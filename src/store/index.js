@@ -5,6 +5,7 @@ Vue.use(Vuex)
 import route from './modules/route'
 import user from './modules/user'
 import entity from './modules/entity'
+import sysConfig from './modules/sysConfig'
 import getters from './getters'
 
 const store = new Vuex.Store({
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
     route,
     user,
     entity,
+    sysConfig,
   },
   getters,
 })

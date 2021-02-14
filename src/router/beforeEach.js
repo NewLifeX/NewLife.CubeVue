@@ -13,6 +13,12 @@ export default (to, from, next) => {
       })
     } else {
       if (!store.getters.userInfo) {
+        // TODO 暂时在这里拉取系统配置信息，
+        // 应该在登陆完之后拉取初始化需要的信息
+        store
+          .dispatch('getSysConfig')
+          .then()
+          .catch()
         // 判断当前用户是否已拉取完user_info信息
         store
           .dispatch('GetUserInfo')
@@ -26,7 +32,7 @@ export default (to, from, next) => {
             })
           })
           .catch((err) => {
-            console.log(err)
+            console.log('请求错误，注销并跳转登录', err)
             store.dispatch('Logout').then(() => {
               //   Message.error(err || 'Verification failed, please login again')
               next({

@@ -5,7 +5,7 @@
       :is-active="sidebar.opened"
       class="hamburger-container"
     /> -->
-    <div class="left-menu">魔方新UI</div>
+    <div class="left-menu">{{ displayName }}</div>
     <div class="right-menu">
       <span class="right-menu-item">{{ userInfo.DisplayName }}</span>
     </div>
@@ -69,6 +69,7 @@ export default {
     ...mapGetters([
       // 'sidebar',
       'userInfo',
+      'sysConfig',
       // 'avatar',
       //   'device',
     ]),
@@ -79,6 +80,13 @@ export default {
         return avatar
       }
       return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
+    },
+    displayName() {
+      let vm = this
+      if (vm.sysConfig && vm.sysConfig.DisplayName) {
+        return vm.sysConfig.DisplayName
+      }
+      return ''
     },
   },
   methods: {
