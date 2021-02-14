@@ -1,4 +1,5 @@
 export default {
+  // baseUrl: 'http://localhost:5000',
   baseUrl: 'http://81.69.253.197:8000',
   login: '/Admin/User/Login',
   getUserInfo: '/Admin/User/Info/',
@@ -10,4 +11,6 @@ export default {
   deleteById: '/Delete',
   add: '/Add',
   edit: '/Edit',
+  getObject: '/Index',
+  updateObject: '/Update',
 }
