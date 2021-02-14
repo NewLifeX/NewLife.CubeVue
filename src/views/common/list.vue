@@ -8,9 +8,21 @@
           </el-button>
         </div>
         <div class="right-search">
+          <el-date-picker
+            v-model="queryParams.dateRange"
+            type="daterange"
+            value-format="yyyy-MM-dd"
+            align="right"
+            unlink-panels
+            range-separator="~"
+            start-placeholder="开始"
+            end-placeholder="结束"
+            :picker-options="pickerOptions"
+          >
+          </el-date-picker>
           <el-input
             style="width:auto"
-            v-model="key"
+            v-model="queryParams.key"
             placeholder="关键字"
           ></el-input>
           <el-button type="primary" @click="gettabeldata">
@@ -65,38 +77,100 @@
         </el-table>
       </div>
       <div slot="footer">
-        <dy-pagination
-          v-model="page.PageIndex"
+        <el-pagination
+          :current-page="page.PageIndex"
           :page-size="page.PageSize"
+          :page-sizes="[10, 20, 50, 100]"
           :total="page.TotalCount"
-          @change="currentchange"
-          @sizeChange="handleSizeChange"
+          @current-change="currentchange"
+          @size-change="handleSizeChange"
+          layout="total, sizes, prev, pager, next, jumper"
         >
-        </dy-pagination>
+        </el-pagination>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { getDataList, deleteById } from '@/api/entity'
+
 export default {
   name: 'list',
   data() {
     return {
       tabledata: [],
-      key: undefined,
+      queryParams: {
+        key: null,
+        dateRange: null,
+      },
       page: {
         PageIndex: 1,
-        PageSize: 50,
+        PageSize: 10,
         TotalCount: 0,
       },
       headerData: [],
       listLoading: false,
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: '昨天',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+              end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '今天',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            },
+          },
+          {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            },
+          },
+        ],
+      },
     }
   },
   computed: {
     currentPath() {
       return this.$route.path
+    },
+    queryData() {
+      let vm = this
+      let dateRange = vm.queryParams.dateRange
+      if (dateRange) {
+        vm.queryParams.dtStart = dateRange[0]
+        vm.queryParams.dtEnd = dateRange[1]
+      } else {
+        vm.queryParams.dtStart = null
+        vm.queryParams.dtEnd = null
+      }
+
+      let temp = {}
+      Object.assign(temp, vm.page, vm.queryParams)
+      temp.dateRange = undefined
+      return temp
     },
   },
   watch: {
@@ -183,12 +257,7 @@ export default {
       }
     },
     clear() {
-      this.search = {
-        BusinessId: '',
-        BusinessMerchant: '',
-        DeviceMerchant: '',
-        DeviceMerchantId: '',
-      }
+      this.search = {}
       this.page.PageIndex = 1
       console.log('清除重置')
     },
@@ -199,8 +268,8 @@ export default {
     gettabeldata() {
       let vm = this
       vm.listLoading = true
-      vm.page.q = vm.key
-      getDataList(vm.currentPath, vm.page).then((res) => {
+
+      getDataList(vm.currentPath, vm.queryData).then((res) => {
         vm.listLoading = false
         vm.tabledata = res.data.data
         vm.page = res.data.pager
@@ -245,7 +314,12 @@ export default {
 }
 
 .search .el-input,
-.el-button {
+.el-button,
+.el-date-editor {
   margin-right: 2px;
+}
+
+.search .el-date-editor {
+  width: 250px;
 }
 </style>

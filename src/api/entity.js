@@ -70,3 +70,18 @@ export function edit(path, entity) {
     data: entity,
   })
 }
+
+export function getObject(path) {
+  return request({
+    url: path + urls.getObject,
+    method: 'get',
+  })
+}
+
+export function updateObject(path, obj) {
+  return request({
+    url: path + urls.updateObject,
+    method: 'post',
+    data: obj,
+  })
+}

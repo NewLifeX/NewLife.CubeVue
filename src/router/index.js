@@ -55,6 +55,10 @@ export const constantRouterMap = [
       },
     ],
   },
+  {
+    path: '/Admin/Index/Main',
+    redirect: 'dashboard',
+  },
 ]
 
 export const asyncRouterMap = [
