@@ -23,11 +23,11 @@ export const constantRouterMap = [
     component: () => import('@/views/account/login'),
     hidden: true,
   },
-  // {
-  //   path: '/auth-redirect',
-  //   component: () => import('src/views/login/authredirect'),
-  //   hidden: true,
-  // },
+  {
+    path: '/auth-redirect',
+    component: () => import('@/views/account/authRedirect'),
+    hidden: true,
+  },
   // {
   //   path: '/404',
   //   component: () => import('src/views/errorPage/404'),

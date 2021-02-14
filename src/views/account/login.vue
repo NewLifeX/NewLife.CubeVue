@@ -75,7 +75,7 @@
             <el-row>
               <el-col :sm="24">
                 <template v-for="(mi, i) in ms">
-                  <a :key="i" :href="getUrl(mi)">
+                  <a :key="i" @click="ssoClick(getUrl(mi))">
                     {{ mi.Name }}
                   </a>
                 </template>
@@ -89,16 +89,22 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import urls from '@/api/constant'
+
 export default {
+  computed: {
+    ...mapGetters(['sysConfig']),
+    redirect() {
+      return this.$route.query.redirect
+    },
+  },
   data() {
     return {
       loginForm: {
         username: null,
         password: null,
         remember: true,
-      },
-      sysConfig: {
-        DisplayName: '魔方平台',
       },
       setting: {
         AllowLogin: true,
@@ -117,8 +123,6 @@ export default {
         Taobao: '淘宝',
         Ding: '钉钉',
       },
-      redirect: undefined,
-      returnUrl: '/',
     }
   },
   methods: {
@@ -127,20 +131,26 @@ export default {
       vm.$store
         .dispatch('Login', vm.loginForm)
         .then(() => {
-          if (vm.returnUrl) {
-            window.location.href = window.location.origin + vm.returnUrl
-          } else {
-            vm.$router.push({ path: vm.redirect || '/' })
-          }
+          vm.$router.push({ path: vm.redirect || '/' })
         })
         .catch(() => {})
     },
+    ssoClick(url) {
+      location.href = urls.baseUrl + url
+      // location.href = urls.ssoUrl + url
+    },
     getUrl(mi) {
+      console.log(mi)
       let vm = this
-      var url = '/Sso/Login?name=' + mi.Name
-      if (vm.returnUrl != null) {
-        url += '&r=' + vm.returnUrl
-      }
+      // let name = 'NewLife.Cube'
+      let url = `/Sso/Login?name=${mi.Name}&state=front-end`
+      // let url = `/sso/authorize?response_type=token&client_id=${name}`
+      let redirect_uri = encodeURIComponent(
+        location.origin +
+          '/auth-redirect' +
+          (vm.redirect ? '?redirect=' + vm.redirect : '')
+      )
+      url += `&redirect_uri=${redirect_uri}`
       return url
     },
     getName(mi) {

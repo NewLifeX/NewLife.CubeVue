@@ -1,6 +1,7 @@
 import { login, logout, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/token'
 import * as userInfoStorage from '@/utils/user'
+import urls from '@/api/constant'
 
 const user = {
   state: {
@@ -44,6 +45,9 @@ const user = {
           })
       })
     },
+    SetToken({ commit }, token) {
+      commit('SET_TOKEN', token)
+    },
     // 获取用户信息
     GetUserInfo({ commit }) {
       return new Promise((resolve, reject) => {
@@ -55,6 +59,10 @@ const user = {
             }
 
             const data = response.data.data
+            console.log('userinfo', data)
+            if (data.Avatar && data.Avatar.indexOf('http') !== 0) {
+              data.Avatar = urls.baseUrl + data.Avatar
+            }
 
             commit('SET_USERINFO', data)
             resolve(response)
