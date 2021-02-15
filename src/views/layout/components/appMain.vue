@@ -26,6 +26,6 @@ export default {
   width: 100%;
   position: relative;
   overflow: hidden;
-  padding: 15px;
+  padding: 0px 0px 0px 15px;
 }
 </style>

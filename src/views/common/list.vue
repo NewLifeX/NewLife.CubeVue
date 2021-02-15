@@ -32,7 +32,7 @@
       </div>
       <div class="table-container">
         <el-table v-loading="listLoading" :data="tabledata" stripe border>
-          <el-table-column label="编号" type="index" />
+          <el-table-column label="编号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
             <el-table-column
               v-if="column.Length <= 50 && column.Name.toLowerCase() != 'id'"
@@ -56,7 +56,7 @@
           <el-table-column
             label="操作"
             align="center"
-            width="150"
+            width="140"
             fixed="right"
             class-name="small-padding fixed-width"
           >
@@ -320,5 +320,9 @@ export default {
 
 .search .el-date-editor {
   width: 250px;
+}
+
+.el-table .el-button + .el-button {
+  margin-left: 3px;
 }
 </style>

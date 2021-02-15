@@ -27,7 +27,7 @@ import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 
 export default {
-  name: 'Menu',
+  name: 'Sidebar',
   components: { SidebarItem },
   computed: {
     ...mapGetters(['menuRouters', 'sidebar']),

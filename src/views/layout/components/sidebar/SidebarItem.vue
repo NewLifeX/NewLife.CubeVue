@@ -12,7 +12,7 @@
         :to="onlyOneChild.path || onlyOneChild.Url"
       >
         <el-menu-item
-          :index="onlyOneChild.path"
+          :index="onlyOneChild.path || onlyOneChild.Url"
           :class="{ 'submenu-title-noDropdown': !isNest }"
         >
           <item :title="onlyOneChild.name" />
@@ -20,7 +20,12 @@
       </router-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="item.path" popper-append-to-body>
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="item.path || item.Url"
+      popper-append-to-body
+    >
       <template slot="title">
         <item v-if="item" :title="item.name" />
       </template>
