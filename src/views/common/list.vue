@@ -44,7 +44,6 @@
                 <template v-if="column.TypeStr == 'Boolean'">
                   <el-switch
                     :value="scope.row[column.Name]"
-                    style="display: block"
                     active-color="#13ce66"
                     inactive-color="#ff4949"
                   />
