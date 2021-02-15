@@ -1,6 +1,6 @@
 <template>
   <el-row type="flex" justify="center">
-    <el-col :span="6">
+    <el-col class="login-col">
       <!-- Login -->
       <div>
         <!-- Logo-->
@@ -10,7 +10,7 @@
           </el-col>
         </el-row>
         <template v-if="setting.AllowLogin">
-          <el-form :model="loginForm" class="cube-login">
+          <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
             <span class="heading text-primary"
               >{{ sysConfig.DisplayName }} 登录</span
@@ -20,7 +20,6 @@
                 v-model="loginForm.username"
                 placeholder="用户名 / 邮箱"
                 prefix-icon="el-icon-user"
-                class="form-control"
               >
               </el-input>
             </el-form-item>
@@ -30,7 +29,6 @@
                 v-model="loginForm.password"
                 placeholder="密码"
                 prefix-icon="el-icon-lock"
-                class="form-control"
                 show-password
               >
               </el-input>
@@ -222,6 +220,20 @@ export default {
   color: #4ca6ff;
 }
 
+.el-input input {
+  border-radius: 20px;
+  box-shadow: none;
+  padding: 0 20px 0 45px;
+  height: 40px;
+  transition: all 0.3s ease 0s;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+}
+
 .btn {
   float: right;
   font-size: 14px;
@@ -275,5 +287,23 @@ p.login3 span.right {
 
 p.login3 span.left {
   left: 65%;
+}
+
+@media screen and (max-width: 680px) {
+  .login-col {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 680px) and (max-width: 1680px) {
+  .login-col {
+    width: 30%;
+  }
+}
+
+@media screen and (min-width: 1680px) {
+  .login-col {
+    width: 445px;
+  }
 }
 </style>
