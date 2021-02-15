@@ -1,24 +1,19 @@
-# newlife-cubu-vueui
+# newlife-cube-vueui
 
-## Project setup
-```
+## 安装依赖
+
+```bash
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
+### 开发
+
+```bash
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
+### 构建
+
+```bash
 yarn build
 ```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
