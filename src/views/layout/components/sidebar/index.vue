@@ -2,7 +2,8 @@
   <div class="box">
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
-        :collapse="false"
+        :default-active="$route.path"
+        :collapse="isCollapse"
         background-color="#304156"
         text-color="#bfcbd9"
         :unique-opened="false"
@@ -29,7 +30,10 @@ export default {
   name: 'Menu',
   components: { SidebarItem },
   computed: {
-    ...mapGetters(['menuRouters']),
+    ...mapGetters(['menuRouters', 'sidebar']),
+    isCollapse() {
+      return !this.sidebar.opened
+    },
   },
   data() {
     return {
@@ -38,19 +42,7 @@ export default {
     }
   },
   created() {
-    console.log(this.menuRouters)
-  },
-  methods: {
-    activeMenu() {
-      console.log(this.$route)
-      const route = this.$route
-      const { meta, path } = route
-      // if set path, the sidebar will highlight the path you set
-      if (meta.activeMenu) {
-        return meta.activeMenu
-      }
-      return path
-    },
+    // console.log(this.menuRouters)
   },
 }
 </script>

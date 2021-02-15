@@ -48,9 +48,11 @@
       </template>
 
       <el-form-item prop label-name>
-        <dy-button @click.prevent="confirm">
-          提交
-        </dy-button>
+        <div
+          style="position: fixed; margin: 30px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+        >
+          <el-button type="primary" @click="confirm">保存</el-button>
+        </div>
       </el-form-item>
     </el-form>
   </div>
@@ -104,8 +106,9 @@ export default {
 
 <style scoped>
 .objform {
-  height: calc(100vh - 125px);
+  max-height: calc(100vh - 200px);
   overflow: auto;
+  box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
 
 .objform h2 {

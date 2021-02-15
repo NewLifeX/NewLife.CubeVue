@@ -4,5 +4,7 @@ const getters = {
   menuRouters: (state) => state.route.menuRouters,
   addRouters: (state) => state.route.addRouters,
   sysConfig: (state) => state.sysConfig.sysConfig,
+  sidebar: (state) => state.app.sidebar,
+  app: (state) => state.app,
 }
 export default getters

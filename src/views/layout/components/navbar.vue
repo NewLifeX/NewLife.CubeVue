@@ -1,10 +1,10 @@
 <template>
   <div class="navbar">
-    <!-- <hamburger
+    <hamburger
       :toggle-click="toggleSideBar"
       :is-active="sidebar.opened"
       class="hamburger-container"
-    /> -->
+    />
     <div class="left-menu">{{ displayName }}</div>
     <div class="right-menu">
       <span class="right-menu-item">{{ userInfo.DisplayName }}</span>
@@ -54,25 +54,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import Hamburger from 'src/components/Hamburger'
+import Hamburger from '@/views/layout/components/hamburger'
 // import SizeSelect from 'src/components/SizeSelect'
 // import ThemePicker from 'src/components/ThemePicker'
 
 export default {
   components: {
-    // Hamburger,
+    Hamburger,
     // Screenfull,
     // SizeSelect,
     // ThemePicker,
   },
   computed: {
-    ...mapGetters([
-      // 'sidebar',
-      'userInfo',
-      'sysConfig',
-      // 'avatar',
-      //   'device',
-    ]),
+    ...mapGetters(['sidebar', 'userInfo', 'sysConfig', 'app']),
     myAvatar() {
       let vm = this
       let avatar = vm.userInfo.Avatar || vm.userInfo.avatar
