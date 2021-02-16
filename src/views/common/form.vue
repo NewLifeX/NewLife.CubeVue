@@ -11,9 +11,9 @@
     >
       <template v-for="(column, k) in fields">
         <el-form-item
-          v-if="column.Name.toLowerCase() != 'id'"
+          v-if="column.Name.toLowerCase() != 'id' && !column.IsCustom"
           :key="k"
-          :prop="column.Name"
+          :prop="column.IsDataObjectField ? column.Name : column.ColumnName"
           :label="column.DisplayName || column.Name"
         >
           <el-switch
@@ -30,12 +30,15 @@
             v-model="form[column.Name]"
             type="datetime"
             format="yyyy-MM-dd HH:mm:ss"
+            value-format="yyyy-MM-dd HH:mm:ss"
             placeholder="选择日期时间"
           />
 
           <el-input
             v-else
-            v-model="form[column.Name]"
+            v-model="
+              form[column.IsDataObjectField ? column.Name : column.ColumnName]
+            "
             type="text"
           /> </el-form-item
       ></template>

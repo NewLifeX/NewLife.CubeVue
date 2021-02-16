@@ -33,6 +33,7 @@
                 v-model="form[item.Name]"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm:ss"
+                value-format="yyyy-MM-dd HH:mm:ss"
               />
 
               <el-input
