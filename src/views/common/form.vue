@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{ type }}</div>
+    <div>{{ typeMap[type] }}</div>
     <el-form
       ref="form"
       v-model="form"
@@ -63,6 +63,7 @@ export default {
     return {
       form: {},
       fields: [],
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' },
     }
   },
   computed: {
@@ -123,11 +124,19 @@ export default {
       let vm = this
       if (vm.isAdd) {
         add(vm.currentPath, vm.form).then(() => {
-          alert('新增成功')
+          vm.$message({
+            message: '新增成功',
+            type: 'success',
+            duration: 5 * 1000,
+          })
         })
       } else {
         edit(vm.currentPath, vm.form).then(() => {
-          alert('保存成功')
+          vm.$message({
+            message: '保存成功',
+            type: 'success',
+            duration: 5 * 1000,
+          })
         })
       }
     },

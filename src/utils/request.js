@@ -1,7 +1,8 @@
 import axios from 'axios'
-// import { Message, MessageBox } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import urls from '@/api/constant'
+import { getToken } from '@/utils/token'
 
 const service = axios.create({
   timeout: 50000,
@@ -19,20 +20,21 @@ service.interceptors.request.use(
     // 所有请求默认是json格式，除了上传文件，不用表单
     config.headers['Content-Type'] = 'application/json; charset=UTF-8'
 
-    if (store.getters.token) {
+    const token = getToken()
+    if (token) {
       // 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
-      config.headers['Authorization'] = store.getters.token
+      config.headers['Authorization'] = token
     }
 
     return config
   },
   (error) => {
     console.log(error)
-    // Message({
-    //   message: error,
-    //   type: 'error',
-    //   duration: 5 * 1000,
-    // })
+    Message({
+      message: error,
+      type: 'error',
+      duration: 5 * 1000,
+    })
     Promise.reject(error)
   }
 )
@@ -40,64 +42,86 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     console.log(response)
-    const res = response
-    if (res.status && res.status !== 200) {
-      if (res.status >= 500) {
-        // Message({
-        //   message: '后端服务错误',
-        //   type: 'error',
-        //   duration: 5 * 1000,
-        // })
-        return Promise.reject('服务异常')
-      } else if (res.status === 401) {
-        // 请自行在引入 MessageBox
-        // import { Message, MessageBox } from 'element-ui'
-        // 如果已弹窗，不重复弹窗
-        if (!isLoginTimeout) {
-          isLoginTimeout = true
-          // 如果当前就是login、页面则不作处理
-          if (location.pathname.indexOf('/login') > 0) {
-            return response
-          }
-          //   MessageBox.confirm(
-          //     '你已被登出或者登陆失效，可以取消继续留在该页面，或者重新登录',
-          //     '确定登出',
-          //     {
-          //       confirmButtonText: '重新登录',
-          //       cancelButtonText: '取消',
-          //       type: 'warning',
-          //     }
-          //   ).then(() => {
-          //isLoginTimeout = false
-          store.dispatch('Logout').then(() => {
-            isLoginTimeout = false
-            location.reload() // 为了重新实例化vue-router对象 避免bug
-          })
-          //   })
-        } else {
-          return response
-        }
+    // http状态不是200不会到这里
+    const res = response.data
+    if (res.code !== undefined && res.code !== null) {
+      if (res.code >= 500) {
+        Message({
+          message: res.message,
+          type: 'error',
+          duration: 5 * 1000,
+        })
+        return Promise.reject('后端服务错误')
+      } else if (res.code === 401) {
+        handle401()
+      } else if (res.code === 403) {
+        handle403(res)
       } else {
-        // Message({
-        //   message: res.Msg,
-        //   type: 'error',
-        //   duration: 5 * 1000,
-        // })
-        return Promise.reject(res.data.message)
+        return response
       }
     } else {
-      return response
+      console.log('格式错误', res) // for debug
+      Message({
+        message: res.message,
+        type: 'error',
+        duration: 5 * 1000,
+      })
+      return Promise.reject('服务端返回格式不正确')
     }
   },
   (error) => {
-    // console.log('err' + error) // for debug
-    // Message({
-    //   message: '请求错误',
-    //   type: 'error',
-    //   duration: 5 * 1000,
-    // })
+    // console.log('err', error, JSON.stringify(error)) // for debug
+    if (error.message === 'Request failed with status code 401') {
+      handle401()
+    } else if (error.message === 'Request failed with status code 403') {
+      handle403({ message: '没有权限！' })
+    } else {
+      Message({
+        message: '服务请求出错',
+        type: 'error',
+        duration: 5 * 1000,
+      })
+    }
+
     return Promise.reject(error)
   }
 )
+
+function handle401() {
+  // 如果已弹窗，不重复弹窗
+  if (!isLoginTimeout) {
+    isLoginTimeout = true
+    // 如果当前就是login、页面则不作处理
+    if (location.pathname.indexOf('/login') === 0) {
+      return Promise.reject('登录超时，已经是登录页')
+    }
+    MessageBox.confirm(
+      '登陆超时，可以取消继续留在该页面，或者重新登录',
+      '确定登出',
+      {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    ).then(() => {
+      isLoginTimeout = false
+      store.dispatch('Logout').then(() => {
+        isLoginTimeout = false
+        location.reload() // 为了重新实例化vue-router对象 避免bug
+      })
+    })
+  } else {
+    return Promise.reject('登录超时，已弹窗')
+  }
+}
+
+function handle403(res) {
+  Message({
+    message: res.message,
+    type: 'warning',
+    duration: 5 * 1000,
+  })
+  return Promise.reject('没有权限')
+}
 
 export default service

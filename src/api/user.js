@@ -23,7 +23,7 @@ export function login(username, password, remember) {
 export function logout() {
   return request({
     url: urls.logout,
-    method: 'post',
+    method: 'get',
   })
 }
 
