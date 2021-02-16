@@ -21,8 +21,6 @@
             v-model="form[column.Name]"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            active-text="是"
-            inactive-text="否"
           />
 
           <el-date-picker
