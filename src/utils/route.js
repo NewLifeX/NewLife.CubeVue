@@ -1,11 +1,9 @@
-const files = require.context('@/views/', true, /^.*\.vue$/)
-const fileKeys = files.keys()
-
 /**
  * 将菜单转化成路由
  * @param {*} routes 请求返回菜单
  */
-export function formatRoutes(routes, depth = 0) {
+export function formatRoutes(files, routes, depth = 0) {
+  const fileKeys = files.keys()
   routes.forEach((router) => {
     router.path = router.Url
     router.name = router['Name'] || router['name']
@@ -28,12 +26,12 @@ export function formatRoutes(routes, depth = 0) {
       }
 
       // 添加、编辑页路由
-      routes.push(getEditRoute(router, router.path))
+      routes.push(getEditRoute(files, router, router.path))
     }
 
     let children = router['Children'] || router['children']
     if (children && children instanceof Array) {
-      children = formatRoutes(children, depth + 1)
+      children = formatRoutes(files, children, depth + 1)
     }
 
     router.children = children
@@ -42,7 +40,8 @@ export function formatRoutes(routes, depth = 0) {
   return routes
 }
 
-function getEditRoute(router, path) {
+function getEditRoute(files, router, path) {
+  const fileKeys = files.keys()
   // 添加、编辑页路由
   const r = {
     hidden: true,

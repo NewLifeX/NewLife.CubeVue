@@ -1,6 +1,6 @@
 export default {
-  baseUrl: 'http://localhost:5000',
-  // baseUrl: 'http://81.69.253.197:8000',
+  // baseUrl: 'http://localhost:5000',
+  baseUrl: 'http://81.69.253.197:8000',
   // ssoUrl: 'http://localhost:5000',
   ssoUrl: 'https://sso.newlifex.com',
   login: '/Admin/User/Login',

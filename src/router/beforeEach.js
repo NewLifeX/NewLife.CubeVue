@@ -23,7 +23,7 @@ export default (to, from, next) => {
         store
           .dispatch('GetUserInfo')
           .then(() => {
-            store.dispatch('GenerateRoutes').then(() => {
+            store.dispatch('generateRoutes').then(() => {
               router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
               next({
                 ...to,
