@@ -100,7 +100,10 @@ export default {
 .navbar {
   height: 50px;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   background: #fff;
   -webkit-box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
