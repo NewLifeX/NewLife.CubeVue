@@ -188,48 +188,6 @@ export default {
     getListFields() {
       let vm = this
       vm.$store.dispatch('getListFields', vm.currentPath).then((res) => {
-        // let fields = [
-        //   // {
-        //   //   title: '操作',
-        //   //   render: (h, row) =>
-        //   //     h('div', [
-        //   //       h(
-        //   //         'dy-button',
-        //   //         {
-        //   //           props: { type: 'text' },
-        //   //           on: {
-        //   //             click: () => {
-        //   //               vm.edit(row)
-        //   //             },
-        //   //           },
-        //   //         },
-        //   //         '编辑'
-        //   //       ),
-        //   //       h(
-        //   //         'dy-button',
-        //   //         {
-        //   //           props: { type: 'error' },
-        //   //           on: {
-        //   //             click: () => {
-        //   //               vm.delete(row)
-        //   //             },
-        //   //           },
-        //   //         },
-        //   //         '删除'
-        //   //       ),
-        //   //     ]),
-        //   // },
-        // ]
-        // for (const key in res) {
-        //   if (Object.hasOwnProperty.call(res, key)) {
-        //     const e = res[key]
-        //     let col = {
-        //       key: e.Name,
-        //       title: e.DisplayName,
-        //     }
-        //     fields.push(col)
-        //   }
-        // }
         vm.headerData = res
       })
     },

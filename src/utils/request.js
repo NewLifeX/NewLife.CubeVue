@@ -41,7 +41,7 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
   (response) => {
-    console.log(response)
+    // console.log(response)
     // http状态不是200不会到这里
     const res = response.data
     if (res.code !== undefined && res.code !== null) {

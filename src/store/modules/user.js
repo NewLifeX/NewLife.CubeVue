@@ -59,7 +59,7 @@ const user = {
             }
 
             const data = response.data.data
-            console.log('userinfo', data)
+            // console.log('userinfo', data)
             if (data.Avatar && data.Avatar.indexOf('http') !== 0) {
               data.Avatar = urls.baseUrl + data.Avatar
             }
