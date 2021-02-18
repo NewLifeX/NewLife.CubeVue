@@ -13,7 +13,7 @@ const route = {
     async getSysConfig({ commit }) {
       const path = '/Admin/Sys'
       let res = await getObject(path)
-      let cfg = res.data.data.Value
+      let cfg = res.data.data.value
       commit('SET_SYSCONFIG', cfg)
     },
   },

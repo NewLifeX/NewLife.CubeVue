@@ -9,10 +9,10 @@
     >
       <router-link
         v-if="onlyOneChild"
-        :to="onlyOneChild.path || onlyOneChild.Url"
+        :to="onlyOneChild.path || onlyOneChild.url"
       >
         <el-menu-item
-          :index="onlyOneChild.path || onlyOneChild.Url"
+          :index="onlyOneChild.path || onlyOneChild.url"
           :class="{ 'submenu-title-noDropdown': !isNest }"
         >
           <item :title="onlyOneChild.name" />
@@ -23,7 +23,7 @@
     <el-submenu
       v-else
       ref="subMenu"
-      :index="item.path || item.Url"
+      :index="item.path || item.url"
       popper-append-to-body
     >
       <template slot="title">
@@ -70,15 +70,18 @@ export default {
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
-      const showingChildren = children.filter((item) => {
-        if (item.hidden) {
-          return false
-        } else {
-          // Temp set(will be used if only has one showing child)
-          this.onlyOneChild = item
-          return true
-        }
-      })
+      let showingChildren = []
+      if (children) {
+        showingChildren = children.filter((item) => {
+          if (item.hidden) {
+            return false
+          } else {
+            // Temp set(will be used if only has one showing child)
+            this.onlyOneChild = item
+            return true
+          }
+        })
+      }
 
       // When there is only one child router, the child router is displayed by default
       if (showingChildren.length === 1) {

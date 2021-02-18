@@ -7,7 +7,7 @@
     />
     <div class="left-menu">{{ displayName }}</div>
     <div class="right-menu">
-      <span class="right-menu-item">{{ userInfo.DisplayName }}</span>
+      <span class="right-menu-item">{{ userInfo.displayName }}</span>
     </div>
     <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'"> -->
@@ -69,20 +69,20 @@ export default {
     ...mapGetters(['sidebar', 'userInfo', 'sysConfig', 'urls']),
     myAvatar() {
       let vm = this
-      let avatar = vm.userInfo.Avatar || vm.userInfo.avatar
+      let avatar = vm.userInfo.avatar
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
           avatar = urls.baseUrl + avatar
         }
-        urls.baseUrl + data.Avatar
+        urls.baseUrl + data.avatar
         return avatar
       }
       return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
     },
     displayName() {
       let vm = this
-      if (vm.sysConfig && vm.sysConfig.DisplayName) {
-        return vm.sysConfig.DisplayName
+      if (vm.sysConfig && vm.sysConfig.displayName) {
+        return vm.sysConfig.displayName
       }
       return ''
     },

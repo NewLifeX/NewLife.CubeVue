@@ -17,17 +17,17 @@
               应用系统：
             </td>
             <td class="value">
-              <!-- @if (this.Has((PermissionFlags)16)) -->
+              <!-- @if (this.has((PermissionFlags)16)) -->
 
               <a style="cursor: pointer;" @click="restart">重启应用系统</a>
 
-              &nbsp;&nbsp;&nbsp;&nbsp;{{ model.RawUrl }}
+              &nbsp;&nbsp;&nbsp;&nbsp;{{ model.rawUrl }}
             </td>
             <td class="name">
               目录：
             </td>
             <td class="value">
-              {{ model.ContentRootPath }}
+              {{ model.contentRootPath }}
             </td>
           </tr>
           <tr>
@@ -35,16 +35,16 @@
               域名地址：
             </td>
             <td class="value">
-              <span title="主机">{{ model.Host }}</span
+              <span title="主机">{{ model.host }}</span
               >，
-              <span title="本地">{{ model.LocalHost }}</span>
-              &nbsp;<span title="远程">{{ model.RemoteHost }}</span>
+              <span title="本地">{{ model.localHost }}</span>
+              &nbsp;<span title="远程">{{ model.remoteHost }}</span>
             </td>
             <td class="name">
               应用程序：
             </td>
             <td class="value">
-              <span :title="model.CommandLine">{{ model.ProcessName }}</span>
+              <span :title="model.commandLine">{{ model.processName }}</span>
             </td>
           </tr>
           <tr>
@@ -52,45 +52,45 @@
               应用域：
             </td>
             <td class="value">
-              {{ model.CurDomainFriendlyName }}
-              <!-- <a href="@Url.Action("Main", new{ id = "Assembly" })" target="_blank" title="点击打开进程程序集列表">程序集列表</a>
-                    <a href="@Url.Action("Main", new{ id = "ProcessModules" })" target="_blank" title="点击打开进程模块列表">模块列表</a>
-                    <a href="@Url.Action("Main", new{ id = "ServerVar" })" target="_blank" title="点击打开服务器变量列表">服务器变量列表</a> -->
+              {{ model.curDomainFriendlyName }}
+              <!-- <a href="@Url.action("Main", new{ id = "Assembly" })" target="_blank" title="点击打开进程程序集列表">程序集列表</a>
+                    <a href="@Url.action("Main", new{ id = "ProcessModules" })" target="_blank" title="点击打开进程模块列表">模块列表</a>
+                    <a href="@Url.action("Main", new{ id = "ServerVar" })" target="_blank" title="点击打开服务器变量列表">服务器变量列表</a> -->
             </td>
             <td class="name">
-              .Net 版本：
+              .net 版本：
             </td>
             <td class="value">
-              {{ model.EnvVersion }} &nbsp;{{ model.FrameworkName }}
+              {{ model.envVersion }} &nbsp;{{ model.frameworkName }}
             </td>
           </tr>
           <tr>
             <td class="name">
               操作系统：
             </td>
-            <td class="value" :title="model.Guid">
-              {{ model.OSName }} {{ model.OSVersion }}
+            <td class="value" :title="model.guid">
+              {{ model.oSName }} {{ model.oSVersion }}
             </td>
             <td class="name">
               机器用户：
             </td>
-            <td class="value" :title="model.UUID">
-              <span v-if="model.Product !== undefined"
-                >{{ model.Product }}，</span
+            <td class="value" :title="model.uuid">
+              <span v-if="model.product !== undefined"
+                >{{ model.product }}，</span
               >
-              {{ model.UserName + '/' + model.MachineName }}
+              {{ model.userName + '/' + model.machineName }}
             </td>
           </tr>
           <tr>
             <td class="name">
               处理器：
             </td>
-            <td class="value" :title="model.CpuID">
-              {{ model.Processor }}，
-              {{ model.ProcessorCount }}
-              核心，{{ model.CpuRate }}
-              <span v-if="model.Temperature > 0"
-                >，{{ model.Temperature }} ℃</span
+            <td class="value" :title="model.cpuID">
+              {{ model.processor }}，
+              {{ model.processorCount }}
+              核心，{{ model.cpuRate }}
+              <span v-if="model.temperature > 0"
+                >，{{ model.temperature }} ℃</span
               >
             </td>
             <td class="name">
@@ -101,7 +101,7 @@
               class="value"
               title="这里使用了服务器默认的时间格式！后面是开机时间。"
             >
-              {{ model.DateTimeNow }}，开机{{ model.Uptime }}
+              {{ model.dateTimeNow }}，开机{{ model.uptime }}
             </td>
           </tr>
           <tr>
@@ -109,17 +109,17 @@
               内存：
             </td>
             <td class="value">
-              物理：{{ model.AvailableMemory }}M / {{ model.Memory }}M，
-              工作/提交: {{ model.WorkingSet64 }}M/{{
-                model.PrivateMemorySize64
-              }}M GC: {{ model.TotalMemory }}M
+              物理：{{ model.availableMemory }}M / {{ model.memory }}M，
+              工作/提交: {{ model.workingSet64 }}M/{{
+                model.privateMemorySize64
+              }}M GC: {{ model.totalMemory }}M
               <a @click="memoryFree" title="点击释放进程内存">释放内存</a>
             </td>
             <td class="name">
               进程时间：
             </td>
             <td class="value">
-              <!-- @process.TotalProcessorTime.TotalSeconds.ToString("N2")秒 启动于 @process.StartTime.ToLocalTime().ToFullString() -->
+              <!-- @process.totalProcessorTime.totalSeconds.toString("N2")秒 启动于 @process.startTime.toLocalTime().toFullString() -->
             </td>
           </tr>
           <tr>
@@ -127,7 +127,7 @@
               Session：
             </td>
             <td class="value">
-              <!-- @httpContext.Session.Keys.Count() 个 -->
+              <!-- @httpContext.session.keys.count() 个 -->
               <a
                 @click="main('Session')"
                 target="_blank"
@@ -137,11 +137,11 @@
               <!-- ，@gc -->
             </td>
             <td class="name">
-              <!-- @{ var app = ApplicationManager.Load();} -->
+              <!-- @{ var app = ApplicationManager.load();} -->
               应用启动：
             </td>
             <td class="value">
-              <!-- 启动于 @app.StartTime.ToLocalTime().ToFullString() -->
+              <!-- 启动于 @app.startTime.toLocalTime().toFullString() -->
             </td>
           </tr>
         </tbody>
@@ -160,15 +160,15 @@
           </tr>
         </thead>
         <tbody>
-          <!-- @foreach (AssemblyX item in ViewBag.MyAsms)
+          <!-- @foreach (AssemblyX item in ViewBag.myAsms)
             {
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Title</td>
-                    <td>@item.FileVersion</td>
-                    <td>@item.Version</td>
-                    <td>@(item.Compile.Year <= 2000 ? "" : item.Compile.ToFullString())</td>
-                    <td>@item.Description</td>
+                    <td>@item.name</td>
+                    <td>@item.title</td>
+                    <td>@item.fileVersion</td>
+                    <td>@item.version</td>
+                    <td>@(item.compile.year <= 2000 ? "" : item.compile.toFullString())</td>
+                    <td>@item.description</td>
                 </tr>
             } -->
         </tbody>
@@ -182,34 +182,34 @@ export default {
   data() {
     return {
       model: {
-        RawUrl: 'RawUrl',
-        ContentRootPath: 'ContentRootPath',
-        Host: 'Host',
-        LocalHost: 'LocalHost',
-        RemoteHost: 'RemoteHost',
-        CommandLine: 'CommandLine',
-        ProcessName: 'ProcessName',
-        CurDomainFriendlyName: 'FriendlyName',
-        EnvVersion: 'EnvVersion',
-        FrameworkName: 'FrameworkName',
-        Guid: 'Guid',
-        OSName: 'OSName',
-        OSVersion: 'OSVersion',
-        Product: 'Product',
-        UserName: 'UserName',
-        MachineName: 'MachineName',
-        UUID: 'UUID',
-        Processor: 'Processor',
-        ProcessorCount: 'ProcessorCount',
-        CpuRate: 'CpuRate',
-        Temperature: 0,
-        DateTimeNow: 'DateTimeNow',
-        Uptime: 'Uptime',
-        AvailableMemory: 'AvailableMemory',
-        Memory: 'Memory',
-        WorkingSet64: 'WorkingSet64',
-        PrivateMemorySize64: 'PrivateMemorySize64',
-        TotalMemory: 'TotalMemory',
+        rawUrl: 'RawUrl',
+        contentRootPath: 'ContentRootPath',
+        host: 'Host',
+        localHost: 'LocalHost',
+        remoteHost: 'RemoteHost',
+        commandLine: 'CommandLine',
+        processName: 'ProcessName',
+        curDomainFriendlyName: 'FriendlyName',
+        envVersion: 'EnvVersion',
+        frameworkName: 'FrameworkName',
+        guid: 'Guid',
+        oSName: 'OSName',
+        oSVersion: 'OSVersion',
+        product: 'Product',
+        userName: 'UserName',
+        machineName: 'MachineName',
+        uuid: 'UUID',
+        processor: 'Processor',
+        processorCount: 'ProcessorCount',
+        cpuRate: 'CpuRate',
+        temperature: 0,
+        dateTimeNow: 'DateTimeNow',
+        uptime: 'Uptime',
+        availableMemory: 'AvailableMemory',
+        memory: 'Memory',
+        workingSet64: 'WorkingSet64',
+        privateMemorySize64: 'PrivateMemorySize64',
+        totalMemory: 'TotalMemory',
       },
     }
   },

@@ -5,8 +5,8 @@
 export function formatRoutes(files, routes, depth = 0) {
   const fileKeys = files.keys()
   routes.forEach((router) => {
-    router.path = router.Url
-    router.name = router['Name'] || router['name']
+    router.path = router.url
+    router.name = router.name
 
     // 第一层使用布局模板
     if (depth === 0) {
@@ -29,7 +29,7 @@ export function formatRoutes(files, routes, depth = 0) {
       routes.push(getEditRoute(files, router, router.path))
     }
 
-    let children = router['Children'] || router['children']
+    let children = router.children
     if (children && children instanceof Array) {
       children = formatRoutes(files, children, depth + 1)
     }
@@ -47,7 +47,7 @@ function getEditRoute(files, router, path) {
     hidden: true,
     path: `${path}/:type(Edit|Add|Detail)/:id?`,
     // path: `User/Edit/:id?`,
-    name: router['Name'] || router['name'],
+    name: router.name,
     component: (resolve) => {
       // 先尝试加载自定义视图，不存在使用默认视图
       path = `.${path}/form.vue`

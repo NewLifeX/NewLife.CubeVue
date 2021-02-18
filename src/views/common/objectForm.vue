@@ -16,19 +16,19 @@
           <template v-for="(item, k) in list">
             <el-form-item
               :key="k + cate"
-              :label="item.DisplayName"
-              :prop="item.Name"
+              :label="item.displayName"
+              :prop="item.name"
             >
               <el-switch
-                v-if="item.TypeStr == 'Boolean'"
-                v-model="form[item.Name]"
+                v-if="item.typeStr == 'Boolean'"
+                v-model="form[item.name]"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
               />
 
               <el-date-picker
-                v-else-if="item.TypeStr == 'DateTime'"
-                v-model="form[item.Name]"
+                v-else-if="item.typeStr == 'DateTime'"
+                v-model="form[item.name]"
                 type="datetime"
                 format="yyyy-MM-dd HH:mm:ss"
                 value-format="yyyy-MM-dd HH:mm:ss"
@@ -36,11 +36,11 @@
 
               <el-input
                 v-else
-                v-model="form[item.Name]"
+                v-model="form[item.name]"
                 type="text"
                 size="medium"
               />
-              <span>{{ item.Description }}</span>
+              <span>{{ item.description }}</span>
             </el-form-item>
           </template>
         </template>
@@ -88,8 +88,8 @@ export default {
     query() {
       let vm = this
       getObject(vm.currentPath).then((res) => {
-        vm.form = res.data.data.Value
-        vm.properties = res.data.data.Properties
+        vm.form = res.data.data.value
+        vm.properties = res.data.data.properties
       })
     },
     confirm() {

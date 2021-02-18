@@ -35,25 +35,25 @@
           <el-table-column label="编号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
             <el-table-column
-              v-if="column.Length <= 50 && column.Name.toLowerCase() != 'id'"
+              v-if="column.length <= 50 && column.name.toLowerCase() != 'id'"
               :key="idx"
-              :label="column.DisplayName"
-              :prop="column.Name"
+              :label="column.displayName"
+              :prop="column.name"
             >
               <template slot-scope="scope">
-                <template v-if="column.TypeStr == 'Boolean'">
+                <template v-if="column.typeStr == 'Boolean'">
                   <el-switch
-                    :value="scope.row[column.Name]"
+                    :value="scope.row[column.name]"
                     active-color="#13ce66"
                     inactive-color="#ff4949"
                   />
                 </template>
                 <div v-else>
-                  <template v-if="column.Name === 'ClassName'">
-                    {{ scope.row[column.ColumnName] }}
+                  <template v-if="column.name === 'ClassName'">
+                    {{ scope.row[column.columnName] }}
                   </template>
                   <template v-else>
-                    {{ scope.row[column.Name] }}
+                    {{ scope.row[column.name] }}
                   </template>
                 </div>
               </template>
@@ -84,10 +84,10 @@
       </div>
       <div slot="footer">
         <el-pagination
-          :current-page="page.PageIndex"
-          :page-size="page.PageSize"
+          :current-page="page.pageIndex"
+          :page-size="page.pageSize"
           :page-sizes="[10, 20, 50, 100]"
-          :total="page.TotalCount"
+          :total="page.totalCount"
           @current-change="currentchange"
           @size-change="handleSizeChange"
           layout="total, sizes, prev, pager, next, jumper"
@@ -204,11 +204,11 @@ export default {
     },
     editData(row) {
       let vm = this
-      vm.$router.push(vm.currentPath + '/Edit/' + row.ID)
+      vm.$router.push(vm.currentPath + '/Edit/' + row.id)
     },
     deleteData(row) {
       let vm = this
-      deleteById(vm.currentPath, row.ID).then(() => {
+      deleteById(vm.currentPath, row.id).then(() => {
         vm.gettabeldata()
       })
     },
@@ -222,11 +222,11 @@ export default {
     },
     clear() {
       this.search = {}
-      this.page.PageIndex = 1
+      this.page.pageIndex = 1
       console.log('清除重置')
     },
     query() {
-      this.page.PageIndex = 1
+      this.page.pageIndex = 1
       this.gettabeldata()
     },
     gettabeldata() {
@@ -240,11 +240,11 @@ export default {
       })
     },
     currentchange(val) {
-      this.page.PageIndex = val
+      this.page.pageIndex = val
       this.gettabeldata()
     },
     handleSizeChange(val) {
-      this.page.PageSize = val
+      this.page.pageSize = val
       this.gettabeldata()
     },
   },

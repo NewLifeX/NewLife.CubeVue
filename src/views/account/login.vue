@@ -9,11 +9,11 @@
             <i class="el-icon-cloudy"></i>
           </el-col>
         </el-row>
-        <template v-if="setting.AllowLogin">
+        <template v-if="setting.allowLogin">
           <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
             <span class="heading text-primary"
-              >{{ sysConfig.DisplayName }} 登录</span
+              >{{ sysConfig.displayName }} 登录</span
             >
             <el-form-item label="">
               <el-input
@@ -40,7 +40,7 @@
                 >记住我</el-checkbox
               >
 
-              <template v-if="setting.AllowRegister">
+              <template v-if="setting.allowRegister">
                 <div
                   style="display: inline-block; margin-top: 5px; float: right;"
                 >
@@ -62,7 +62,7 @@
         </template>
       </div>
       <!-- Login3 -->
-      <div v-if="setting.AutoRegister && ms.length > 0">
+      <div v-if="setting.autoRegister && ms.length > 0">
         <el-row>
           <el-col :span="24" class="text-center">
             <p class="login3">
@@ -74,7 +74,7 @@
               <el-col :sm="24">
                 <template v-for="(mi, i) in ms">
                   <a :key="i" @click="ssoClick(getUrl(mi))">
-                    {{ mi.Name }}
+                    {{ mi.name }}
                   </a>
                 </template>
               </el-col>
@@ -91,7 +91,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   computed: {
-    ...mapGetters(['sysConfig','urls']),
+    ...mapGetters(['sysConfig', 'urls']),
     redirect() {
       return this.$route.query.redirect
     },
@@ -104,21 +104,21 @@ export default {
         remember: true,
       },
       setting: {
-        AllowLogin: true,
-        AllowRegister: true,
-        AutoRegister: true,
+        allowLogin: true,
+        allowRegister: true,
+        autoRegister: true,
       },
       ms: [
         {
-          Name: 'NewLife',
+          name: 'NewLife',
         },
       ],
       dic: {
-        NewLife: '新生命',
-        Baidu: '百度',
-        Weixin: '微信',
-        Taobao: '淘宝',
-        Ding: '钉钉',
+        newLife: '新生命',
+        baidu: '百度',
+        weixin: '微信',
+        taobao: '淘宝',
+        ding: '钉钉',
       },
     }
   },
@@ -140,7 +140,7 @@ export default {
       console.log(mi)
       let vm = this
       // let name = 'NewLife.Cube'
-      let url = `/Sso/Login?name=${mi.Name}&state=front-end`
+      let url = `/Sso/Login?name=${mi.name}&state=front-end`
       // let url = `/sso/authorize?response_type=token&client_id=${name}`
       let redirect_uri = encodeURIComponent(
         location.origin +
@@ -152,9 +152,9 @@ export default {
     },
     getName(mi) {
       let vm = this
-      let nickName = vm.dic[mi.Name]
+      let nickName = vm.dic[mi.name]
       if (nickName == null) {
-        nickName = mi.Name
+        nickName = mi.name
       }
       return nickName
     },

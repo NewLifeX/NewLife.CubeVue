@@ -11,21 +11,21 @@
     >
       <template v-for="(column, k) in fields">
         <el-form-item
-          v-if="column.Name.toLowerCase() != 'id' && !column.IsCustom"
+          v-if="column.name.toLowerCase() != 'id' && !column.isCustom"
           :key="k"
-          :prop="column.IsDataObjectField ? column.Name : column.ColumnName"
-          :label="column.DisplayName || column.Name"
+          :prop="column.isDataObjectField ? column.name : column.columnName"
+          :label="column.displayName || column.name"
         >
           <el-switch
-            v-if="column.TypeStr == 'Boolean'"
-            v-model="form[column.Name]"
+            v-if="column.typeStr == 'Boolean'"
+            v-model="form[column.name]"
             active-color="#13ce66"
             inactive-color="#ff4949"
           />
 
           <el-date-picker
-            v-else-if="column.TypeStr == 'DateTime'"
-            v-model="form[column.Name]"
+            v-else-if="column.typeStr == 'DateTime'"
+            v-model="form[column.name]"
             type="datetime"
             format="yyyy-MM-dd HH:mm:ss"
             value-format="yyyy-MM-dd HH:mm:ss"
@@ -35,7 +35,7 @@
           <el-input
             v-else
             v-model="
-              form[column.IsDataObjectField ? column.Name : column.ColumnName]
+              form[column.isDataObjectField ? column.name : column.columnName]
             "
             type="text"
           /> </el-form-item

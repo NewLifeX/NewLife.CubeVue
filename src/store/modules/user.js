@@ -35,7 +35,7 @@ const user = {
         login(username, userInfo.password)
           .then((response) => {
             const data = response.data.data
-            let token = data['Token'] || data['token']
+            let token = data.token
             commit('SET_TOKEN', token)
             resolve()
           })
@@ -58,11 +58,6 @@ const user = {
             }
 
             const data = response.data.data
-
-            // 此处不处理，用到再处理
-            // if (data.Avatar && data.Avatar.indexOf('http') !== 0) {
-            //   data.Avatar = urls.baseUrl + data.Avatar
-            // }
 
             commit('SET_USERINFO', data)
             resolve(response)
