@@ -72,9 +72,8 @@ export default {
       let avatar = vm.userInfo.avatar
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
-          avatar = urls.baseUrl + avatar
+          avatar = vm.urls.baseUrl + avatar
         }
-        urls.baseUrl + data.avatar
         return avatar
       }
       return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
