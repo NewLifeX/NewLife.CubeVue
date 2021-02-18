@@ -1,5 +1,6 @@
 import Storage from '@/utils/storage'
 import urls from '@/api/constant'
+import { getObject, getLoginConfig } from '@/api/config'
 
 const app = {
   state: {
@@ -10,6 +11,8 @@ const app = {
     device: 'desktop',
     size: Storage.getItem('size') || 'medium',
     urls: urls,
+    sysConfig: {},
+    loginConfig: {},
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -36,6 +39,12 @@ const app = {
     SET_URLS: (state, urls) => {
       Object.assign(state.urls, urls)
     },
+    SET_SYSCONFIG: (state, cfg) => {
+      state.sysConfig = cfg
+    },
+    SET_LOGINCONFIG: (state, cfg) => {
+      state.loginConfig = cfg
+    },
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -52,6 +61,17 @@ const app = {
     },
     setUrls({ commit }, urls) {
       commit('SET_URLS', urls)
+    },
+    async getSysConfig({ commit }) {
+      const path = '/Admin/Sys'
+      let res = await getObject(path)
+      let cfg = res.data.data.value
+      commit('SET_SYSCONFIG', cfg)
+    },
+    async getLoginConfig({ commit }) {
+      let res = await getLoginConfig()
+      let cfg = res.data.data.value
+      commit('SET_LOGINCONFIG', cfg)
     },
   },
 }

@@ -43,7 +43,7 @@ export default {
   },
   created() {
     window.menuRouters = this.menuRouters
-    console.log(this.menuRouters)
+    // console.log(this.menuRouters)
   },
 }
 </script>

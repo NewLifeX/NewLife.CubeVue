@@ -32,7 +32,7 @@ export default {
   methods: {
     handleClick(tab, event) {
       let vm = this
-      console.log(tab, event)
+      // console.log(tab, event)
       if (tab.name === 'OAuthConfig') {
         vm.$router.push({ path: '/Admin/OAuthConfig', component: List })
       }

@@ -9,11 +9,11 @@
             <i class="el-icon-cloudy"></i>
           </el-col>
         </el-row>
-        <template v-if="setting.allowLogin">
+        <template v-if="set.allowLogin">
           <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
             <span class="heading text-primary"
-              >{{ sysConfig.displayName }} 登录</span
+              >{{ sysConfig.displayName || set.displayName }} 登录</span
             >
             <el-form-item label="">
               <el-input
@@ -40,7 +40,7 @@
                 >记住我</el-checkbox
               >
 
-              <template v-if="setting.allowRegister">
+              <template v-if="set.allowRegister">
                 <div
                   style="display: inline-block; margin-top: 5px; float: right;"
                 >
@@ -62,7 +62,7 @@
         </template>
       </div>
       <!-- Login3 -->
-      <div v-if="setting.autoRegister && ms.length > 0">
+      <div v-if="set.autoRegister && set.providers.length > 0">
         <el-row>
           <el-col :span="24" class="text-center">
             <p class="login3">
@@ -72,9 +72,9 @@
             </p>
             <el-row>
               <el-col :sm="24">
-                <template v-for="(mi, i) in ms">
+                <template v-for="(mi, i) in set.providers">
                   <a :key="i" @click="ssoClick(getUrl(mi))">
-                    {{ mi.name }}
+                    {{ mi.nickName }}
                   </a>
                 </template>
               </el-col>
@@ -88,6 +88,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { getLoginConfig } from '@/api/config'
 
 export default {
   computed: {
@@ -103,24 +104,21 @@ export default {
         password: null,
         remember: true,
       },
-      setting: {
+      set: {
+        displayName: '魔方',
+        logo: '', // 系统logo
         allowLogin: true,
         allowRegister: true,
         autoRegister: true,
-      },
-      ms: [
-        {
-          name: 'NewLife',
-        },
-      ],
-      dic: {
-        newLife: '新生命',
-        baidu: '百度',
-        weixin: '微信',
-        taobao: '淘宝',
-        ding: '钉钉',
+        providers: [],
       },
     }
+  },
+  created() {
+    let vm = this
+    getLoginConfig().then((res) => {
+      vm.set = res.data.data
+    })
   },
   methods: {
     login() {
@@ -137,7 +135,7 @@ export default {
       // location.href = urls.ssoUrl + url
     },
     getUrl(mi) {
-      console.log(mi)
+      // console.log(mi)
       let vm = this
       // let name = 'NewLife.Cube'
       let url = `/Sso/Login?name=${mi.name}&state=front-end`
@@ -149,14 +147,6 @@ export default {
       )
       url += `&redirect_uri=${redirect_uri}`
       return url
-    },
-    getName(mi) {
-      let vm = this
-      let nickName = vm.dic[mi.name]
-      if (nickName == null) {
-        nickName = mi.name
-      }
-      return nickName
     },
     getQueryString(name) {
       var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')

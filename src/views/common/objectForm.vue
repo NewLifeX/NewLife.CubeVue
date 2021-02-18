@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { getObject, updateObject } from '@/api/entity'
+import { getObject, updateObject } from '@/api/config'
 
 export default {
   props: ['path'],
