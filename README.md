@@ -5,6 +5,12 @@
 - api 文档地址 http://81.69.253.197:8000/index.html
 - 旧版魔方 http://81.69.253.197:8000/Admin
 
+## 环境
+
+- 下载安装 nodejs： https://nodejs.org/dist/v14.15.5/node-v14.15.5-x64.msi
+- 注意安装完之后需要重新打开命令行窗口，命令才会生效
+- 安装 yarn：`npm i yarn -g`
+
 ## 安装依赖
 
 ```bash

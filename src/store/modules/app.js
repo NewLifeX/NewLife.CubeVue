@@ -9,7 +9,7 @@ const app = {
     },
     device: 'desktop',
     size: Storage.getItem('size') || 'medium',
-    baseUrl: urls.baseUrl,
+    urls: urls,
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -33,6 +33,9 @@ const app = {
       state.size = size
       Storage.setItem('size', size)
     },
+    SET_URLS: (state, urls) => {
+      Object.assign(state.urls, urls)
+    },
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -46,6 +49,9 @@ const app = {
     },
     setSize({ commit }, size) {
       commit('SET_SIZE', size)
+    },
+    setUrls({ commit }, urls) {
+      commit('SET_URLS', urls)
     },
   },
 }

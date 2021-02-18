@@ -88,11 +88,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import urls from '@/api/constant'
 
 export default {
   computed: {
-    ...mapGetters(['sysConfig']),
+    ...mapGetters(['sysConfig','urls']),
     redirect() {
       return this.$route.query.redirect
     },
@@ -134,7 +133,7 @@ export default {
         .catch(() => {})
     },
     ssoClick(url) {
-      location.href = urls.baseUrl + url
+      location.href = this.urls.baseUrl + url
       // location.href = urls.ssoUrl + url
     },
     getUrl(mi) {

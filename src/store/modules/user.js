@@ -1,7 +1,6 @@
 import { login, logout, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/token'
 import * as userInfoStorage from '@/utils/user'
-import urls from '@/api/constant'
 
 const user = {
   state: {
@@ -59,10 +58,11 @@ const user = {
             }
 
             const data = response.data.data
-            // console.log('userinfo', data)
-            if (data.Avatar && data.Avatar.indexOf('http') !== 0) {
-              data.Avatar = urls.baseUrl + data.Avatar
-            }
+
+            // 此处不处理，用到再处理
+            // if (data.Avatar && data.Avatar.indexOf('http') !== 0) {
+            //   data.Avatar = urls.baseUrl + data.Avatar
+            // }
 
             commit('SET_USERINFO', data)
             resolve(response)

@@ -7,5 +7,6 @@ const getters = {
   sysConfig: (state) => state.sysConfig.sysConfig,
   sidebar: (state) => state.app.sidebar,
   app: (state) => state.app,
+  urls: (state) => state.app.urls,
 }
 export default getters

@@ -1,5 +1,5 @@
 import { Vue, Element, App, Store, Router } from 'newlife-cube-vueui'
-console.log(Vue, Element, App, Store, Router)
+// console.log(Vue, Element, App, Store, Router)
 import 'element-ui/lib/theme-chalk/index.css'
 import '../../lib/newlife-cube-vueui.css'
 
@@ -9,6 +9,8 @@ Vue.config.productionTip = false
 // 注册组件
 const files = require.context('@/views/', true, /^.*\.vue$/)
 Store.dispatch('setFiles', files)
+
+// Store.dispatch('setUrls', 'http://localhost:5000')
 
 new Vue({
   router: Router,
