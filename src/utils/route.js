@@ -7,6 +7,7 @@ export function formatRoutes(files, routes, depth = 0) {
   routes.forEach((router) => {
     router.path = router.url
     router.name = router.name
+    if (router.visible !== undefined) router.hidden = !router.visible
 
     // 第一层使用布局模板
     if (depth === 0) {
