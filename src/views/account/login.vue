@@ -73,8 +73,17 @@
             <el-row>
               <el-col :sm="24">
                 <template v-for="(mi, i) in set.providers">
-                  <a :key="i" @click="ssoClick(getUrl(mi))">
-                    {{ mi.nickName }}
+                  <a
+                    :title="mi.nickName || mi.name"
+                    :key="i"
+                    @click="ssoClick(getUrl(mi))"
+                  >
+                    <img
+                      v-if="mi.logo"
+                      :src="getLogoUrl(mi.logo)"
+                      style="width: 64px;height: 64px;"
+                    />
+                    <template v-else>{{ mi.nickName || mi.name }}</template>
                   </a>
                 </template>
               </el-col>
@@ -89,6 +98,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getLoginConfig } from '@/api/config'
+import { MessageBox } from 'element-ui'
 
 export default {
   computed: {
@@ -119,6 +129,10 @@ export default {
     getLoginConfig().then((res) => {
       vm.set = res.data.data
     })
+    try {
+      // 关闭所有弹窗
+      MessageBox.close()
+    } catch (error) {}
   },
   methods: {
     login() {
@@ -148,11 +162,12 @@ export default {
       url += `&redirect_uri=${redirect_uri}`
       return url
     },
-    getQueryString(name) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
-      var r = window.location.search.substr(1).match(reg)
-      if (r != null) return unescape(r[2])
-      return null
+    getLogoUrl(logo) {
+      let vm = this
+      if (logo.indexOf('http') !== 0) {
+        logo = vm.urls.baseUrl + logo
+      }
+      return logo
     },
   },
 }

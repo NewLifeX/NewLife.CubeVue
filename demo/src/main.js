@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 const files = require.context('@/views/', true, /^.*\.vue$/)
 Store.dispatch('setFiles', files)
 
-// Store.dispatch('setUrls', 'http://localhost:5000')
+// Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
 
 new Vue({
   router: Router,

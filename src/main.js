@@ -7,6 +7,8 @@ Vue.use(Element)
 
 Vue.config.productionTip = false
 
+// Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+
 new Vue({
   router: Router,
   store: Store,

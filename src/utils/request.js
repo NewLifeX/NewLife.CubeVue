@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import urls from '@/api/constant'
 import { getToken } from '@/utils/token'
 
 const service = axios.create({
@@ -91,10 +90,6 @@ function handle401() {
   // 如果已弹窗，不重复弹窗
   if (!isLoginTimeout) {
     isLoginTimeout = true
-    // 如果当前就是login、页面则不作处理
-    if (location.pathname.indexOf('/login') === 0) {
-      return Promise.reject('登录超时，已经是登录页')
-    }
     MessageBox.confirm(
       '登陆超时，可以取消继续留在该页面，或者重新登录',
       '确定登出',
