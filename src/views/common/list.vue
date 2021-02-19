@@ -31,7 +31,14 @@
         </div>
       </div>
       <div class="table-container">
-        <el-table v-loading="listLoading" :data="tabledata" stripe border>
+        <el-table
+          height="calc(100vh - 177px)"
+          v-loading="listLoading"
+          :data="tabledata"
+          stripe
+          border
+          @sort-change="sortChange"
+        >
           <el-table-column label="编号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
             <el-table-column
@@ -39,6 +46,7 @@
               :key="idx"
               :label="column.displayName"
               :prop="column.name"
+              :sortable="true"
             >
               <template slot-scope="scope">
                 <template v-if="column.typeStr == 'Boolean'">
@@ -103,9 +111,9 @@ export default {
         dateRange: null,
       },
       page: {
-        PageIndex: 1,
-        PageSize: 10,
-        TotalCount: 0,
+        pageIndex: 1,
+        pageSize: 10,
+        totalCount: 0,
       },
       headerData: [],
       listLoading: false,
@@ -240,6 +248,20 @@ export default {
       this.page.pageSize = val
       this.gettabeldata()
     },
+    sortChange({ column, prop, order }) {
+      console.log(column, prop, order)
+      if (order === 'ascending') {
+        this.page.desc = false
+        this.page.sort = prop
+      } else if (order === 'descending') {
+        this.page.desc = true
+        this.page.sort = prop
+      } else {
+        this.page.desc = undefined
+        this.page.sort = undefined
+      }
+      this.gettabeldata()
+    },
   },
 }
 </script>
@@ -264,7 +286,7 @@ export default {
   padding: 0 10px;
 }
 .table-container {
-  max-height: calc(100vh - 177px);
+  /* max-height: calc(100vh - 177px); */
   overflow-y: auto;
   margin-bottom: 12px;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
