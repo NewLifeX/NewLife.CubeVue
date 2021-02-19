@@ -140,7 +140,7 @@ export default {
       vm.$store
         .dispatch('Login', vm.loginForm)
         .then(() => {
-          vm.$router.push({ path: vm.redirect || '/' })
+          vm.$router.push({ path: vm.redirect || '/' }, () => {})
         })
         .catch(() => {})
     },

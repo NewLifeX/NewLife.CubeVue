@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/token'
-
+window.MessageBox = MessageBox
 const service = axios.create({
   timeout: 50000,
 })
@@ -90,24 +90,29 @@ function handle401() {
   // 如果已弹窗，不重复弹窗
   if (!isLoginTimeout) {
     isLoginTimeout = true
-    MessageBox.confirm(
-      '登陆超时，可以取消继续留在该页面，或者重新登录',
-      '确定登出',
-      {
-        confirmButtonText: '重新登录',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-    ).then(() => {
-      isLoginTimeout = false
-      store.dispatch('Logout').then(() => {
-        isLoginTimeout = false
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
-    })
   } else {
-    return Promise.reject('登录超时，已弹窗')
+    console.log('登录超时，已弹窗，尝试关闭已打开的弹窗')
+    try {
+      // 关闭所有弹窗
+      MessageBox.close()
+    } catch (error) {}
   }
+
+  MessageBox.confirm(
+    '登陆超时，可以取消继续留在该页面，或者重新登录',
+    '确定登出',
+    {
+      confirmButtonText: '重新登录',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    isLoginTimeout = false
+    store.dispatch('Logout').then(() => {
+      isLoginTimeout = false
+      location.reload() // 为了重新实例化vue-router对象 避免bug
+    })
+  })
 }
 
 function handle403(res) {
