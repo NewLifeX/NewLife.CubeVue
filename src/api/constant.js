@@ -1,7 +1,7 @@
 export default {
   // baseUrl: '',
-  baseUrl: 'http://localhost:5000',
-  // baseUrl: 'http://81.69.253.197:8000',
+  // baseUrl: 'http://localhost:5000',
+  baseUrl: 'http://81.69.253.197:8000',
   // ssoUrl: 'http://localhost:5000',
   ssoUrl: 'https://sso.newlifex.com',
   login: '/Admin/User/Login',
@@ -17,5 +17,5 @@ export default {
   edit: '/Edit',
   getObject: '/Index',
   updateObject: '/Update',
-  getLoginConfig: '/Admin/Cube/getLoginConfig',
+  getLoginConfig: '/Admin/Cube/GetLoginConfig',
 }
