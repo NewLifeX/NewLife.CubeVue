@@ -24,7 +24,12 @@ export default (to, from, next) => {
           .dispatch('GetUserInfo')
           .then(() => {
             store.dispatch('generateRoutes').then(() => {
-              router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+              let addRouters = store.getters.addRouters
+              if (addRouters) {
+                addRouters.forEach((e) => {
+                  router.addRoute(e) // 动态添加可访问路由表
+                })
+              }
               next({
                 ...to,
                 replace: true,

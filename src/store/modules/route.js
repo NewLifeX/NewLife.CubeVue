@@ -1,9 +1,6 @@
 import { getMenu } from '@/api/menu'
 import { formatRoutes } from '@/utils/route'
 
-// 添加/编辑页的路由，不需要加到菜单显示
-let addRouters = []
-
 const route = {
   state: {
     // 将展示在侧边栏的菜单
@@ -46,10 +43,10 @@ const route = {
         getMenu().then((routeRes) => {
           // 将请求回来的菜单转化成路由以及菜单信息
           let accessedRouters = routeRes.data.data
-          addRouters = formatRoutes(state.files, routeRes.data.data)
+          let addRouters = formatRoutes(state.files, accessedRouters)
 
-          commit('SET_ROUTERS', accessedRouters)
-          commit('ADD_ROUTERS', addRouters)
+          commit('SET_ROUTERS', addRouters)
+          // commit('ADD_ROUTERS', addRouters)
           resolve()
         })
       })

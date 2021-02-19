@@ -47,7 +47,7 @@ function getEditRoute(files, router, path) {
     hidden: true,
     path: `${path}/:type(Edit|Add|Detail)/:id?`,
     // path: `User/Edit/:id?`,
-    name: router.name,
+    // name: router.name,
     component: (resolve) => {
       // 先尝试加载自定义视图，不存在使用默认视图
       path = `.${path}/form.vue`
