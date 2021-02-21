@@ -34,10 +34,11 @@
         <el-table
           height="calc(100vh - 177px)"
           v-loading="listLoading"
-          :data="tabledata"
+          :data="tableData"
           stripe
           border
           @sort-change="sortChange"
+          @row-dblclick="rowDblclick"
         >
           <el-table-column label="编号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
@@ -105,7 +106,7 @@ export default {
   name: 'list',
   data() {
     return {
-      tabledata: [],
+      tableData: [],
       queryParams: {
         key: null,
         dateRange: null,
@@ -236,7 +237,7 @@ export default {
 
       getDataList(vm.currentPath, vm.queryData).then((res) => {
         vm.listLoading = false
-        vm.tabledata = res.data.data
+        vm.tableData = res.data.data
         vm.page = res.data.pager
       })
     },
@@ -261,6 +262,9 @@ export default {
         this.page.sort = undefined
       }
       this.gettabeldata()
+    },
+    rowDblclick(row) {
+      this.editData(row)
     },
   },
 }
