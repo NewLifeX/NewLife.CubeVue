@@ -150,6 +150,8 @@ export default {
   margin-left: 50px;
   margin-bottom: 75px;
   max-height: calc(100vh - 160px);
+  max-height: -moz-calc(100vh - 160px);
+  max-height: -webkit-calc(100vh - 160px);
   overflow-y: auto;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }

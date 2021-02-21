@@ -40,6 +40,8 @@
       &.has-logo {
         .el-scrollbar {
           height: calc(100% - 50px);
+          height: -moz-calc(100% - 50px);
+          height: -webkit-calc(100% - 50px);
         }
       }
 

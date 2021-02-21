@@ -106,6 +106,8 @@ export default {
 <style scoped>
 .objform {
   max-height: calc(100vh - 200px);
+  max-height: -moz-calc(100vh - 200px);
+  max-height: -webkit-calc(100vh - 200px);
   overflow: auto;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
