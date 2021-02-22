@@ -42,7 +42,7 @@ export default {
     }
   },
   created() {
-    window.menuRouters = this.menuRouters
+    // window.menuRouters = this.menuRouters
     // console.log(this.menuRouters)
   },
 }

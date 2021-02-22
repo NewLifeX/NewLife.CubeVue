@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden">
+  <div v-if="item.visible">
     <template
       v-if="
         hasOneShowingChild(item.children, item) &&
@@ -15,7 +15,7 @@
           :index="onlyOneChild.path || onlyOneChild.url"
           :class="{ 'submenu-title-noDropdown': !isNest }"
         >
-          <item :title="onlyOneChild.name" />
+          <item :title="onlyOneChild.displayName" />
         </el-menu-item>
       </router-link>
     </template>
@@ -27,7 +27,7 @@
       popper-append-to-body
     >
       <template slot="title">
-        <item v-if="item" :title="item.name" />
+        <item v-if="item" :title="item.displayName" />
       </template>
       <sidebar-item
         v-for="child in item.children"
