@@ -9,7 +9,7 @@ export default {
   getUserInfo: '/Admin/User/Info/',
   logout: '/Admin/User/Logout',
   getMenu: '/Admin/Index/GetMenuTree',
-  getEntityFields: '/GetEntityFields',
+  getEntityFields: '/GetFields',
   getDataList: '/Index',
   getData: '/Edit',
   deleteById: '/Delete',
