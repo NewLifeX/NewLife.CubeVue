@@ -13,6 +13,7 @@ const app = {
     urls: urls,
     sysConfig: {},
     loginConfig: {},
+    hiddenLayout: false,
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -45,6 +46,9 @@ const app = {
     SET_LOGINCONFIG: (state, cfg) => {
       state.loginConfig = cfg
     },
+    SET_HIDDENLAYOUT: (state, hidden) => {
+      state.hiddenLayout = hidden
+    },
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -61,6 +65,9 @@ const app = {
     },
     setUrls({ commit }, urls) {
       commit('SET_URLS', urls)
+    },
+    setHiddenLayout({ commit }, hidden) {
+      commit('SET_HIDDENLAYOUT', hidden)
     },
     async getSysConfig({ commit }) {
       const path = '/Admin/Sys'

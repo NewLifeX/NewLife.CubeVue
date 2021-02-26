@@ -2,12 +2,12 @@
   <div :class="classObj" class="app-wrapper">
     <div>
       <div
-        v-if="device === 'mobile' && sidebar.opened"
+        v-show="!hiddenLayout && device === 'mobile' && sidebar.opened"
         class="drawer-bg"
         @click="handleClickOutside"
       />
-      <sidebar class="sidebar sidebar-container" />
-      <navbar />
+      <navbar v-show="!hiddenLayout" />
+      <sidebar v-show="!hiddenLayout" class="sidebar sidebar-container" />
       <div :class="classAppMain" class="main">
         <app-main></app-main>
       </div>
@@ -33,6 +33,10 @@ export default {
     device() {
       return this.$store.state.app.device
     },
+    hiddenLayout() {
+      let query = this.$route.query
+      return query.hiddenLayout === 'true' || query.hl === 'true'
+    },
     classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -43,6 +47,7 @@ export default {
     },
     classAppMain() {
       return {
+        hiddenLayout: this.hiddenLayout,
         hideSidebarMain: !this.sidebar.opened,
         openSidebarMain: this.sidebar.opened,
       }
@@ -76,6 +81,7 @@ export default {
   bottom: 0;
   height: 100%;
 }
+
 .hideSidebarMain {
   left: 0px;
   width: calc(100% - 40px);
@@ -88,6 +94,12 @@ export default {
   width: calc(100% - 240px);
   width: -webkit-calc(100% - 240px);
   width: -moz-calc(100% - 240px);
+}
+
+.hiddenLayout {
+  left: 0px;
+  width: calc(100% - 40px);
+  top: 0px;
 }
 </style>
 
