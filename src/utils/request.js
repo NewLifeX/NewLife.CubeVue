@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/token'
-window.MessageBox = MessageBox
+
 const service = axios.create({
   timeout: 50000,
 })
@@ -14,12 +13,12 @@ service.interceptors.request.use(
   (config) => {
     // api 的 base_url
     // 在此处设置baseURL，避免直接依赖store，如果放在上面create方法，store为空
-    config.baseURL = store.getters.urls.baseUrl
+    config.baseURL = store.getters.urls.getBaseUrl()
 
     // 所有请求默认是json格式，除了上传文件，不用表单
     config.headers['Content-Type'] = 'application/json; charset=UTF-8'
 
-    const token = getToken()
+    const token = store.getters.token
     if (token) {
       // 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
       config.headers['Authorization'] = token
@@ -69,12 +68,12 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    // console.log('err', error, JSON.stringify(error)) // for debug
     if (error.message === 'Request failed with status code 401') {
       handle401()
     } else if (error.message === 'Request failed with status code 403') {
       handle403({ message: '没有权限！' })
     } else {
+      console.log('err', error, JSON.stringify(error)) // for debug
       Message({
         message: '服务请求出错',
         type: 'error',
