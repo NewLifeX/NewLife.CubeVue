@@ -126,13 +126,15 @@ export default {
   },
   created() {
     let vm = this
-    getLoginConfig().then((res) => {
-      vm.set = res.data.data
-    })
     try {
       // 关闭所有弹窗
       MessageBox.close()
     } catch (error) {}
+    getLoginConfig().then((res) => {
+      vm.set = res.data.data
+      // 检查是否需要自动跳转第三方登录
+      vm.autoAuthRedirect()
+    })
   },
   methods: {
     login() {
@@ -168,6 +170,14 @@ export default {
         logo = vm.urls.baseUrl + logo
       }
       return logo
+    },
+    autoAuthRedirect() {
+      // 根据设置，如果不允许密码登录，且只有一个第三方登录，自动跳转
+      let vm = this
+      let set = vm.set
+      if (!set.allowLogin && set.providers.length === 1) {
+        vm.ssoClick(vm.getUrl(set.providers[0]))
+      }
     },
   },
 }
