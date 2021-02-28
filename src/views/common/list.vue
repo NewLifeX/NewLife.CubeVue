@@ -40,10 +40,10 @@
           @sort-change="sortChange"
           @row-dblclick="rowDblclick"
         >
-          <el-table-column label="编号" type="index" width="50" />
+          <el-table-column label="序号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
             <el-table-column
-              v-if="column.length <= 50 && column.name.toLowerCase() != 'id'"
+              v-if="column.length <= 50"
               :key="idx"
               :label="column.displayName"
               :prop="column.name"
