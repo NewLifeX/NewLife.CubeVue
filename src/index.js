@@ -8,6 +8,11 @@ import * as ApiEntity from '@/api/entity'
 
 import '@/styles/index.scss' // global css
 
+Vue.prototype.$message = Element.Message
+Vue.prototype.$warn = (config) => {
+  Element.Message.warning(config)
+}
+
 const files = require.context('@/views/', true, /^.*\.vue$/)
 Store.dispatch('setFiles', files)
 
