@@ -72,8 +72,12 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token)
           .then(() => {
+            // 移除token
             commit('REMOVE_TOKEN')
+            // 移除用户信息
             commit('REMOVE_USERINFO')
+            // TODO 移除配置
+            // commit('REMOVE_USERINFO')
             resolve()
           })
           .catch((error) => {

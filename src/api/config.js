@@ -1,7 +1,8 @@
-import request from '@/utils/request'
-import urls from './constant'
+import stroe from '@/store'
 
 export function getObject(path) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: path + urls.getObject,
     method: 'get',
@@ -9,6 +10,8 @@ export function getObject(path) {
 }
 
 export function updateObject(path, obj) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: path + urls.updateObject,
     method: 'post',
@@ -17,6 +20,8 @@ export function updateObject(path, obj) {
 }
 
 export function getLoginConfig() {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: urls.getLoginConfig,
     method: 'get',

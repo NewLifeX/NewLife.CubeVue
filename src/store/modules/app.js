@@ -1,6 +1,7 @@
 import Storage from '@/utils/storage'
 import urls from '@/api/constant'
 import { getObject, getLoginConfig } from '@/api/config'
+import request from '@/utils/request'
 
 const app = {
   state: {
@@ -11,9 +12,14 @@ const app = {
     device: 'desktop',
     size: Storage.getItem('size') || 'medium',
     urls: urls,
-    sysConfig: {},
-    loginConfig: {},
+    // 系统配置
+    sysConfig: undefined,
+    // 登录页面配置
+    loginConfig: undefined,
+    // 是否隐藏布局
     hiddenLayout: false,
+    // http请求封装
+    request: request,
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -49,6 +55,9 @@ const app = {
     SET_HIDDENLAYOUT: (state, hidden) => {
       state.hiddenLayout = hidden
     },
+    SET_REQUEST: (state, request) => {
+      state.request = request
+    },
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -79,6 +88,9 @@ const app = {
       let res = await getLoginConfig()
       let cfg = res.data.data.value
       commit('SET_LOGINCONFIG', cfg)
+    },
+    setRequest({ commit }, request) {
+      commit('SET_REQUEST', request)
     },
   },
 }

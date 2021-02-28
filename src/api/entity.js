@@ -1,7 +1,8 @@
-import request from '@/utils/request'
-import urls from './constant'
+import stroe from '@/store'
 
 function getEntityFields(path, kind) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   let params = {
     kind,
   }
@@ -26,6 +27,8 @@ export function getListFields(path) {
 }
 
 export function getDataList(path, page) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: path + urls.getDataList,
     method: 'post',
@@ -34,6 +37,8 @@ export function getDataList(path, page) {
 }
 
 export function getData(path, id) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   let params = {
     id,
   }
@@ -45,6 +50,8 @@ export function getData(path, id) {
 }
 
 export function deleteById(path, id) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   let params = {
     id,
   }
@@ -56,6 +63,8 @@ export function deleteById(path, id) {
 }
 
 export function add(path, entity) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: path + urls.add,
     method: 'post',
@@ -64,6 +73,8 @@ export function add(path, entity) {
 }
 
 export function edit(path, entity) {
+  const request = stroe.getters.request
+  const urls = stroe.getters.urls
   return request({
     url: path + urls.edit,
     method: 'post',
