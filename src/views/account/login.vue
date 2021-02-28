@@ -12,9 +12,7 @@
         <template v-if="set.allowLogin">
           <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
-            <span class="heading text-primary"
-              >{{ sysConfig.displayName || set.displayName }} 登录</span
-            >
+            <span class="heading text-primary">{{ displayName }} 登录</span>
             <el-form-item label="">
               <el-input
                 v-model="loginForm.username"
@@ -105,6 +103,11 @@ export default {
     ...mapGetters(['sysConfig', 'urls']),
     redirect() {
       return this.$route.query.redirect
+    },
+    displayName() {
+      return (
+        (this.sysConfig && this.sysConfig.displayName) || this.set.displayName
+      )
     },
   },
   data() {
