@@ -1,5 +1,3 @@
-import store from '@/store'
-
 const { body } = document
 const WIDTH = 1024
 const RATIO = 3
@@ -14,7 +12,7 @@ export default {
     $route() {
       if (this.device === 'mobile' && this.sidebar.opened) {
         this.currentDevice = 'mobile'
-        store.dispatch('closeSideBar', { withoutAnimation: false })
+        this.$store.dispatch('closeSideBar', { withoutAnimation: false })
       }
     },
   },
@@ -25,8 +23,8 @@ export default {
     const isMobile = this.isMobile()
     if (isMobile) {
       this.currentDevice = 'mobile'
-      store.dispatch('toggleDevice', 'mobile')
-      store.dispatch('closeSideBar', { withoutAnimation: true })
+      this.$store.dispatch('toggleDevice', 'mobile')
+      this.$store.dispatch('closeSideBar', { withoutAnimation: true })
     }
   },
   methods: {
@@ -39,12 +37,12 @@ export default {
         const isMobile = this.isMobile()
         if (isMobile && this.currentDevice !== 'mobile') {
           this.currentDevice = 'mobile'
-          store.dispatch('toggleDevice', 'mobile')
-          store.dispatch('closeSideBar', { withoutAnimation: true })
+          this.$store.dispatch('toggleDevice', 'mobile')
+          this.$store.dispatch('closeSideBar', { withoutAnimation: true })
         } else if (!isMobile && this.currentDevice !== 'desktop') {
           this.currentDevice = 'desktop'
-          store.dispatch('toggleDevice', 'desktop')
-          store.dispatch('toggleSideBar')
+          this.$store.dispatch('toggleDevice', 'desktop')
+          this.$store.dispatch('toggleSideBar')
         }
       }
     },

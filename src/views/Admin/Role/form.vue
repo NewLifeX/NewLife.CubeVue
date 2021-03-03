@@ -100,8 +100,6 @@
 </template>
 
 <script>
-import { getData, add, edit } from '@/api/entity'
-
 export default {
   data() {
     return {
@@ -130,6 +128,22 @@ export default {
         : vm.isDetail
         ? 'getDetailFields'
         : 'getEditFormFields'
+    },
+    setFieldType() {
+      let vm = this
+      return vm.isAdd
+        ? 'setAddFormFields'
+        : vm.isDetail
+        ? 'setDetailFields'
+        : 'setEditFormFields'
+    },
+    fieldType() {
+      let vm = this
+      return vm.isAdd
+        ? 'addFormFields'
+        : vm.isDetail
+        ? 'detailFields'
+        : 'editFormFields'
     },
     isAdd() {
       return this.type === 'Add'
@@ -234,13 +248,25 @@ export default {
     },
     getFields() {
       let vm = this
-      vm.$store.dispatch(vm.getFieldType, vm.currentPath).then((res) => {
-        vm.fields = res
+      let path = vm.currentPath
+      let key = path + '-' + fieldType
+      let fields = vm.$store.state.entity[vm.fieldType][key]
+      if (fields) {
+        vm.fields = fields
+        return
+      }
+
+      // 没有获取过字信息，请求回来后保存一份
+      vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
+        fields = res.data.data
+        vm.fields = fields
+
+        vm.$store.dispatch(vm.setFieldType, { key, fields })
       })
     },
     query() {
       let vm = this
-      getData(vm.currentPath, vm.id).then((res) => {
+      vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
         vm.form = res.data.data
         vm.allCheckUpdate()
       })
@@ -248,7 +274,7 @@ export default {
     confirm() {
       let vm = this
       if (vm.isAdd) {
-        add(vm.currentPath, vm.form).then(() => {
+        vm.$store.getters.apis.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '新增成功',
             type: 'success',
@@ -256,7 +282,7 @@ export default {
           })
         })
       } else {
-        edit(vm.currentPath, vm.form).then(() => {
+        vm.$store.getters.apis.edit(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '保存成功',
             type: 'success',

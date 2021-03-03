@@ -1,16 +1,24 @@
-import { Vue, Element, App, Store, Router } from './index'
-// console.log(Vue, Element, App, Store, Router)
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VueRouter from 'vue-router'
+import Element from 'element-ui'
+import CubeUI from './index'
+// console.log(Vue, CubeUI)
+
 import 'element-ui/lib/theme-chalk/index.css'
-import '@/styles/index.scss' // global css
 
-Vue.use(Element)
+Vue.Vuex = Vuex
+Vue.VueRouter = VueRouter
+Vue.Element = Element
+// window.Vue = Vue
+Vue.use(CubeUI)
+// console.log(Vue.Store)
 
-Vue.config.productionTip = false
+// Vue.Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
 
-// Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-
+window.Vue = Vue
 new Vue({
-  router: Router,
-  store: Store,
-  render: (h) => h(App),
+  router: Vue.Router,
+  store: Vue.Store,
+  render: (h) => h(CubeUI.App),
 }).$mount('#app')

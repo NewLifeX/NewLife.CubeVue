@@ -41,7 +41,7 @@
           @row-dblclick="rowDblclick"
         >
           <el-table-column label="序号" type="index" width="50" />
-          <template v-for="(column, idx) in headerData">
+          <!-- <template v-for="(column, idx) in headerData">
             <el-table-column
               v-if="column.length <= 50"
               :key="idx"
@@ -60,7 +60,7 @@
                 <div v-else>{{ scope.row[column.name] }}</div>
               </template>
             </el-table-column>
-          </template>
+          </template> -->
 
           <el-table-column
             label="操作"
@@ -100,8 +100,6 @@
   </div>
 </template>
 <script>
-import { getDataList, deleteById } from '@/api/entity'
-
 export default {
   name: 'list',
   data() {
@@ -196,8 +194,20 @@ export default {
     },
     getListFields() {
       let vm = this
-      vm.$store.dispatch('getListFields', vm.currentPath).then((res) => {
-        vm.headerData = res
+      let path = vm.currentPath
+      let key = path + '-list'
+      let fields = vm.$store.state.entity.listFields[key]
+      if (fields) {
+        vm.headerData = fields
+        return
+      }
+
+      // 没有获取过字信息，请求回来后保存一份
+      vm.$store.getters.apis.getListFields(path).then((res) => {
+        fields = res.data.data
+        vm.headerData = fields
+
+        vm.$store.dispatch('setListFields', { key, fields })
       })
     },
     add() {
@@ -210,7 +220,7 @@ export default {
     },
     deleteData(row) {
       let vm = this
-      deleteById(vm.currentPath, row.id).then(() => {
+      vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
         vm.gettabeldata()
       })
     },
@@ -235,11 +245,13 @@ export default {
       let vm = this
       vm.listLoading = true
 
-      getDataList(vm.currentPath, vm.queryData).then((res) => {
-        vm.listLoading = false
-        vm.tableData = res.data.data
-        vm.page = res.data.pager
-      })
+      vm.$store.getters.apis
+        .getDataList(vm.currentPath, vm.queryData)
+        .then((res) => {
+          vm.listLoading = false
+          vm.tableData = res.data.data
+          vm.page = res.data.pager
+        })
     },
     currentchange(val) {
       this.page.pageIndex = val

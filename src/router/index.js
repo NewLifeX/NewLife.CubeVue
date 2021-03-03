@@ -1,7 +1,3 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
 import beforeEach from './beforeEach'
 
 const Layout = () => import('@/views/layout/index.vue')
@@ -69,14 +65,12 @@ export const asyncRouterMap = [
   },
 ]
 
-const router = new VueRouter({
+const routerOptions = {
   mode: 'history',
   scrollBehavior: () => ({
     y: 0,
   }),
   routes: constantRouterMap,
-})
+}
 
-router.beforeEach(beforeEach)
-
-export default router
+export default { routerOptions, beforeEach }

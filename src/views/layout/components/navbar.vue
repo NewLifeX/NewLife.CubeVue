@@ -53,7 +53,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Hamburger from '@/views/layout/components/hamburger'
 // import SizeSelect from 'src/components/SizeSelect'
 // import ThemePicker from 'src/components/ThemePicker'
@@ -66,7 +65,18 @@ export default {
     // ThemePicker,
   },
   computed: {
-    ...mapGetters(['sidebar', 'userInfo', 'sysConfig', 'urls']),
+    sidebar() {
+      return this.$store.getters.sidebar
+    },
+    userInfo() {
+      return this.$store.getters.userInfo
+    },
+    sysConfig() {
+      return this.$store.getters.sysConfig
+    },
+    urls() {
+      return this.$store.getters.urls
+    },
     myAvatar() {
       let vm = this
       let avatar = vm.userInfo.avatar
@@ -91,7 +101,9 @@ export default {
       this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      this.$store.dispatch('Logout').then(() => {
+      let vm = this
+      vm.$store.getters.apis.logout().then(() => {
+        vm.$store.dispatch('logout')
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
     },

@@ -1,7 +1,5 @@
 import Storage from '@/utils/storage'
 import urls from '@/api/constant'
-import { getObject, getLoginConfig } from '@/api/config'
-import request from '@/utils/request'
 
 const app = {
   state: {
@@ -18,8 +16,10 @@ const app = {
     loginConfig: undefined,
     // 是否隐藏布局
     hiddenLayout: false,
-    // http请求封装
-    request: request,
+    // 信息弹窗
+    message: undefined,
+    // 确认框弹窗
+    messageBox: undefined,
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -55,8 +55,11 @@ const app = {
     SET_HIDDENLAYOUT: (state, hidden) => {
       state.hiddenLayout = hidden
     },
-    SET_REQUEST: (state, request) => {
-      state.request = request
+    SET_MESSAGE: (state, message) => {
+      state.message = message
+    },
+    SET_MESSAGEBOX: (state, messageBox) => {
+      state.messageBox = messageBox
     },
   },
   actions: {
@@ -78,19 +81,17 @@ const app = {
     setHiddenLayout({ commit }, hidden) {
       commit('SET_HIDDENLAYOUT', hidden)
     },
-    async getSysConfig({ commit }) {
-      const path = '/Admin/Sys'
-      let res = await getObject(path)
-      let cfg = res.data.data.value
+    setSysConfig({ commit }, cfg) {
       commit('SET_SYSCONFIG', cfg)
     },
-    async getLoginConfig({ commit }) {
-      let res = await getLoginConfig()
-      let cfg = res.data.data.value
+    setLoginConfig({ commit }, cfg) {
       commit('SET_LOGINCONFIG', cfg)
     },
-    setRequest({ commit }, request) {
-      commit('SET_REQUEST', request)
+    setMessage({ commit }, message) {
+      commit('SET_MESSAGE', message)
+    },
+    setMessageBox({ commit }, messageBox) {
+      commit('SET_MESSAGEBOX', messageBox)
     },
   },
 }

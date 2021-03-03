@@ -1,4 +1,3 @@
-import { getMenu } from '@/api/menu'
 import { formatRoutes } from '@/utils/route'
 
 const route = {
@@ -37,19 +36,13 @@ const route = {
     },
   },
   actions: {
-    generateRoutes({ commit, state }) {
-      return new Promise((resolve) => {
-        // let accessedRouters
-        getMenu().then((routeRes) => {
-          // 将请求回来的菜单转化成路由以及菜单信息
-          let accessedRouters = routeRes.data.data
-          let addRouters = formatRoutes(state.files, accessedRouters)
-
-          commit('SET_ROUTERS', addRouters)
-          // commit('ADD_ROUTERS', addRouters)
-          resolve()
-        })
-      })
+    generateRoutes({ commit, state }, accessedRouters) {
+      // 将请求回来的菜单生成为路由
+      let addRouters = formatRoutes(state.files, accessedRouters)
+      commit('SET_ROUTERS', addRouters)
+    },
+    setRouters({ commit }, addRouters) {
+      commit('SET_ROUTERS', addRouters)
     },
     setFiles({ commit }, files) {
       commit('SET_FILES', files)

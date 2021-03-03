@@ -9,6 +9,7 @@ const getters = {
   sidebar: (state) => state.app.sidebar,
   app: (state) => state.app,
   urls: (state) => state.app.urls,
-  request: (state) => state.app.request,
+  request: (state) => state.api.request,
+  apis: (state) => state.api.apis,
 }
 export default getters

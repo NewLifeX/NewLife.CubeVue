@@ -23,14 +23,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 
 export default {
   name: 'Sidebar',
   components: { SidebarItem },
   computed: {
-    ...mapGetters(['menuRouters', 'sidebar']),
+    menuRouters() {
+      return this.$store.getters.menuRouters
+    },
+    sidebar() {
+      return this.$store.getters.sidebar
+    },
     isCollapse() {
       return !this.sidebar.opened
     },

@@ -194,8 +194,20 @@ export default {
     },
     getListFields() {
       let vm = this
-      vm.$store.dispatch('getListFields', vm.currentPath).then((res) => {
-        vm.headerData = res
+      let path = vm.currentPath
+      let key = path + '-list'
+      let fields = vm.$store.state.entity.listFields[key]
+      if (fields) {
+        vm.headerData = fields
+        return
+      }
+
+      // 没有获取过字信息，请求回来后保存一份
+      vm.$store.getters.apis.getListFields(path).then((res) => {
+        fields = res.data.data
+        vm.headerData = fields
+
+        vm.$store.dispatch('setListFields', { key, fields })
       })
     },
     add() {

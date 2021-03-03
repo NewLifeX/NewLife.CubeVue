@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import { getObject, updateObject } from '@/api/config'
-
 export default {
   props: ['path'],
   data() {
@@ -87,16 +85,19 @@ export default {
     },
     query() {
       let vm = this
-      getObject(vm.currentPath).then((res) => {
+      vm.$store.getters.apis.getObject(vm.currentPath).then((res) => {
         vm.form = res.data.data.value
         vm.properties = res.data.data.properties
       })
     },
     confirm() {
       let vm = this
-
-      updateObject(vm.currentPath, vm.form).then(() => {
-        alert('保存成功')
+      vm.$store.getters.apis.updateObject(vm.currentPath, vm.form).then(() => {
+        vm.$message({
+          message: '保存成功',
+          type: 'success',
+          duration: 5 * 1000,
+        })
       })
     },
   },

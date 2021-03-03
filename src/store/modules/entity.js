@@ -1,10 +1,3 @@
-import {
-  getListFields,
-  getAddFormFields,
-  getEditFormFields,
-  getDetailFields,
-} from '@/api/entity'
-
 const route = {
   state: {
     listFields: {},
@@ -27,45 +20,17 @@ const route = {
     },
   },
   actions: {
-    async getListFields({ commit, state }, path) {
-      let key = path + '-list'
-      let fields = state.listFields[key]
-      if (!fields) {
-        let res = await getListFields(path)
-        fields = res.data.data
-        commit('SET_ListFields', { key, fields })
-      }
-      return fields
+    setListFields({ commit }, { key, fields }) {
+      commit('SET_ListFields', { key, fields })
     },
-    async getAddFormFields({ commit, state }, path) {
-      let key = path + '-addForm'
-      let fields = state.addFormFields[key]
-      if (!fields) {
-        let res = await getAddFormFields(path)
-        fields = res.data.data
-        commit('SET_AddFormFields', { key, fields })
-      }
-      return fields
+    setAddFormFields({ commit }, { key, fields }) {
+      commit('SET_AddFormFields', { key, fields })
     },
-    async getEditFormFields({ commit, state }, path) {
-      let key = path + '-editForm'
-      let fields = state.editFormFields[key]
-      if (!fields) {
-        let res = await getEditFormFields(path)
-        fields = res.data.data
-        commit('SET_EditFormFields', { key, fields })
-      }
-      return fields
+    setEditFormFields({ commit }, { key, fields }) {
+      commit('SET_EditFormFields', { key, fields })
     },
-    async getDetailFields({ commit, state }, path) {
-      let key = path + '-detail'
-      let fields = state.detailFields[key]
-      if (!fields) {
-        let res = await getDetailFields(path)
-        fields = res.data.data
-        commit('SET_DetailFields', { key, fields })
-      }
-      return fields
+    setDetailFields({ commit }, { key, fields }) {
+      commit('SET_DetailFields', { key, fields })
     },
   },
 }

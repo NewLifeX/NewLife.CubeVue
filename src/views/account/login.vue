@@ -94,13 +94,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { getLoginConfig } from '@/api/config'
-import { MessageBox } from 'element-ui'
-
 export default {
   computed: {
-    ...mapGetters(['sysConfig', 'urls']),
+    sysConfig() {
+      return this.$store.getters.sysConfig
+    },
+    urls() {
+      return this.$store.getters.urls
+    },
+    apis() {
+      return this.$store.getters.apis
+    },
     redirect() {
       return this.$route.query.redirect
     },
@@ -131,10 +135,12 @@ export default {
     let vm = this
     try {
       // 关闭所有弹窗
-      MessageBox.close()
+      vm.$messageBox.close()
     } catch (error) {}
-    getLoginConfig().then((res) => {
-      vm.set = res.data.data
+    vm.apis.getLoginConfig().then((res) => {
+      let cfg = res.data.data
+      vm.$store.dispatch('setLoginConfig', cfg)
+      vm.set = cfg
       // 检查是否需要自动跳转第三方登录
       vm.autoAuthRedirect()
     })
@@ -142,12 +148,12 @@ export default {
   methods: {
     login() {
       let vm = this
-      vm.$store
-        .dispatch('Login', vm.loginForm)
-        .then(() => {
-          vm.$router.push({ path: vm.redirect || '/' }, () => {})
-        })
-        .catch(() => {})
+      vm.apis.login(vm.loginForm).then((response) => {
+        const data = response.data.data
+        let token = data.token
+        vm.$store.dispatch('setToken', token)
+        vm.$router.push({ path: vm.redirect || '/' }, () => {})
+      })
     },
     ssoClick(url) {
       location.href = this.urls.baseUrl + url

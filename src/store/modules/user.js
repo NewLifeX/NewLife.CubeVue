@@ -1,4 +1,3 @@
-import { login, logout, getUserInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/token'
 import * as userInfoStorage from '@/utils/user'
 
@@ -28,62 +27,21 @@ const user = {
   },
 
   actions: {
-    // 用户名登录
-    Login({ commit }, userInfo) {
-      const username = userInfo.username.trim()
-      return new Promise((resolve, reject) => {
-        login(username, userInfo.password)
-          .then((response) => {
-            const data = response.data.data
-            let token = data.token
-            commit('SET_TOKEN', token)
-            resolve()
-          })
-          .catch((error) => {
-            reject(error)
-          })
-      })
-    },
-    SetToken({ commit }, token) {
+    setToken({ commit }, token) {
       commit('SET_TOKEN', token)
     },
-    // 获取用户信息
-    GetUserInfo({ commit }) {
-      return new Promise((resolve, reject) => {
-        getUserInfo()
-          .then((response) => {
-            if (!response.data) {
-              // 由于mockjs 不支持自定义状态码只能这样hack
-              reject('error')
-            }
-
-            const data = response.data.data
-
-            commit('SET_USERINFO', data)
-            resolve(response)
-          })
-          .catch((error) => {
-            reject(error)
-          })
-      })
+    // 设置用户信息
+    setUserInfo({ commit }, userInfo) {
+      commit('SET_USERINFO', userInfo)
     },
     // 登出
-    Logout({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        logout(state.token)
-          .then(() => {
-            // 移除token
-            commit('REMOVE_TOKEN')
-            // 移除用户信息
-            commit('REMOVE_USERINFO')
-            // TODO 移除配置
-            // commit('REMOVE_USERINFO')
-            resolve()
-          })
-          .catch((error) => {
-            reject(error)
-          })
-      })
+    logout({ commit, state }) {
+      // 移除token
+      commit('REMOVE_TOKEN')
+      // 移除用户信息
+      commit('REMOVE_USERINFO')
+      // TODO 移除配置
+      // commit('REMOVE_USERINFO')
     },
   },
 }

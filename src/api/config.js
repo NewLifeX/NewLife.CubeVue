@@ -1,29 +1,35 @@
-import stroe from '@/store'
+export default function getApis(stroe) {
+  function getObject(path) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: path + urls.getObject,
+      method: 'get',
+    })
+  }
 
-export function getObject(path) {
-  const request = stroe.getters.request
-  const urls = stroe.getters.urls
-  return request({
-    url: path + urls.getObject,
-    method: 'get',
-  })
-}
+  function updateObject(path, obj) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: path + urls.updateObject,
+      method: 'post',
+      data: obj,
+    })
+  }
 
-export function updateObject(path, obj) {
-  const request = stroe.getters.request
-  const urls = stroe.getters.urls
-  return request({
-    url: path + urls.updateObject,
-    method: 'post',
-    data: obj,
-  })
-}
+  function getLoginConfig() {
+    let request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: urls.getLoginConfig,
+      method: 'get',
+    })
+  }
 
-export function getLoginConfig() {
-  const request = stroe.getters.request
-  const urls = stroe.getters.urls
-  return request({
-    url: urls.getLoginConfig,
-    method: 'get',
-  })
+  return {
+    getObject,
+    updateObject,
+    getLoginConfig,
+  }
 }

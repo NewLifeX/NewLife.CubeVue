@@ -20,6 +20,7 @@ export default {
   add: '/Add',
   edit: '/Edit',
   getObject: '/Index',
+  getSysConfig: '/Admin/Sys',
   updateObject: '/Update',
   getLoginConfig: '/Admin/Cube/GetLoginConfig',
 }
