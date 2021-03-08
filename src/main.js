@@ -15,6 +15,7 @@ Vue.use(CubeUI)
 // console.log(Vue.Store)
 
 // Vue.Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+Vue.Store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
 
 window.Vue = Vue
 new Vue({

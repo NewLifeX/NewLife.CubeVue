@@ -11,20 +11,20 @@
     >
       <template v-for="(column, k) in fields">
         <el-form-item
-          v-if="column.name.toLowerCase() != 'id' && !column.isCustom"
+          v-if="column.name.toLowerCase() != 'id' && column.showInForm"
           :key="k"
           :prop="column.isDataObjectField ? column.name : column.columnName"
           :label="column.displayName || column.name"
         >
           <el-switch
-            v-if="column.typeStr == 'Boolean'"
+            v-if="column.dataType == 'Boolean'"
             v-model="form[column.name]"
             active-color="#13ce66"
             inactive-color="#ff4949"
           />
 
           <el-date-picker
-            v-else-if="column.typeStr == 'DateTime'"
+            v-else-if="column.dataType == 'DateTime'"
             v-model="form[column.name]"
             type="datetime"
             format="yyyy-MM-dd HH:mm:ss"
@@ -115,29 +115,38 @@ export default {
   },
   methods: {
     init() {
-      this.getFields()
+      // this.getFields()
+      this.getColumns()
       if (!this.isAdd) {
         this.query()
       }
     },
-    getFields() {
+    getColumns() {
+      // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       let vm = this
       let path = vm.currentPath
-      let key = path + '-' + fieldType
-      let fields = vm.$store.state.entity[vm.fieldType][key]
-      if (fields) {
-        vm.fields = fields
-        return
-      }
-
-      // 没有获取过字信息，请求回来后保存一份
-      vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
-        fields = res.data.data
-        vm.fields = fields
-
-        vm.$store.dispatch(vm.setFieldType, { key, fields })
+      vm.$store.getters.apis.getColumns(path).then((res) => {
+        vm.fields = res.data.data
       })
     },
+    // getFields() {
+    //   let vm = this
+    //   let path = vm.currentPath
+    //   let key = path + '-' + fieldType
+    //   let fields = vm.$store.state.entity[vm.fieldType][key]
+    //   if (fields) {
+    //     vm.fields = fields
+    //     return
+    //   }
+
+    //   // 没有获取过字信息，请求回来后保存一份
+    //   vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
+    //     fields = res.data.data
+    //     vm.fields = fields
+
+    //     vm.$store.dispatch(vm.setFieldType, { key, fields })
+    //   })
+    // },
     query() {
       let vm = this
       vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {

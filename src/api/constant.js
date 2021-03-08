@@ -1,8 +1,5 @@
 export default {
-  // baseUrl: '',
-  // baseUrl: 'http://localhost:5000',
-  baseUrl: 'http://81.69.253.197:8000',
-  // ssoUrl: 'http://localhost:5000',
+  baseUrl: '',
   getBaseUrl() {
     // 获取基础请求路径，可重载
     return this.baseUrl
@@ -14,6 +11,7 @@ export default {
   logout: '/Admin/User/Logout',
   getMenu: '/Admin/Index/GetMenuTree',
   getEntityFields: '/GetFields',
+  getColumns: '/GetColumns',
   getDataList: '/Index',
   getData: '/Edit',
   deleteById: '/Delete',

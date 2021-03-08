@@ -25,6 +25,20 @@ export default function(stroe) {
     return getEntityFields(path, 'List')
   }
 
+  /**
+   * 获取表对应的列
+   * @param {*} path 基础请求路径
+   * @returns
+   */
+  function getColumns(path) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: path + urls.getColumns,
+      method: 'get',
+    })
+  }
+
   function getDataList(path, page) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
@@ -82,6 +96,7 @@ export default function(stroe) {
   }
 
   return {
+    getColumns,
     getDetailFields,
     getEditFormFields,
     getAddFormFields,
@@ -90,5 +105,6 @@ export default function(stroe) {
     getData,
     add,
     edit,
+    deleteById,
   }
 }

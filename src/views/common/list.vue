@@ -41,7 +41,7 @@
           @row-dblclick="rowDblclick"
         >
           <el-table-column label="序号" type="index" width="50" />
-          <!-- <template v-for="(column, idx) in headerData">
+          <template v-for="(column, idx) in headerData">
             <el-table-column
               v-if="column.length <= 50"
               :key="idx"
@@ -60,7 +60,7 @@
                 <div v-else>{{ scope.row[column.name] }}</div>
               </template>
             </el-table-column>
-          </template> -->
+          </template>
 
           <el-table-column
             label="操作"
@@ -262,7 +262,6 @@ export default {
       this.gettabeldata()
     },
     sortChange({ column, prop, order }) {
-      console.log(column, prop, order)
       if (order === 'ascending') {
         this.page.desc = false
         this.page.sort = prop
