@@ -41,6 +41,15 @@ const install = (Vue) => {
     Vue.Element.Message.warning(config)
   }
 
+  Object.defineProperties(Vue.prototype, {
+    // 此处挂载在 Vue 原型的 $api 对象上
+    $api: {
+      get() {
+        return store.getters.apis
+      },
+    },
+  })
+
   Vue.Store = store
   Vue.Router = router
 }
