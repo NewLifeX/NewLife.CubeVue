@@ -11,5 +11,7 @@ const getters = {
   urls: (state) => state.app.urls,
   request: (state) => state.api.request,
   apis: (state) => state.api.apis,
+  message: (state) => state.app.message,
+  messageBox: (state) => state.app.messageBox,
 }
 export default getters
