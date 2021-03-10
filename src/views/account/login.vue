@@ -163,7 +163,7 @@ export default {
       // console.log(mi)
       let vm = this
       // let name = 'NewLife.Cube'
-      let url = `/Sso/Login?name=${mi.name}&state=front-end`
+      let url = `/Sso/Login?name=${mi.name}&source=front-end`
       // let url = `/sso/authorize?response_type=token&client_id=${name}`
       let redirect_uri = encodeURIComponent(
         location.origin +
