@@ -22,7 +22,7 @@
           </el-date-picker>
           <el-input
             style="width:auto"
-            v-model="queryParams.key"
+            v-model="queryParams.Q"
             placeholder="关键字"
           ></el-input>
           <el-button type="primary" @click="gettabeldata">
@@ -43,19 +43,26 @@
           <el-table-column label="序号" type="index" width="50" />
           <template v-for="(column, idx) in headerData">
             <el-table-column
-              v-if="column.length <= 50"
+              v-if="column.showInList"
               :key="idx"
               :label="column.displayName"
               :prop="column.name"
               :sortable="true"
             >
               <template slot-scope="scope">
-                <template v-if="column.typeStr == 'Boolean'">
+                <template v-if="column.dataType === 'Boolean'">
                   <el-switch
                     :value="scope.row[column.name]"
                     active-color="#13ce66"
                     inactive-color="#ff4949"
                   />
+                </template>
+                <template
+                  v-else-if="!column.isDataObjectField && column.cellUrl"
+                >
+                  <a :href="getUrl(column, scope.row)">{{
+                    column.displayName
+                  }}</a>
                 </template>
                 <div v-else>{{ scope.row[column.name] }}</div>
               </template>
@@ -106,7 +113,7 @@ export default {
     return {
       tableData: [],
       queryParams: {
-        key: null,
+        Q: null,
         dateRange: null,
       },
       page: {
@@ -174,7 +181,8 @@ export default {
       }
 
       let temp = {}
-      Object.assign(temp, vm.page, vm.queryParams)
+      // 查询参数也添加上
+      Object.assign(temp, vm.page, vm.queryParams, vm.$route.query)
       temp.dateRange = undefined
       return temp
     },
@@ -189,8 +197,21 @@ export default {
   },
   methods: {
     init() {
-      this.getListFields()
+      this.getColumns()
       this.query()
+    },
+    getUrl(column, entity) {
+      // 针对指定实体对象计算url，替换其中变量
+      const reg = /{(\w+)}/g
+      return column.cellUrl.replace(reg, (a, b) => entity[b])
+    },
+    getColumns() {
+      // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
+      let vm = this
+      let path = vm.currentPath
+      vm.$store.getters.apis.getColumns(path).then((res) => {
+        vm.headerData = res.data.data
+      })
     },
     getListFields() {
       let vm = this
