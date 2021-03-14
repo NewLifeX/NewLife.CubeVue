@@ -8,26 +8,66 @@
           </el-button>
         </div>
         <div class="right-search">
-          <el-date-picker
-            v-model="queryParams.dateRange"
-            type="daterange"
-            value-format="yyyy-MM-dd"
-            align="right"
-            unlink-panels
-            range-separator="~"
-            start-placeholder="开始"
-            end-placeholder="结束"
-            :picker-options="pickerOptions"
+          <el-form
+            ref="form"
+            v-model="queryParams"
+            label-position="right"
+            label-width="120px"
+            :inline="true"
+            class="search-form-container"
           >
-          </el-date-picker>
-          <el-input
-            style="width:auto"
-            v-model="queryParams.Q"
-            placeholder="关键字"
-          ></el-input>
-          <el-button type="primary" @click="gettabeldata">
-            查询
-          </el-button>
+            <template v-for="(column, k) in headerData">
+              <el-form-item
+                v-if="column.showInSearch"
+                :key="k"
+                :prop="
+                  column.isDataObjectField ? column.name : column.columnName
+                "
+                :label="column.displayName || column.name"
+              >
+                <el-switch
+                  v-if="column.dataType == 'Boolean'"
+                  v-model="
+                    queryParams[
+                      column.isDataObjectField ? column.name : column.columnName
+                    ]
+                  "
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                />
+
+                <el-input
+                  v-else
+                  v-model="
+                    queryParams[
+                      column.isDataObjectField ? column.name : column.columnName
+                    ]
+                  "
+                  type="text"
+                />
+              </el-form-item>
+            </template>
+            <el-date-picker
+              v-model="queryParams.dateRange"
+              type="daterange"
+              value-format="yyyy-MM-dd"
+              align="right"
+              unlink-panels
+              range-separator="~"
+              start-placeholder="开始"
+              end-placeholder="结束"
+              :picker-options="pickerOptions"
+            >
+            </el-date-picker>
+            <el-input
+              style="width:auto"
+              v-model="queryParams.Q"
+              placeholder="关键字"
+            ></el-input>
+            <el-button type="primary" @click="gettabeldata">
+              查询
+            </el-button>
+          </el-form>
         </div>
       </div>
       <div class="table-container">
@@ -48,6 +88,7 @@
               :label="column.displayName"
               :prop="column.name"
               :sortable="true"
+              :show-overflow-tooltip="true"
             >
               <template slot-scope="scope">
                 <template v-if="column.dataType === 'Boolean'">
@@ -73,7 +114,6 @@
             label="操作"
             align="center"
             width="140"
-            fixed="right"
             class-name="small-padding fixed-width"
           >
             <template slot-scope="scope">
@@ -203,7 +243,7 @@ export default {
 
       let temp = {}
       // 查询参数也添加上
-      Object.assign(temp, vm.page, vm.queryParams, vm.$route.query)
+      Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
     },
@@ -218,8 +258,19 @@ export default {
   },
   methods: {
     init() {
+      this.setQueryParams()
       this.getColumns()
       this.query()
+    },
+    setQueryParams() {
+      // 设置查询参数
+      let vm = this
+      for (const key in vm.$route.query) {
+        if (Object.hasOwnProperty.call(vm.$route.query, key)) {
+          const element = vm.$route.query[key]
+          vm.$set(vm.queryParams, key, element)
+        }
+      }
     },
     getUrl(column, entity) {
       // 针对指定实体对象计算url，替换其中变量
@@ -339,7 +390,7 @@ export default {
 </script>
 <style scoped>
 .search {
-  height: 60px;
+  /* height: 60px; */
   overflow: hidden;
   position: relative;
 }
@@ -352,10 +403,11 @@ export default {
 }
 .search .right-search {
   line-height: 58px;
-  height: 60px;
+  /* height: 60px; */
   float: right;
-  height: 100%;
+  max-height: 110px;
   padding: 0 10px;
+  overflow-y: auto;
 }
 .table-container {
   /* max-height: calc(100vh - 177px); */
@@ -376,5 +428,14 @@ export default {
 
 .el-table .el-button + .el-button {
   margin-left: 3px;
+}
+</style>
+<style>
+.search-form-container .el-form-item__content {
+  line-height: 60px;
+}
+
+.search-form-container .el-form-item {
+  margin-bottom: 0;
 }
 </style>
