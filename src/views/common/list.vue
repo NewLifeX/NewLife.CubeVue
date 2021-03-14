@@ -2,7 +2,7 @@
   <div class="mgl20 com_popup">
     <div>
       <div class="search">
-        <div class="left-search">
+        <div class="left-search" v-if="hasPermission(permissionFlags.insert)">
           <el-button type="primary" @click="add">
             新增
           </el-button>
@@ -77,11 +77,25 @@
             class-name="small-padding fixed-width"
           >
             <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="editData(scope.row)"
+              <el-button
+                v-if="
+                  !hasPermission(permissionFlags.update) &&
+                    hasPermission(permissionFlags.detail)
+                "
+                type="primary"
+                size="mini"
+                @click="detail(scope.row)"
+                >查看</el-button
+              >
+              <el-button
+                v-if="hasPermission(permissionFlags.update)"
+                type="primary"
+                size="mini"
+                @click="editData(scope.row)"
                 >编辑</el-button
               >
               <el-button
-                v-if="scope.row.status != 'deleted'"
+                v-if="hasPermission(permissionFlags.delete)"
                 size="mini"
                 type="danger"
                 @click="deleteData(scope.row)"
@@ -163,6 +177,13 @@ export default {
           },
         ],
       },
+      permissionFlags: {
+        none: 0,
+        detail: 1,
+        insert: 2,
+        update: 4,
+        delete: 8,
+      },
     }
   },
   computed: {
@@ -235,6 +256,10 @@ export default {
       let vm = this
       vm.$router.push(vm.currentPath + '/Add')
     },
+    detail(row) {
+      let vm = this
+      vm.$router.push(vm.currentPath + '/Detail/' + row.id)
+    },
     editData(row) {
       let vm = this
       vm.$router.push(vm.currentPath + '/Edit/' + row.id)
@@ -297,6 +322,17 @@ export default {
     },
     rowDblclick(row) {
       this.editData(row)
+    },
+    hasPermission(actionId) {
+      let vm = this
+      let menuId = vm.$route.meta.menuId
+      let permissions = vm.$route.meta.permissions
+      let has = vm.$store.state.user.hasPermission(vm.$store, {
+        menuId,
+        actionId,
+        permissions,
+      })
+      return has
     },
   },
 }

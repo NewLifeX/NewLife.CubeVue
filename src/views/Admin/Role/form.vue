@@ -156,8 +156,8 @@ export default {
       let vm = this
       // permission格式: 1#255,2#255。#前为菜单id，#后为权限值
       let permission = vm.form.permission
-      if (!permission) return []
       let pObj = {}
+      if (!permission) return pObj
       let mlist = permission.split(',')
       for (const key in mlist) {
         const m = mlist[key]
@@ -249,7 +249,7 @@ export default {
     getFields() {
       let vm = this
       let path = vm.currentPath
-      let key = path + '-' + fieldType
+      let key = path + '-' + vm.fieldType
       let fields = vm.$store.state.entity[vm.fieldType][key]
       if (fields) {
         vm.fields = fields

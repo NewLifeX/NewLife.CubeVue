@@ -8,6 +8,12 @@ export function formatRoutes(files, routes, depth = 0) {
     router.path = router.url
     router.displayName = router.displayName || router.name
     if (router.visible === undefined) console.log(router.name + ' visible为空')
+    if (router.meta) {
+      router.meta.menuId = router.id
+      router.meta.permissions = router.permissions
+    } else {
+      router.meta = { menuId: router.id, permissions: router.permissions }
+    }
 
     // 第一层使用布局模板
     if (depth === 0) {
