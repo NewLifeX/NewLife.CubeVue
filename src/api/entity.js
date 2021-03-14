@@ -62,6 +62,19 @@ export default function(stroe) {
     })
   }
 
+  function getDetailData(path, id) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    let params = {
+      id,
+    }
+    return request({
+      url: path + urls.getDetailData,
+      method: 'get',
+      params,
+    })
+  }
+
   function deleteById(path, id) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
@@ -103,6 +116,7 @@ export default function(stroe) {
     getListFields,
     getDataList,
     getData,
+    getDetailData,
     add,
     edit,
     deleteById,

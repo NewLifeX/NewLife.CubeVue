@@ -41,7 +41,7 @@
           /> </el-form-item
       ></template>
 
-      <el-form-item>
+      <el-form-item v-if="!isDetail">
         <div
           style="position: fixed; margin:20px; float:right; bottom: 0px; right: 0px; z-index: 1;"
         >
@@ -149,9 +149,17 @@ export default {
     // },
     query() {
       let vm = this
-      vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
-        vm.form = res.data.data
-      })
+      if (vm.isDetail) {
+        vm.$store.getters.apis
+          .getDetailData(vm.currentPath, vm.id)
+          .then((res) => {
+            vm.form = res.data.data
+          })
+      } else {
+        vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
+          vm.form = res.data.data
+        })
+      }
     },
     confirm() {
       let vm = this

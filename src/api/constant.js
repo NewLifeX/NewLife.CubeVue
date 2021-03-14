@@ -14,6 +14,7 @@ export default {
   getColumns: '/GetColumns',
   getDataList: '/Index',
   getData: '/Edit',
+  getDetailData: '/Detail',
   deleteById: '/Delete',
   add: '/Add',
   edit: '/Edit',
