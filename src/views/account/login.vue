@@ -60,7 +60,7 @@
         </template>
       </div>
       <!-- Login3 -->
-      <div v-if="set.autoRegister && set.providers.length > 0">
+      <div v-if="set.providers.length > 0">
         <el-row>
           <el-col :span="24" class="text-center">
             <p class="login3">
@@ -126,7 +126,6 @@ export default {
         logo: '', // 系统logo
         allowLogin: true,
         allowRegister: true,
-        autoRegister: true,
         providers: [],
       },
     }
