@@ -12,7 +12,6 @@
             ref="form"
             v-model="queryParams"
             label-position="right"
-            label-width="120px"
             :inline="true"
             class="search-form-container"
           >
@@ -25,8 +24,19 @@
                 "
                 :label="column.displayName || column.name"
               >
+                <single-select
+                  v-if="column.itemType == 'singleSelect'"
+                  v-model="
+                    queryParams[
+                      column.isDataObjectField ? column.name : column.columnName
+                    ]
+                  "
+                  :url="'/Admin/Role/Index?key=name&value=id'"
+                >
+                </single-select>
+
                 <el-switch
-                  v-if="column.dataType == 'Boolean'"
+                  v-else-if="column.dataType == 'Boolean'"
                   v-model="
                     queryParams[
                       column.isDataObjectField ? column.name : column.columnName
@@ -161,8 +171,12 @@
   </div>
 </template>
 <script>
+import singleSelect from '../../components/singleSelect'
 export default {
   name: 'list',
+  components: {
+    singleSelect,
+  },
   data() {
     return {
       tableData: [],
@@ -397,13 +411,13 @@ export default {
 
 .search .left-search {
   line-height: 58px;
-  height: 60px;
+  /* height: 60px; */
   float: left;
   padding: 0 10px;
 }
 .search .right-search {
   line-height: 58px;
-  /* height: 60px; */
+  height: 65px;
   float: right;
   max-height: 110px;
   padding: 0 10px;
