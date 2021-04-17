@@ -59,7 +59,7 @@ export default function getRequest(store) {
       } else {
         console.log('格式错误', res) // for debug
         store.getters.message({
-          message: res.message,
+          message: '服务端返回格式不正确!!!请联系管理员',
           type: 'error',
           duration: 5 * 1000,
         })
