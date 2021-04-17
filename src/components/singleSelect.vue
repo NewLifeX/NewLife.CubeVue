@@ -1,6 +1,5 @@
 <template>
   <el-select v-model="data" clearable @focus="getData">
-    <el-option value="" label="全部">全部</el-option>
     <el-option
       v-for="item in options"
       :key="item.value"
@@ -13,6 +12,7 @@
 
 <script>
 export default {
+  name: 'singleSelect',
   props: {
     url: {
       type: String,
@@ -45,16 +45,27 @@ export default {
   },
   watch: {
     data(val, oldVal) {
-      if (val == oldVal) return
       this.$emit('input', val)
     },
   },
   methods: {
     getData() {
       let vm = this
-      console.log(vm.options, vm.options.length)
+
+      if (!vm.url) {
+        return
+      }
 
       if (vm.options.length > 0) return
+      // 如果是[开头，说明数据是数组
+      if (vm.url.substring(0, 1) === '[') {
+        vm.getLocalData()
+      } else {
+        vm.getRemoteData()
+      }
+    },
+    getRemoteData() {
+      let vm = this
       vm.$store.getters
         .request({
           url: vm.url,
@@ -68,6 +79,12 @@ export default {
           }
           vm.$forceUpdate()
         })
+    },
+    getLocalData() {
+      let vm = this
+      let data = JSON.parse(vm.url)
+      vm.options = data
+      vm.$forceUpdate()
     },
   },
 }

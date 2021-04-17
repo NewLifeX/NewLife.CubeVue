@@ -25,15 +25,28 @@
                 :label="column.displayName || column.name"
               >
                 <single-select
-                  v-if="column.itemType == 'singleSelect'"
+                  v-if="column.itemType == 'singleSelect' && column.dataSource"
                   v-model="
                     queryParams[
                       column.isDataObjectField ? column.name : column.columnName
                     ]
                   "
-                  :url="'/Admin/Role/Index?key=name&value=id'"
+                  :url="column.dataSource"
                 >
                 </single-select>
+
+                <multiple-select
+                  v-else-if="
+                    column.itemType == 'multipleSelect' && column.dataSource
+                  "
+                  v-model="
+                    queryParams[
+                      column.isDataObjectField ? column.name : column.columnName
+                    ]
+                  "
+                  :url="column.dataSource"
+                >
+                </multiple-select>
 
                 <el-switch
                   v-else-if="column.dataType == 'Boolean'"
@@ -172,10 +185,12 @@
 </template>
 <script>
 import singleSelect from '../../components/singleSelect'
+import multipleSelect from '../../components/multipleSelect'
 export default {
   name: 'list',
   components: {
     singleSelect,
+    multipleSelect,
   },
   data() {
     return {
