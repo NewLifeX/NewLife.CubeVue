@@ -1,5 +1,11 @@
 <template>
-  <el-select v-model="data" :multiple="true" clearable @focus="getData">
+  <el-select
+    v-model="data"
+    :multiple="true"
+    filterable
+    clearable
+    @focus="getData"
+  >
     <el-option
       v-for="item in options"
       :key="item.value"

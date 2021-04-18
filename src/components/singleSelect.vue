@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="data" clearable @focus="getData">
+  <el-select v-model="data" filterable clearable @focus="getData">
     <el-option
       v-for="item in options"
       :key="item.value"
