@@ -15,6 +15,7 @@ export default (store, router) => {
           // TODO 暂时在这里拉取系统配置信息，
           // 应该在登陆完之后拉取初始化需要的信息
 
+          // 拉取系统配置信息
           store.getters.apis
             .getObject(store.getters.urls.getSysConfig)
             .then((res) => {
@@ -22,7 +23,7 @@ export default (store, router) => {
               store.dispatch('setSysConfig', cfg)
             })
 
-          // 判断当前用户是否已拉取完user_info信息
+          // 拉取user_info信息
           store.getters.apis
             .getUserInfo()
             .then((response) => {
@@ -61,6 +62,12 @@ export default (store, router) => {
                 })
               })
             })
+
+          // 拉取登录配置
+          store.getters.apis.getLoginConfig().then((res) => {
+            let cfg = res.data.data
+            store.dispatch('setLoginConfig', cfg)
+          })
         } else {
           next()
         }

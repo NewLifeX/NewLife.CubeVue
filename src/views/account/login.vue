@@ -9,7 +9,7 @@
             <i class="el-icon-cloudy"></i>
           </el-col>
         </el-row>
-        <template v-if="set.allowLogin">
+        <template v-if="loginConfig.allowLogin">
           <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
             <span class="heading text-primary">{{ displayName }} 登录</span>
@@ -38,7 +38,7 @@
                 >记住我</el-checkbox
               >
 
-              <template v-if="set.allowRegister">
+              <template v-if="loginConfig.allowRegister">
                 <div
                   style="display: inline-block; margin-top: 5px; float: right;"
                 >
@@ -60,7 +60,7 @@
         </template>
       </div>
       <!-- Login3 -->
-      <div v-if="set.autoRegister && set.providers.length > 0">
+      <div v-if="loginConfig.providers.length > 0">
         <el-row>
           <el-col :span="24" class="text-center">
             <p class="login3">
@@ -70,7 +70,7 @@
             </p>
             <el-row>
               <el-col :sm="24">
-                <template v-for="(mi, i) in set.providers">
+                <template v-for="(mi, i) in loginConfig.providers">
                   <a
                     :title="mi.nickName || mi.name"
                     :key="i"
@@ -99,6 +99,20 @@ export default {
     sysConfig() {
       return this.$store.getters.sysConfig
     },
+    loginConfig() {
+      let vm = this
+      let loginConfig = vm.$store.getters.loginConfig
+      if (!loginConfig) {
+        loginConfig = {
+          displayName: '魔方',
+          logo: '', // 系统logo
+          allowLogin: true,
+          allowRegister: true,
+          providers: [],
+        }
+      }
+      return loginConfig
+    },
     urls() {
       return this.$store.getters.urls
     },
@@ -110,7 +124,8 @@ export default {
     },
     displayName() {
       return (
-        (this.sysConfig && this.sysConfig.displayName) || this.set.displayName
+        (this.sysConfig && this.sysConfig.displayName) ||
+        (this.loginConfig && this.loginConfig.displayName)
       )
     },
   },
@@ -121,14 +136,6 @@ export default {
         password: null,
         remember: true,
       },
-      set: {
-        displayName: '魔方',
-        logo: '', // 系统logo
-        allowLogin: true,
-        allowRegister: true,
-        autoRegister: true,
-        providers: [],
-      },
     }
   },
   created() {
@@ -137,12 +144,13 @@ export default {
       // 关闭所有弹窗
       vm.$messageBox.close()
     } catch (error) {}
+    // 为了本地快速检查是否需要自动跳转第三方登录，使用缓存的配置立即进行检查跳转
+    vm.autoAuthRedirect()
+
+    // 获取一次登录设置，如果跳转了第三方登录，会被强制取消
     vm.apis.getLoginConfig().then((res) => {
       let cfg = res.data.data
       vm.$store.dispatch('setLoginConfig', cfg)
-      vm.set = cfg
-      // 检查是否需要自动跳转第三方登录
-      vm.autoAuthRedirect()
     })
   },
   methods: {
@@ -183,9 +191,13 @@ export default {
     autoAuthRedirect() {
       // 根据设置，如果不允许密码登录，且只有一个第三方登录，自动跳转
       let vm = this
-      let set = vm.set
-      if (!set.allowLogin && set.providers.length === 1) {
-        vm.ssoClick(vm.getUrl(set.providers[0]))
+      let loginConfig = vm.loginConfig
+      if (
+        loginConfig &&
+        !loginConfig.allowLogin &&
+        loginConfig.providers.length === 1
+      ) {
+        vm.ssoClick(vm.getUrl(loginConfig.providers[0]))
       }
     },
   },

@@ -7,7 +7,9 @@
     />
     <div class="left-menu">{{ displayName }}</div>
     <div class="right-menu">
-      <span class="right-menu-item">{{ userInfo.displayName }}</span>
+      <span class="right-menu-item">{{
+        userInfo && userInfo.displayName
+      }}</span>
     </div>
     <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'"> -->
@@ -79,7 +81,7 @@ export default {
     },
     myAvatar() {
       let vm = this
-      let avatar = vm.userInfo.avatar
+      let avatar = vm.userInfo && vm.userInfo.avatar
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
           avatar = vm.urls.baseUrl + avatar

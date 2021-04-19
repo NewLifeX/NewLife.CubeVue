@@ -1,19 +1,29 @@
-import { Vue, Element, App, Store, Router } from 'newlife-cube-vueui'
-// console.log(Vue, Element, App, Store, Router)
-import 'element-ui/lib/theme-chalk/index.css'
-import '../../lib/newlife-cube-vueui.css'
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VueRouter from 'vue-router'
+import Element from 'element-ui'
+import CubeUI from '../../lib/CubeUI.umd.js'
 
-Vue.use(Element)
-Vue.config.productionTip = false
+import 'element-ui/lib/theme-chalk/index.css'
+import '../../lib/CubeUI.css'
+
+Vue.Vuex = Vuex
+Vue.VueRouter = VueRouter
+Vue.Element = Element
+
+Vue.use(CubeUI)
+let store = Vue.Store
+const router = Vue.Router
+const App = CubeUI.App
 
 // 注册组件
 const files = require.context('@/views/', true, /^.*\.vue$/)
-Store.dispatch('setFiles', files)
+store.dispatch('setFiles', files)
 
 // Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
 
 new Vue({
-  router: Router,
-  store: Store,
+  router,
+  store,
   render: (h) => h(App),
 }).$mount('#app')

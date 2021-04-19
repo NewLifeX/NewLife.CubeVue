@@ -54,10 +54,10 @@ const install = (Vue) => {
   Vue.Router = router
 }
 
-// TODO 支持不完善
-if (typeof window !== 'undefined' && window.Vue) {
-  install(window.Vue)
-}
+// // TODO 支持不完善
+// if (typeof window !== 'undefined' && window.Vue) {
+//   install(window.Vue)
+// }
 
 export default {
   version: '1.0',

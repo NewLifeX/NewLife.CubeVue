@@ -1,6 +1,6 @@
 import Storage from '@/utils/storage'
 
-const Key = 'user'
+const Key = 'userInfo'
 
 export function getUserInfo() {
   return JSON.parse(Storage.getItem(Key))

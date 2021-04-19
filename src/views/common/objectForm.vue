@@ -93,11 +93,21 @@ export default {
     confirm() {
       let vm = this
       vm.$store.getters.apis.updateObject(vm.currentPath, vm.form).then(() => {
+        let msg = '保存成功'
+
+        if (!vm.form.enableNewUI) {
+          msg += '，正在跳转页面'
+        }
+
         vm.$message({
-          message: '保存成功',
+          message: msg,
           type: 'success',
-          duration: 5 * 1000,
+          duration: 3 * 1000,
         })
+
+        if (!vm.form.enableNewUI) {
+          location.href = '/'
+        }
       })
     },
   },

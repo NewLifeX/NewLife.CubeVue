@@ -13,7 +13,7 @@ const app = {
     // 系统配置
     sysConfig: undefined,
     // 登录页面配置
-    loginConfig: undefined,
+    loginConfig: JSON.parse(Storage.getItem('loginConfig')),
     // 是否隐藏布局
     hiddenLayout: false,
     // 信息弹窗
@@ -51,6 +51,7 @@ const app = {
     },
     SET_LOGINCONFIG: (state, cfg) => {
       state.loginConfig = cfg
+      Storage.setItem('loginConfig', JSON.stringify(cfg))
     },
     SET_HIDDENLAYOUT: (state, hidden) => {
       state.hiddenLayout = hidden

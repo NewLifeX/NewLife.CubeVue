@@ -1,168 +1,197 @@
 <template>
-  <div class="mgl20 com_popup">
-    <div>
-      <div class="search">
-        <div class="left-search" v-if="hasPermission(permissionFlags.insert)">
-          <el-button type="primary" @click="add">
-            新增
-          </el-button>
-        </div>
-        <div class="right-search">
-          <el-form
-            ref="form"
-            v-model="queryParams"
-            label-position="right"
-            label-width="120px"
-            :inline="true"
-            class="search-form-container"
-          >
-            <template v-for="(column, k) in headerData">
-              <el-form-item
-                v-if="column.showInSearch"
-                :key="k"
-                :prop="
-                  column.isDataObjectField ? column.name : column.columnName
+  <div class="list-container">
+    <el-row type="flex" class="search" justify="end">
+      <el-col
+        :span="4"
+        class="left-search"
+        v-if="hasPermission(permissionFlags.insert)"
+      >
+        <el-button type="primary" @click="add">
+          新增
+        </el-button>
+      </el-col>
+      <el-col :span="20" class="right-search">
+        <el-form
+          ref="form"
+          v-model="queryParams"
+          label-position="right"
+          :inline="true"
+          class="search-form-container"
+        >
+          <template v-for="(column, k) in headerData">
+            <el-form-item
+              v-if="column.showInSearch"
+              :key="k"
+              :prop="column.isDataObjectField ? column.name : column.columnName"
+              :label="column.displayName || column.name"
+            >
+              <single-select
+                v-if="column.itemType == 'singleSelect' && column.dataSource"
+                v-model="
+                  queryParams[
+                    column.isDataObjectField ? column.name : column.columnName
+                  ]
                 "
-                :label="column.displayName || column.name"
+                :url="column.dataSource"
               >
+              </single-select>
+
+              <multiple-select
+                v-else-if="
+                  column.itemType == 'multipleSelect' && column.dataSource
+                "
+                v-model="
+                  queryParams[
+                    column.isDataObjectField ? column.name : column.columnName
+                  ]
+                "
+                :url="column.dataSource"
+              >
+              </multiple-select>
+
+              <el-switch
+                v-else-if="column.dataType == 'Boolean'"
+                v-model="
+                  queryParams[
+                    column.isDataObjectField ? column.name : column.columnName
+                  ]
+                "
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+              />
+
+              <el-input
+                v-else
+                v-model="
+                  queryParams[
+                    column.isDataObjectField ? column.name : column.columnName
+                  ]
+                "
+                type="text"
+              />
+            </el-form-item>
+          </template>
+          <el-date-picker
+            v-model="queryParams.dateRange"
+            type="daterange"
+            value-format="yyyy-MM-dd"
+            align="right"
+            unlink-panels
+            range-separator="~"
+            start-placeholder="开始"
+            end-placeholder="结束"
+            :picker-options="pickerOptions"
+          >
+          </el-date-picker>
+          <el-input
+            style="width:auto"
+            v-model="queryParams.Q"
+            placeholder="关键字"
+          ></el-input>
+          <el-button type="primary" @click="gettabeldata">
+            查询
+          </el-button>
+        </el-form>
+      </el-col>
+    </el-row>
+    <div class="table-container">
+      <el-table
+        height="calc(100vh - 150px)"
+        v-loading="listLoading"
+        :data="tableData"
+        stripe
+        border
+        @sort-change="sortChange"
+        @row-dblclick="rowDblclick"
+      >
+        <el-table-column align="center" label="序号" type="index" width="50" />
+        <template v-for="(column, idx) in headerData">
+          <el-table-column
+            v-if="column.showInList"
+            :key="idx"
+            :label="column.displayName"
+            :prop="column.name"
+            :sortable="true"
+            :show-overflow-tooltip="true"
+            :width="column.width"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <template v-if="column.dataType === 'Boolean'">
                 <el-switch
-                  v-if="column.dataType == 'Boolean'"
-                  v-model="
-                    queryParams[
-                      column.isDataObjectField ? column.name : column.columnName
-                    ]
-                  "
+                  :value="scope.row[column.name]"
                   active-color="#13ce66"
                   inactive-color="#ff4949"
                 />
-
-                <el-input
-                  v-else
-                  v-model="
-                    queryParams[
-                      column.isDataObjectField ? column.name : column.columnName
-                    ]
-                  "
-                  type="text"
-                />
-              </el-form-item>
-            </template>
-            <el-date-picker
-              v-model="queryParams.dateRange"
-              type="daterange"
-              value-format="yyyy-MM-dd"
-              align="right"
-              unlink-panels
-              range-separator="~"
-              start-placeholder="开始"
-              end-placeholder="结束"
-              :picker-options="pickerOptions"
-            >
-            </el-date-picker>
-            <el-input
-              style="width:auto"
-              v-model="queryParams.Q"
-              placeholder="关键字"
-            ></el-input>
-            <el-button type="primary" @click="gettabeldata">
-              查询
-            </el-button>
-          </el-form>
-        </div>
-      </div>
-      <div class="table-container">
-        <el-table
-          height="calc(100vh - 177px)"
-          v-loading="listLoading"
-          :data="tableData"
-          stripe
-          border
-          @sort-change="sortChange"
-          @row-dblclick="rowDblclick"
-        >
-          <el-table-column label="序号" type="index" width="50" />
-          <template v-for="(column, idx) in headerData">
-            <el-table-column
-              v-if="column.showInList"
-              :key="idx"
-              :label="column.displayName"
-              :prop="column.name"
-              :sortable="true"
-              :show-overflow-tooltip="true"
-            >
-              <template slot-scope="scope">
-                <template v-if="column.dataType === 'Boolean'">
-                  <el-switch
-                    :value="scope.row[column.name]"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                  />
-                </template>
-                <template
-                  v-else-if="!column.isDataObjectField && column.cellUrl"
-                >
-                  <a :href="getUrl(column, scope.row)">{{
-                    column.displayName
-                  }}</a>
-                </template>
-                <div v-else>{{ scope.row[column.name] }}</div>
               </template>
-            </el-table-column>
-          </template>
-
-          <el-table-column
-            label="操作"
-            align="center"
-            width="140"
-            class-name="small-padding fixed-width"
-          >
-            <template slot-scope="scope">
-              <el-button
-                v-if="
-                  !hasPermission(permissionFlags.update) &&
-                    hasPermission(permissionFlags.detail)
-                "
-                type="primary"
-                size="mini"
-                @click="detail(scope.row)"
-                >查看</el-button
-              >
-              <el-button
-                v-if="hasPermission(permissionFlags.update)"
-                type="primary"
-                size="mini"
-                @click="editData(scope.row)"
-                >编辑</el-button
-              >
-              <el-button
-                v-if="hasPermission(permissionFlags.delete)"
-                size="mini"
-                type="danger"
-                @click="deleteData(scope.row)"
-                >删除</el-button
-              >
+              <template v-else-if="!column.isDataObjectField && column.cellUrl">
+                <a :href="getUrl(column, scope.row)">{{
+                  column.displayName
+                }}</a>
+              </template>
+              <div v-else>{{ scope.row[column.name] }}</div>
             </template>
           </el-table-column>
-        </el-table>
-      </div>
-      <div slot="footer">
-        <el-pagination
-          :current-page="page.pageIndex"
-          :page-size="page.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="page.totalCount"
-          @current-change="currentchange"
-          @size-change="handleSizeChange"
-          layout="total, sizes, prev, pager, next, jumper"
+        </template>
+
+        <el-table-column
+          label="操作"
+          align="center"
+          width="140"
+          class-name="small-padding fixed-width"
         >
-        </el-pagination>
-      </div>
+          <template slot-scope="scope">
+            <el-button
+              v-if="
+                !hasPermission(permissionFlags.update) &&
+                  hasPermission(permissionFlags.detail)
+              "
+              type="primary"
+              size="mini"
+              @click="detail(scope.row)"
+              >查看</el-button
+            >
+            <el-button
+              v-if="hasPermission(permissionFlags.update)"
+              type="primary"
+              size="mini"
+              @click="editData(scope.row)"
+              >编辑</el-button
+            >
+            <el-button
+              v-if="hasPermission(permissionFlags.delete)"
+              size="mini"
+              type="danger"
+              @click="deleteData(scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <div slot="footer">
+      <el-pagination
+        :current-page="page.pageIndex"
+        :page-size="page.pageSize"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="page.totalCount"
+        @current-change="currentchange"
+        @size-change="handleSizeChange"
+        layout="total, sizes, prev, pager, next, jumper"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
 <script>
+import singleSelect from '../../components/singleSelect'
+import multipleSelect from '../../components/multipleSelect'
 export default {
   name: 'list',
+  components: {
+    singleSelect,
+    multipleSelect,
+  },
   data() {
     return {
       tableData: [],
@@ -172,7 +201,7 @@ export default {
       },
       page: {
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 20,
         totalCount: 0,
       },
       headerData: [],
@@ -389,30 +418,38 @@ export default {
 }
 </script>
 <style scoped>
+.list-container {
+  height: calc(100vh - 51px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .search {
   /* height: 60px; */
-  overflow: hidden;
-  position: relative;
+  /* overflow: hidden; */
+  /* position: relative; */
+  display: flex;
+  display: -webkit-flex;
 }
 
 .search .left-search {
   line-height: 58px;
-  height: 60px;
-  float: left;
+  /* height: 60px; */
+  /* float: left; */
   padding: 0 10px;
 }
 .search .right-search {
   line-height: 58px;
-  /* height: 60px; */
-  float: right;
-  max-height: 110px;
+  /* height: 65px; */
+  /* float: right; */
+  /* max-height: 110px; */
   padding: 0 10px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 .table-container {
   /* max-height: calc(100vh - 177px); */
-  overflow-y: auto;
-  margin-bottom: 12px;
+  /* overflow-y: auto; */
+  margin-bottom: 2px;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
 
@@ -426,6 +463,7 @@ export default {
   width: 250px;
 }
 
+/** 操作按钮 */
 .el-table .el-button + .el-button {
   margin-left: 3px;
 }
@@ -437,5 +475,16 @@ export default {
 
 .search-form-container .el-form-item {
   margin-bottom: 0;
+}
+
+/** 表头、行上下间距 */
+.table-container .el-table td,
+.table-container .el-table th {
+  padding: 2px 0 2px 0;
+}
+
+/** 表头、行上下间距 */
+.table-container .cell {
+  padding: 0 1px 0 1px;
 }
 </style>
