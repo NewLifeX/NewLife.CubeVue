@@ -88,7 +88,7 @@
             v-model="queryParams.Q"
             placeholder="关键字"
           ></el-input>
-          <el-button type="primary" @click="gettabeldata">
+          <el-button type="primary" @click="getTabelData">
             查询
           </el-button>
         </el-form>
@@ -96,7 +96,7 @@
     </el-row>
     <div class="table-container">
       <el-table
-        height="calc(100vh - 150px)"
+        :height="tableHeight"
         v-loading="listLoading"
         :data="tableData"
         stripe
@@ -175,7 +175,7 @@
         :page-size="page.pageSize"
         :page-sizes="[10, 20, 50, 100]"
         :total="page.totalCount"
-        @current-change="currentchange"
+        @current-change="currentChange"
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
       >
@@ -195,6 +195,7 @@ export default {
   data() {
     return {
       tableData: [],
+      tableHeight: '300px',
       queryParams: {
         Q: null,
         dateRange: null,
@@ -347,27 +348,14 @@ export default {
     deleteData(row) {
       let vm = this
       vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
-        vm.gettabeldata()
+        vm.getTabelData()
       })
-    },
-    closes() {
-      this.editor = false
-      this.addform = {
-        BusinessPartyId: '',
-        TenantIdName: '',
-        BusinessType: '',
-      }
-    },
-    clear() {
-      this.search = {}
-      this.page.pageIndex = 1
-      console.log('清除重置')
     },
     query() {
       this.page.pageIndex = 1
-      this.gettabeldata()
+      this.getTabelData()
     },
-    gettabeldata() {
+    getTabelData() {
       let vm = this
       vm.listLoading = true
 
@@ -377,15 +365,16 @@ export default {
           vm.listLoading = false
           vm.tableData = res.data.data
           vm.page = res.data.pager
+          vm.setTableHeight(vm.tableData.length)
         })
     },
-    currentchange(val) {
+    currentChange(val) {
       this.page.pageIndex = val
-      this.gettabeldata()
+      this.getTabelData()
     },
     handleSizeChange(val) {
       this.page.pageSize = val
-      this.gettabeldata()
+      this.getTabelData()
     },
     sortChange({ column, prop, order }) {
       if (order === 'ascending') {
@@ -398,7 +387,7 @@ export default {
         this.page.desc = undefined
         this.page.sort = undefined
       }
-      this.gettabeldata()
+      this.getTabelData()
     },
     rowDblclick(row) {
       this.editData(row)
@@ -413,6 +402,16 @@ export default {
         permissions,
       })
       return has
+    },
+    setTableHeight(count) {
+      // 根据数据条数设置表格高度，最高设置708px，一页最多显示20条
+      let vm = this
+      console.log(count)
+      if (count && count > 0) {
+        if (count > 20) count = 20
+        else if (count < 8) count = 9
+        vm.tableHeight = count * 35.9 + 'px'
+      }
     },
   },
 }
@@ -449,6 +448,7 @@ export default {
 .table-container {
   /* max-height: calc(100vh - 177px); */
   /* overflow-y: auto; */
+  height: auto;
   margin-bottom: 2px;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
