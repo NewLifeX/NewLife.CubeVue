@@ -218,7 +218,7 @@ export default {
     },
     deleteData(row) {
       let vm = this
-      vm.$apis.deleteById(vm.currentPath, row.id).then(() => {
+      vm.$api.deleteById(vm.currentPath, row.id).then(() => {
         vm.gettabeldata()
       })
     },
@@ -243,7 +243,7 @@ export default {
       let vm = this
       vm.listLoading = true
 
-      vm.$apis.getDataList(vm.currentPath, vm.queryData).then((res) => {
+      vm.$api.getDataList(vm.currentPath, vm.queryData).then((res) => {
         vm.listLoading = false
         vm.tabledata = res.data.data
         vm.page = res.data.pager

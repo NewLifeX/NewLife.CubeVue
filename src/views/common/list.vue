@@ -410,7 +410,9 @@ export default {
       if (count && count > 0) {
         if (count > 20) count = 20
         else if (count < 8) count = 9
-        vm.tableHeight = count * 35.9 + 'px'
+        setTimeout(() => {
+          vm.tableHeight = count * 35.9 + 'px'
+        }, 500)
       }
     },
   },
