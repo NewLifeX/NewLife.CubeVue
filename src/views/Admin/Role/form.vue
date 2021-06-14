@@ -43,7 +43,7 @@
         :data="tableData"
         :tree-props="{
           children: 'children',
-          hasChildren: 'hasChildren',
+          hasChildren: 'hasChildren'
         }"
         row-key="id"
         border
@@ -106,7 +106,7 @@ export default {
       form: {},
       fields: [],
       imObj: {},
-      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' },
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' }
     }
   },
   computed: {
@@ -178,7 +178,7 @@ export default {
           name: i.name,
           displayName: i.displayName,
           permissions: i.permissions,
-          parentID: i.parentID,
+          parentID: i.parentID
         }
 
         // // 父级全选勾选框是否勾选
@@ -194,7 +194,7 @@ export default {
               name: j.name,
               displayName: j.displayName,
               permissions: j.permissions,
-              parentID: j.parentID,
+              parentID: j.parentID
             }
 
             // // 全选勾选框是否勾选，取决于子项是否有勾选
@@ -229,15 +229,15 @@ export default {
       })
 
       return menus
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -278,7 +278,7 @@ export default {
           vm.$message({
             message: '新增成功',
             type: 'success',
-            duration: 5 * 1000,
+            duration: 5 * 1000
           })
         })
       } else {
@@ -286,7 +286,7 @@ export default {
           vm.$message({
             message: '保存成功',
             type: 'success',
-            duration: 5 * 1000,
+            duration: 5 * 1000
           })
         })
       }
@@ -337,7 +337,7 @@ export default {
         vm.checkAllChange({
           id: e.id,
           permissions: e.permissions,
-          parentID: e.parentID,
+          parentID: e.parentID
         })
       })
 
@@ -410,8 +410,8 @@ export default {
           })
         }
       })
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -419,14 +419,15 @@ export default {
 .form-container {
   margin-left: 50px;
   margin-bottom: 75px;
-  max-height: calc(100vh - 160px);
   max-height: -moz-calc(100vh - 160px);
   max-height: -webkit-calc(100vh - 160px);
+  max-height: calc(100vh - 160px);
   overflow-y: auto;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
 .el-switch,
-.el-input {
+.el-input,
+.el-textarea {
   width: 220px;
 }
 </style>

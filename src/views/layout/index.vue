@@ -84,20 +84,22 @@ export default {
 
 .hideSidebarMain {
   left: 0px;
-  width: calc(100% - 40px);
   width: -webkit-calc(100% - 40px);
   width: -moz-calc(100% - 40px);
+  width: calc(100% - 40px);
 }
 
 .openSidebarMain {
   left: 210px;
-  width: calc(100% - 240px);
   width: -webkit-calc(100% - 240px);
   width: -moz-calc(100% - 240px);
+  width: calc(100% - 240px);
 }
 
 .hiddenLayout {
   left: 0px;
+  width: -webkit-calc(100% - 40px);
+  width: -moz-calc(100% - 40px);
   width: calc(100% - 40px);
   top: 0px;
 }

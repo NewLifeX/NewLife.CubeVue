@@ -406,7 +406,7 @@ export default {
     setTableHeight(count) {
       // 根据数据条数设置表格高度，最高设置708px，一页最多显示20条
       let vm = this
-      console.log(count)
+      // console.log(count)
       if (count && count > 0) {
         if (count > 20) count = 20
         else if (count < 8) count = 9
@@ -420,6 +420,8 @@ export default {
 </script>
 <style scoped>
 .list-container {
+  height: -moz-calc(100vh - 51px);
+  height: -webkit-calc(100vh - 51px);
   height: calc(100vh - 51px);
   overflow-x: hidden;
   overflow-y: auto;
@@ -429,8 +431,9 @@ export default {
   /* height: 60px; */
   /* overflow: hidden; */
   /* position: relative; */
-  display: flex;
+  display: -moz-flex;
   display: -webkit-flex;
+  display: flex;
 }
 
 .search .left-search {

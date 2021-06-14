@@ -54,6 +54,8 @@ export default {
 
 <style scoped>
 .box-wrap {
+  display: -moz-flex;
+  display: -webkit-flex;
   display: flex;
   height: auto;
 }

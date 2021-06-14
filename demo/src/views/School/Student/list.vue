@@ -281,6 +281,8 @@ export default {
   padding: 0 10px;
 }
 .table-container {
+  max-height: -moz-calc(100vh - 177px);
+  max-height: -webkit-calc(100vh - 177px);
   max-height: calc(100vh - 177px);
   overflow-y: auto;
   margin-bottom: 12px;
