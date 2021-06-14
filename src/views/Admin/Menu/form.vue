@@ -11,9 +11,9 @@
     >
       <template v-for="(column, k) in fields">
         <el-form-item
-          v-if="column.name.toLowerCase() != 'id' && column.showInForm"
+          v-if="column.name.toLowerCase() != 'id'"
           :key="k"
-          :prop="column.isDataObjectField ? column.name : column.columnName"
+          :prop="column.name"
           :label="column.displayName || column.name"
         >
           <el-switch
@@ -41,9 +41,7 @@
 
           <el-input
             v-else
-            v-model="
-              form[column.isDataObjectField ? column.name : column.columnName]
-            "
+            v-model="form[column.name]"
             type="text"
           /> </el-form-item
       ></template>
@@ -65,8 +63,129 @@ export default {
   data() {
     return {
       form: {},
-      fields: [],
-      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' }
+
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' },
+      fields: [
+        {
+          name: 'id',
+          displayName: '编号',
+          dataType: 'Int32',
+          description: '编号',
+        },
+        {
+          name: 'name',
+          displayName: '名称',
+          dataType: 'String',
+          length: 50,
+          description: '名称',
+        },
+        {
+          name: 'displayName',
+          displayName: '显示名',
+          dataType: 'String',
+          length: 50,
+          description: '显示名',
+        },
+        {
+          name: 'fullName',
+          displayName: '全名',
+          dataType: 'String',
+          length: 200,
+          description: '全名',
+        },
+        {
+          name: 'parentID',
+          displayName: '父编号',
+          dataType: 'Int32',
+          description: '父编号',
+        },
+        {
+          name: 'url',
+          displayName: '链接',
+          dataType: 'String',
+          length: 200,
+          description: '链接',
+        },
+        {
+          name: 'sort',
+          displayName: '排序',
+          dataType: 'Int32',
+          description: '排序',
+        },
+        {
+          name: 'icon',
+          displayName: '图标',
+          dataType: 'String',
+          length: 50,
+          description: '图标',
+        },
+        {
+          name: 'visible',
+          displayName: '可见',
+          dataType: 'Boolean',
+          description: '可见',
+        },
+        {
+          name: 'necessary',
+          displayName: '必要',
+          dataType: 'Boolean',
+          description:
+            '必要。必要的菜单，必须至少有角色拥有这些权限，如果没有则自动授权给系统角色',
+        },
+        {
+          name: 'permission',
+          displayName: '权限子项',
+          dataType: 'String',
+          length: 200,
+          description: '权限子项。逗号分隔，每个权限子项名值竖线分隔',
+        },
+        {
+          name: 'ex1',
+          displayName: '扩展1',
+          dataType: 'Int32',
+          description: '扩展1',
+        },
+        {
+          name: 'ex2',
+          displayName: '扩展2',
+          dataType: 'Int32',
+          description: '扩展2',
+        },
+        {
+          name: 'ex3',
+          displayName: '扩展3',
+          dataType: 'Double',
+          description: '扩展3',
+        },
+        {
+          name: 'ex4',
+          displayName: '扩展4',
+          dataType: 'String',
+          length: 50,
+          description: '扩展4',
+        },
+        {
+          name: 'ex5',
+          displayName: '扩展5',
+          dataType: 'String',
+          length: 50,
+          description: '扩展5',
+        },
+        {
+          name: 'ex6',
+          displayName: '扩展6',
+          dataType: 'String',
+          length: 50,
+          description: '扩展6',
+        },
+        {
+          name: 'remark',
+          displayName: '备注',
+          dataType: 'String',
+          length: 500,
+          description: '备注',
+        },
+      ],
     }
   },
   computed: {
@@ -110,20 +229,20 @@ export default {
     },
     isDetail() {
       return this.type === 'Detail'
-    }
+    },
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     init() {
       // this.getFields()
-      this.getColumns()
+      // this.getColumns()
       if (!this.isAdd) {
         this.query()
       }
@@ -175,7 +294,7 @@ export default {
           vm.$message({
             message: '新增成功',
             type: 'success',
-            duration: 5 * 1000
+            duration: 5 * 1000,
           })
         })
       } else {
@@ -183,15 +302,15 @@ export default {
           vm.$message({
             message: '保存成功',
             type: 'success',
-            duration: 5 * 1000
+            duration: 5 * 1000,
           })
         })
       }
     },
     returnIndex() {
       this.$router.push(this.currentPath)
-    }
-  }
+    },
+  },
 }
 </script>
 
