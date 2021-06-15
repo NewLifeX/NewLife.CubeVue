@@ -6,7 +6,7 @@
         :collapse="isCollapse"
         background-color="#304156"
         text-color="#bfcbd9"
-        :unique-opened="false"
+        :unique-opened="true"
         active-text-color="#409EFF"
         :collapse-transition="false"
         mode="vertical"
@@ -37,18 +37,18 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
-    },
+    }
   },
   data() {
     return {
       active: '1-1-1',
-      data: [],
+      data: []
     }
   },
   created() {
     // window.menuRouters = this.menuRouters
     // console.log(this.menuRouters)
-  },
+  }
 }
 </script>
 
