@@ -11,11 +11,6 @@
       >
     </div>
     <div class="right-menu">
-      <span class="right-menu-item">{{
-        userInfo && userInfo.displayName
-      }}</span>
-    </div>
-    <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'"> -->
       <template>
         <!-- <error-log class="errLog-container right-menu-item" /> -->
@@ -35,7 +30,12 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="myAvatar" class="user-avatar" />
+          <span><img :src="myAvatar" class="user-avatar"/></span>
+          <span class="user-info">
+            {{ userInfo && userInfo.displayName }}<br />{{
+              userInfo && userInfo.roleNames
+            }}</span
+          >
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -184,6 +184,19 @@ export default {
   width: 40px;
   height: 40px;
   border-radius: 10px;
+}
+.navbar .right-menu .avatar-container .avatar-wrapper .user-info {
+  max-width: 150px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: top;
+  line-height: 15px;
+  position: relative;
+  top: 6px;
+  margin-left: 5px;
 }
 .navbar .right-menu .avatar-container .avatar-wrapper .el-icon-caret-bottom {
   cursor: pointer;
