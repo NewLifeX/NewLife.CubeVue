@@ -9,6 +9,7 @@ export default {
   getToken: '/Sso/LoginInfo',
   getUserInfo: '/Admin/User/Info/',
   logout: '/Admin/User/Logout',
+  changePassword: '/Admin/User/ChangePassword',
   getMenu: '/Admin/Index/GetMenuTree',
   getEntityFields: '/GetFields',
   getColumns: '/GetColumns',
@@ -21,5 +22,5 @@ export default {
   getObject: '/Index',
   getSysConfig: '/Admin/Sys',
   updateObject: '/Update',
-  getLoginConfig: '/Admin/Cube/GetLoginConfig',
+  getLoginConfig: '/Admin/Cube/GetLoginConfig'
 }

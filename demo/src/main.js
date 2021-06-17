@@ -20,10 +20,11 @@ const App = CubeUI.App
 const files = require.context('@/views/', true, /^.*\.vue$/)
 store.dispatch('setFiles', files)
 
-// Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+// store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+store.dispatch('setUrls', { baseUrl: 'https://cube.newlifex.com' })
 
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  render: (h) => h(App)
 }).$mount('#app')

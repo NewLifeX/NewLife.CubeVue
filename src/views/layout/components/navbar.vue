@@ -5,7 +5,11 @@
       :is-active="sidebar.opened"
       class="hamburger-container"
     />
-    <div class="left-menu">{{ displayName }}</div>
+    <div class="left-menu">
+      <a href="/"
+        ><span style="display: inline-block;">{{ displayName }}</span></a
+      >
+    </div>
     <div class="right-menu">
       <span class="right-menu-item">{{
         userInfo && userInfo.displayName
@@ -35,16 +39,16 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              首页
-            </el-dropdown-item>
-          </router-link>
-          <!-- <a target="_blank" href="https://github.com/xxred/Easy.Admin">
-            <el-dropdown-item>
-              项目地址
-            </el-dropdown-item>
-          </a> -->
+          <el-dropdown-item>
+            <router-link to="/">
+              <span style="display:inline-block;">首页</span>
+            </router-link>
+          </el-dropdown-item>
+          <el-dropdown-item divided>
+            <router-link to="/Admin/User/Info">
+              <span style="display:inline-block;">个人信息</span>
+            </router-link>
+          </el-dropdown-item>
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
@@ -61,7 +65,7 @@ import Hamburger from '@/views/layout/components/hamburger'
 
 export default {
   components: {
-    Hamburger,
+    Hamburger
     // Screenfull,
     // SizeSelect,
     // ThemePicker,
@@ -96,7 +100,7 @@ export default {
         return vm.sysConfig.displayName
       }
       return ''
-    },
+    }
   },
   methods: {
     toggleSideBar() {
@@ -108,8 +112,8 @@ export default {
         vm.$store.dispatch('logout')
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

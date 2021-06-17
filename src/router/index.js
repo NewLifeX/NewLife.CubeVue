@@ -17,12 +17,27 @@ export const constantRouterMap = [
   {
     path: '/login',
     component: () => import('@/views/account/login'),
-    hidden: true,
+    hidden: true
   },
   {
     path: '/auth-redirect',
     component: () => import('@/views/account/authRedirect'),
-    hidden: true,
+    hidden: true
+  },
+  {
+    path: '',
+    component: Layout,
+    children: [
+      {
+        path: '/Admin/User/Info',
+        component: () => import('@/views/Admin/User/info'),
+        name: 'UserInfo',
+        meta: {
+          title: '个人信息',
+          noCache: true
+        }
+      }
+    ]
   },
   // {
   //   path: '/404',
@@ -46,31 +61,31 @@ export const constantRouterMap = [
         meta: {
           title: '首页',
           icon: 'dashboard',
-          noCache: true,
-        },
-      },
-    ],
+          noCache: true
+        }
+      }
+    ]
   },
   {
     path: '/Admin/Index/Main',
-    redirect: 'dashboard',
-  },
+    redirect: 'dashboard'
+  }
 ]
 
 export const asyncRouterMap = [
   {
     path: '*',
     redirect: '/404',
-    hidden: true,
-  },
+    hidden: true
+  }
 ]
 
 const routerOptions = {
   mode: 'history',
   scrollBehavior: () => ({
-    y: 0,
+    y: 0
   }),
-  routes: constantRouterMap,
+  routes: constantRouterMap
 }
 
 export default { routerOptions, beforeEach }

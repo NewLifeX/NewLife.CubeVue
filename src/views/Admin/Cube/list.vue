@@ -22,11 +22,11 @@ import ObjectForm from '@/views/common/objectForm'
 import List from '@/views/common/list'
 export default {
   components: {
-    ObjectForm,
+    ObjectForm
   },
   data() {
     return {
-      activeName: 'Cube',
+      activeName: 'Cube'
     }
   },
   methods: {
@@ -36,7 +36,7 @@ export default {
       if (tab.name === 'OAuthConfig') {
         vm.$router.push({ path: '/Admin/OAuthConfig', component: List })
       }
-    },
-  },
+    }
+  }
 }
 </script>

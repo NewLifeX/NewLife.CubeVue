@@ -6,7 +6,7 @@ export default function(stroe) {
     return request({
       url: urls.login,
       method: 'post',
-      data: loginForm,
+      data: loginForm
       // params: data,
     })
   }
@@ -16,7 +16,7 @@ export default function(stroe) {
     const urls = stroe.getters.urls
     return request({
       url: urls.logout,
-      method: 'get',
+      method: 'get'
     })
   }
 
@@ -25,7 +25,27 @@ export default function(stroe) {
     const urls = stroe.getters.urls
     return request({
       url: urls.getUserInfo,
-      method: 'get',
+      method: 'get'
+    })
+  }
+
+  function updateUserInfo(userInfo) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: urls.getUserInfo,
+      method: 'post',
+      data: userInfo
+    })
+  }
+
+  function changePassword(data) {
+    const request = stroe.getters.request
+    const urls = stroe.getters.urls
+    return request({
+      url: urls.changePassword,
+      method: 'post',
+      data
     })
   }
 
@@ -33,5 +53,7 @@ export default function(stroe) {
     login,
     logout,
     getUserInfo,
+    updateUserInfo,
+    changePassword
   }
 }
