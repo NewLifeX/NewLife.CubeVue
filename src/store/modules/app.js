@@ -4,8 +4,8 @@ import urls from '@/api/constant'
 const app = {
   state: {
     sidebar: {
-      opened: !+Storage.getItem('sidebarStatus'),
-      withoutAnimation: false,
+      opened: true, //!+Storage.getItem('sidebarStatus'),
+      withoutAnimation: false
     },
     device: 'desktop',
     size: Storage.getItem('size') || 'medium',
@@ -19,7 +19,7 @@ const app = {
     // 信息弹窗
     message: undefined,
     // 确认框弹窗
-    messageBox: undefined,
+    messageBox: undefined
   },
   mutations: {
     TOGGLE_SIDEBAR: (state) => {
@@ -61,7 +61,7 @@ const app = {
     },
     SET_MESSAGEBOX: (state, messageBox) => {
       state.messageBox = messageBox
-    },
+    }
   },
   actions: {
     toggleSideBar({ commit }) {
@@ -93,8 +93,8 @@ const app = {
     },
     setMessageBox({ commit }, messageBox) {
       commit('SET_MESSAGEBOX', messageBox)
-    },
-  },
+    }
+  }
 }
 
 export default app
