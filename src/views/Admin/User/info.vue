@@ -36,9 +36,9 @@
           <el-form-item label="代码" prop="code"
             ><el-input v-model="form.code"></el-input
           ></el-form-item>
-          <el-form-item label="角色" prop="name"
-            ><span>{{ form.roleNames }}</span></el-form-item
-          >
+          <el-form-item label="角色" prop="name">
+            <span>{{ form.roleNames }}</span>
+          </el-form-item>
           <el-form-item label="登录次数" prop="name"
             ><span>{{ form.logins }}</span></el-form-item
           >

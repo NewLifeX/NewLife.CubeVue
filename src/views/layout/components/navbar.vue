@@ -32,9 +32,9 @@
         <div class="avatar-wrapper">
           <span><img :src="myAvatar" class="user-avatar"/></span>
           <span class="user-info">
-            {{ userInfo && userInfo.displayName }}<br />{{
+            {{ userInfo && userInfo.displayName }}<br />[{{
               userInfo && userInfo.roleNames
-            }}</span
+            }}]</span
           >
           <i class="el-icon-caret-bottom" />
         </div>
@@ -193,7 +193,7 @@ export default {
   white-space: nowrap;
   text-align: left;
   vertical-align: top;
-  line-height: 15px;
+  line-height: 16px;
   position: relative;
   top: 6px;
   margin-left: 5px;
