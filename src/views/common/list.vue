@@ -111,7 +111,7 @@
             :key="idx"
             :label="column.displayName"
             :prop="column.name"
-            :sortable="true"
+            :sortable="column.isDataObjectField"
             :show-overflow-tooltip="true"
             :width="column.width"
             align="center"
@@ -190,7 +190,7 @@ export default {
   name: 'list',
   components: {
     singleSelect,
-    multipleSelect,
+    multipleSelect
   },
   data() {
     return {
@@ -198,12 +198,12 @@ export default {
       tableHeight: '300px',
       queryParams: {
         Q: null,
-        dateRange: null,
+        dateRange: null
       },
       page: {
         pageIndex: 1,
         pageSize: 20,
-        totalCount: 0,
+        totalCount: 0
       },
       headerData: [],
       listLoading: false,
@@ -217,7 +217,7 @@ export default {
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '今天',
@@ -225,7 +225,7 @@ export default {
               const end = new Date()
               const start = new Date()
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '最近一周',
@@ -234,7 +234,7 @@ export default {
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '最近一个月',
@@ -243,17 +243,17 @@ export default {
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
               picker.$emit('pick', [start, end])
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       permissionFlags: {
         none: 0,
         detail: 1,
         insert: 2,
         update: 4,
-        delete: 8,
-      },
+        delete: 8
+      }
     }
   },
   computed: {
@@ -276,15 +276,15 @@ export default {
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -399,7 +399,7 @@ export default {
       let has = vm.$store.state.user.hasPermission(vm.$store, {
         menuId,
         actionId,
-        permissions,
+        permissions
       })
       return has
     },
@@ -414,8 +414,8 @@ export default {
           vm.tableHeight = count * 35.9 + 'px'
         }, 500)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped>
