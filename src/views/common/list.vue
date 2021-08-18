@@ -175,12 +175,6 @@
 <script>
 import singleSelect from '../../components/singleSelect'
 import multipleSelect from '../../components/multipleSelect'
-let tableColumnTopis = {
-  name: 'tableColumnTopis',
-  render: (h) => {
-    return <div></div>
-  }
-}
 export default {
   name: 'list',
   components: {
