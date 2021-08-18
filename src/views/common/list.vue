@@ -18,43 +18,35 @@
           :inline="true"
           class="search-form-container"
         >
-          <template v-for="(column, k) in headerData">
+          <template v-for="(col, k) in headerData">
             <el-form-item
-              v-if="column.showInSearch"
+              v-if="col.showInSearch"
               :key="k"
-              :prop="column.isDataObjectField ? column.name : column.columnName"
-              :label="column.displayName || column.name"
+              :prop="col.isDataObjectField ? col.name : col.columnName"
+              :label="col.displayName || col.name"
             >
               <single-select
-                v-if="column.itemType == 'singleSelect' && column.dataSource"
+                v-if="col.itemType == 'singleSelect' && col.dataSource"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
-                :url="column.dataSource"
+                :url="col.dataSource"
               >
               </single-select>
 
               <multiple-select
-                v-else-if="
-                  column.itemType == 'multipleSelect' && column.dataSource
-                "
+                v-else-if="col.itemType == 'multipleSelect' && col.dataSource"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
-                :url="column.dataSource"
+                :url="col.dataSource"
               >
               </multiple-select>
 
               <el-switch
-                v-else-if="column.dataType == 'Boolean'"
+                v-else-if="col.dataType == 'Boolean'"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
                 active-color="#13ce66"
                 inactive-color="#ff4949"
@@ -63,9 +55,7 @@
               <el-input
                 v-else
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
                 type="text"
               />
@@ -105,31 +95,38 @@
         @row-dblclick="rowDblclick"
       >
         <el-table-column align="center" label="序号" type="index" width="50" />
-        <template v-for="(column, idx) in headerData">
+        <template v-for="(col, idx) in headerData">
           <el-table-column
-            v-if="column.showInList"
+            v-if="col.showInList"
             :key="idx"
-            :label="column.displayName"
-            :prop="column.name"
+            :label="col.displayName"
+            :prop="col.name"
             :sortable="true"
             :show-overflow-tooltip="true"
-            :width="column.width"
+            :width="col.width"
+            :render-header="
+              (h, { column, $index }) => {
+                return h(
+                  'span',
+                  { attrs: { title: col.description } },
+                  col.displayName
+                )
+              }
+            "
             align="center"
           >
             <template slot-scope="scope">
-              <template v-if="column.dataType === 'Boolean'">
+              <template v-if="col.dataType === 'Boolean'">
                 <el-switch
-                  :value="scope.row[column.name]"
+                  :value="scope.row[col.name]"
                   active-color="#13ce66"
                   inactive-color="#ff4949"
                 />
               </template>
-              <template v-else-if="!column.isDataObjectField && column.cellUrl">
-                <a :href="getUrl(column, scope.row)">{{
-                  column.displayName
-                }}</a>
+              <template v-else-if="!col.isDataObjectField && col.cellUrl">
+                <a :href="getUrl(col, scope.row)">{{ col.displayName }}</a>
               </template>
-              <div v-else>{{ scope.row[column.name] }}</div>
+              <div v-else>{{ scope.row[col.name] }}</div>
             </template>
           </el-table-column>
         </template>
@@ -190,7 +187,7 @@ export default {
   name: 'list',
   components: {
     singleSelect,
-    multipleSelect,
+    multipleSelect
   },
   data() {
     return {
@@ -198,12 +195,12 @@ export default {
       tableHeight: '300px',
       queryParams: {
         Q: null,
-        dateRange: null,
+        dateRange: null
       },
       page: {
         pageIndex: 1,
         pageSize: 20,
-        totalCount: 0,
+        totalCount: 0
       },
       headerData: [],
       listLoading: false,
@@ -217,7 +214,7 @@ export default {
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
               end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '今天',
@@ -225,7 +222,7 @@ export default {
               const end = new Date()
               const start = new Date()
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '最近一周',
@@ -234,7 +231,7 @@ export default {
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', [start, end])
-            },
+            }
           },
           {
             text: '最近一个月',
@@ -243,17 +240,17 @@ export default {
               const start = new Date()
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
               picker.$emit('pick', [start, end])
-            },
-          },
-        ],
+            }
+          }
+        ]
       },
       permissionFlags: {
         none: 0,
         detail: 1,
         insert: 2,
         update: 4,
-        delete: 8,
-      },
+        delete: 8
+      }
     }
   },
   computed: {
@@ -276,15 +273,15 @@ export default {
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -376,7 +373,7 @@ export default {
       this.page.pageSize = val
       this.getTabelData()
     },
-    sortChange({ column, prop, order }) {
+    sortChange({ col, prop, order }) {
       if (order === 'ascending') {
         this.page.desc = false
         this.page.sort = prop
@@ -399,7 +396,7 @@ export default {
       let has = vm.$store.state.user.hasPermission(vm.$store, {
         menuId,
         actionId,
-        permissions,
+        permissions
       })
       return has
     },
@@ -414,8 +411,8 @@ export default {
           vm.tableHeight = count * 35.9 + 'px'
         }, 500)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped>
