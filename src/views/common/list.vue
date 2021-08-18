@@ -104,16 +104,8 @@
             :sortable="true"
             :show-overflow-tooltip="true"
             :width="col.width"
-            :render-header="
-              (h, { column, $index }) => {
-                return h(
-                  'span',
-                  { attrs: { title: col.description } },
-                  col.displayName
-                )
-              }
-            "
             align="center"
+            :render-header="(h) => renderHeader(h, col)"
           >
             <template slot-scope="scope">
               <template v-if="col.dataType === 'Boolean'">
@@ -183,6 +175,12 @@
 <script>
 import singleSelect from '../../components/singleSelect'
 import multipleSelect from '../../components/multipleSelect'
+let tableColumnTopis = {
+  name: 'tableColumnTopis',
+  render: (h) => {
+    return <div></div>
+  }
+}
 export default {
   name: 'list',
   components: {
@@ -372,6 +370,25 @@ export default {
     handleSizeChange(val) {
       this.page.pageSize = val
       this.getTabelData()
+    },
+    renderHeader(h, col) {
+      return (
+        <div style={{ display: 'inline-flex' }}>
+          <span>{col.displayName}</span>
+          {col.description && col.displayName != col.description ? (
+            <el-tooltip content={col.description}>
+              <i
+                class="el-icon-warning-outline"
+                on-click={(e) => {
+                  e.stopPropagation()
+                }}
+              ></i>
+            </el-tooltip>
+          ) : (
+            ''
+          )}
+        </div>
+      )
     },
     sortChange({ col, prop, order }) {
       if (order === 'ascending') {
