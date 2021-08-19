@@ -105,8 +105,27 @@
             :show-overflow-tooltip="true"
             :width="col.width"
             align="center"
-            :render-header="(h) => renderHeader(h, col)"
           >
+            <!-- :render-header="(h) => renderHeader(h, col)" -->
+
+            <template slot="header">
+              <div style="display:inline-flex">
+                <span>{{ col.displayName }}</span>
+                <el-tooltip
+                  v-if="col.description && col.displayName != col.description"
+                  :content="col.description"
+                >
+                  <i
+                    class="el-icon-warning-outline"
+                    @click="
+                      (e) => {
+                        e.stopPropagation()
+                      }
+                    "
+                  ></i>
+                </el-tooltip>
+              </div>
+            </template>
             <template slot-scope="scope">
               <template v-if="col.dataType === 'Boolean'">
                 <el-switch
