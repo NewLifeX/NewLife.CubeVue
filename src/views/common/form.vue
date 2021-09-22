@@ -16,6 +16,19 @@
           :prop="column.isDataObjectField ? column.name : column.columnName"
           :label="column.displayName || column.name"
         >
+          <template
+            v-if="
+              column.description && column.displayName != column.description
+            "
+            slot="label"
+          >
+            <div style="display:inline-flex">
+              <span>{{ column.displayName || column.name }}</span>
+              <el-tooltip :content="column.description">
+                <i class="el-icon-warning-outline"></i>
+              </el-tooltip>
+            </div>
+          </template>
           <el-switch
             v-if="column.dataType == 'Boolean'"
             v-model="form[column.name]"
@@ -190,6 +203,21 @@ export default {
     },
     returnIndex() {
       this.$router.push(this.currentPath)
+    },
+    renderHeader(h, col) {
+      return (
+        <div style={{ display: 'inline-flex' }}>
+          <span>{col.displayName}</span>
+          <el-tooltip content={col.description}>
+            <i
+              class="el-icon-warning-outline"
+              on-click={(e) => {
+                e.stopPropagation()
+              }}
+            ></i>
+          </el-tooltip>
+        </div>
+      )
     }
   }
 }

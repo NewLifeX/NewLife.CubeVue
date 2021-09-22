@@ -18,43 +18,33 @@
           :inline="true"
           class="search-form-container"
         >
-          <template v-for="(column, k) in headerData">
+          <template v-for="(col, k) in headerData">
             <el-form-item
-              v-if="column.showInSearch"
+              v-if="col.showInSearch"
               :key="k"
-              :prop="column.isDataObjectField ? column.name : column.columnName"
-              :label="column.displayName || column.name"
+              :prop="col.isDataObjectField ? col.name : col.columnName"
+              :label="col.displayName || col.name"
             >
               <single-select
-                v-if="column.itemType == 'singleSelect' && column.dataSource"
+                v-if="col.itemType == 'singleSelect' && col.dataSource"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
-                :url="column.dataSource"
-              >
-              </single-select>
+                :url="col.dataSource"
+              ></single-select>
 
               <multiple-select
-                v-else-if="
-                  column.itemType == 'multipleSelect' && column.dataSource
-                "
+                v-else-if="col.itemType == 'multipleSelect' && col.dataSource"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
-                :url="column.dataSource"
-              >
-              </multiple-select>
+                :url="col.dataSource"
+              ></multiple-select>
 
               <el-switch
-                v-else-if="column.dataType == 'Boolean'"
+                v-else-if="col.dataType == 'Boolean'"
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
                 active-color="#13ce66"
                 inactive-color="#ff4949"
@@ -63,9 +53,7 @@
               <el-input
                 v-else
                 v-model="
-                  queryParams[
-                    column.isDataObjectField ? column.name : column.columnName
-                  ]
+                  queryParams[col.isDataObjectField ? col.name : col.columnName]
                 "
                 type="text"
               />
@@ -81,8 +69,7 @@
             start-placeholder="开始"
             end-placeholder="结束"
             :picker-options="pickerOptions"
-          >
-          </el-date-picker>
+          ></el-date-picker>
           <el-input
             style="width:auto"
             v-model="queryParams.Q"
@@ -105,31 +92,49 @@
         @row-dblclick="rowDblclick"
       >
         <el-table-column align="center" label="序号" type="index" width="50" />
-        <template v-for="(column, idx) in headerData">
+        <template v-for="(col, idx) in headerData">
           <el-table-column
-            v-if="column.showInList"
+            v-if="col.showInList"
             :key="idx"
             :label="column.displayName"
             :prop="column.name"
             :sortable="column.isDataObjectField"
             :show-overflow-tooltip="true"
-            :width="column.width"
+            :width="col.width"
             align="center"
           >
+            <!-- :render-header="(h) => renderHeader(h, col)" -->
+
+            <template slot="header">
+              <div style="display:inline-flex">
+                <span>{{ col.displayName }}</span>
+                <el-tooltip
+                  v-if="col.description && col.displayName != col.description"
+                  :content="col.description"
+                >
+                  <i
+                    class="el-icon-warning-outline"
+                    @click="
+                      (e) => {
+                        e.stopPropagation()
+                      }
+                    "
+                  ></i>
+                </el-tooltip>
+              </div>
+            </template>
             <template slot-scope="scope">
-              <template v-if="column.dataType === 'Boolean'">
+              <template v-if="col.dataType === 'Boolean'">
                 <el-switch
-                  :value="scope.row[column.name]"
+                  :value="scope.row[col.name]"
                   active-color="#13ce66"
                   inactive-color="#ff4949"
                 />
               </template>
-              <template v-else-if="!column.isDataObjectField && column.cellUrl">
-                <a :href="getUrl(column, scope.row)">{{
-                  column.displayName
-                }}</a>
+              <template v-else-if="!col.isDataObjectField && col.cellUrl">
+                <a :href="getUrl(col, scope.row)">{{ col.displayName }}</a>
               </template>
-              <div v-else>{{ scope.row[column.name] }}</div>
+              <div v-else>{{ scope.row[col.name] }}</div>
             </template>
           </el-table-column>
         </template>
@@ -149,22 +154,25 @@
               type="primary"
               size="mini"
               @click="detail(scope.row)"
-              >查看</el-button
             >
+              查看
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.update)"
               type="primary"
               size="mini"
               @click="editData(scope.row)"
-              >编辑</el-button
             >
+              编辑
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.delete)"
               size="mini"
               type="danger"
               @click="deleteData(scope.row)"
-              >删除</el-button
             >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -178,8 +186,7 @@
         @current-change="currentChange"
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -376,7 +383,25 @@ export default {
       this.page.pageSize = val
       this.getTabelData()
     },
-    sortChange({ column, prop, order }) {
+    renderHeader(h, col) {
+      return (
+        <div style={{ display: 'inline-flex' }}>
+          <span>{col.displayName}</span>
+          {col.description && col.displayName != col.description ? (
+            <el-tooltip content={col.description}>
+              <i
+                class="el-icon-warning-outline"
+                on-click={(e) => {
+                  e.stopPropagation()
+                }}></i>
+            </el-tooltip>
+          ) : (
+            ''
+          )}
+        </div>
+      )
+    },
+    sortChange({ col, prop, order }) {
       if (order === 'ascending') {
         this.page.desc = false
         this.page.sort = prop

@@ -1,8 +1,22 @@
 import axios from 'axios'
+import JSONbig from 'json-bigint'
 
 export default function getRequest(store) {
   const service = axios.create({
     timeout: 50000,
+    // 响应拦截处理大数值
+    transformResponse: [
+      function(data) {
+        try {
+          return JSON.parse(data)
+          // 使用json-bigint将大数值转成
+          data = JSONbig.parse(data)
+          return data
+        } catch (err) {
+          return data
+        }
+      }
+    ]
   })
 
   // 是否正在弹窗
@@ -30,7 +44,7 @@ export default function getRequest(store) {
       store.getters.message({
         message: error,
         type: 'error',
-        duration: 5 * 1000,
+        duration: 5 * 1000
       })
       Promise.reject(error)
     }
@@ -46,7 +60,7 @@ export default function getRequest(store) {
           store.getters.message({
             message: res.message,
             type: 'error',
-            duration: 5 * 1000,
+            duration: 5 * 1000
           })
           return Promise.reject('后端服务错误')
         } else if (res.code === 401) {
@@ -61,7 +75,7 @@ export default function getRequest(store) {
         store.getters.message({
           message: '服务端返回格式不正确!!!请联系管理员',
           type: 'error',
-          duration: 5 * 1000,
+          duration: 5 * 1000
         })
         return Promise.reject('服务端返回格式不正确')
       }
@@ -76,7 +90,7 @@ export default function getRequest(store) {
         store.getters.message({
           message: '服务请求出错',
           type: 'error',
-          duration: 5 * 1000,
+          duration: 5 * 1000
         })
       }
 
@@ -100,7 +114,7 @@ export default function getRequest(store) {
       .confirm('登陆超时，可以取消继续留在该页面，或者重新登录', '确定登出', {
         confirmButtonText: '重新登录',
         cancelButtonText: '取消',
-        type: 'warning',
+        type: 'warning'
       })
       .then(() => {
         isLoginTimeout = false
@@ -116,7 +130,7 @@ export default function getRequest(store) {
     store.getters.message({
       message: res.message,
       type: 'warning',
-      duration: 5 * 1000,
+      duration: 5 * 1000
     })
     return Promise.reject('没有权限')
   }
