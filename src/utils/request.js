@@ -1,5 +1,5 @@
 import axios from 'axios'
-import JSONbig from 'json-bigint'
+// import JSONbig from 'json-bigint'
 
 export default function getRequest(store) {
   const service = axios.create({
@@ -8,10 +8,12 @@ export default function getRequest(store) {
     transformResponse: [
       function(data) {
         try {
+          // 使用正则将长整数替换为字符串
+          data = data.replace(/(\d{16,})/gi, '"$1"')
           return JSON.parse(data)
-          // 使用json-bigint将大数值转成
-          data = JSONbig.parse(data)
-          return data
+          // // 使用json-bigint将大数值转成
+          // data = JSONbig.parse(data)
+          // return data
         } catch (err) {
           return data
         }
