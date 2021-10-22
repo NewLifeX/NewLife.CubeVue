@@ -11,7 +11,7 @@
     >
       <template v-for="(column, k) in fields">
         <el-form-item
-          v-if="column.name.toLowerCase() != 'id' && column.showInForm"
+          v-if="column.name.toLowerCase() != 'id' && showInForm(column)"
           :key="k"
           :prop="column.isDataObjectField ? column.name : column.columnName"
           :label="column.displayName || column.name"
@@ -58,8 +58,9 @@
               form[column.isDataObjectField ? column.name : column.columnName]
             "
             type="text"
-          /> </el-form-item
-      ></template>
+          />
+        </el-form-item>
+      </template>
 
       <el-form-item v-if="!isDetail">
         <div
@@ -213,11 +214,20 @@ export default {
               class="el-icon-warning-outline"
               on-click={(e) => {
                 e.stopPropagation()
-              }}
-            ></i>
+              }}></i>
           </el-tooltip>
         </div>
       )
+    },
+    showInForm(col) {
+      let vm = this
+      if (vm.isAdd) {
+        return col.showInAddForm
+      } else if (vm.isDetail) {
+        return col.showInDetailForm
+      } else {
+        return col.showInEditForm
+      }
     }
   }
 }

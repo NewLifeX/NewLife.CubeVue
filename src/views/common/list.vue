@@ -96,9 +96,9 @@
           <el-table-column
             v-if="col.showInList"
             :key="idx"
-            :label="column.displayName"
-            :prop="column.name"
-            :sortable="column.isDataObjectField"
+            :label="col.displayName"
+            :prop="col.name"
+            :sortable="col.isDataObjectField"
             :show-overflow-tooltip="true"
             :width="col.width"
             align="center"
