@@ -6,6 +6,9 @@ export function formatRoutes(files, routes, depth = 0) {
   const fileKeys = files.keys()
   routes.forEach((router) => {
     router.path = router.url
+    if (router.path.startsWith('~')) {
+      router.path = router.path.substr(1)
+    }
     router.displayName = router.displayName || router.name
     if (router.visible === undefined) console.log(router.name + ' visible为空')
     if (router.meta) {
@@ -67,7 +70,7 @@ function getEditRoute(files, router, path) {
       } else {
         resolve(files('./common/form.vue'))
       }
-    },
+    }
   }
 
   return r

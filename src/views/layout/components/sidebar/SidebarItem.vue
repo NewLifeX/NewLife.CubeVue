@@ -11,6 +11,7 @@
         v-if="onlyOneChild"
         :to="onlyOneChild.path || onlyOneChild.url"
       >
+        {{ JSON.stringify(onlyOneChild) }}
         <el-menu-item
           :index="onlyOneChild.path || onlyOneChild.url"
           :class="{ 'submenu-title-noDropdown': !isNest }"
@@ -51,22 +52,25 @@ export default {
     // route object
     item: {
       type: Object,
-      required: true,
+      required: true
     },
     isNest: {
       type: Boolean,
-      default: false,
+      default: false
     },
     basePath: {
       type: String,
-      default: '',
-    },
+      default: ''
+    }
   },
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
     return {}
+  },
+  created() {
+    // console.log(this.item)
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
@@ -78,6 +82,7 @@ export default {
           } else {
             // Temp set(will be used if only has one showing child)
             this.onlyOneChild = item
+
             return true
           }
         })
@@ -90,12 +95,12 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, /*: '',*/ noShowingChildren: true }
         return true
       }
 
       return false
-    },
-  },
+    }
+  }
 }
 </script>
