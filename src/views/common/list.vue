@@ -1,16 +1,8 @@
 <template>
   <div class="list-container">
-    <el-row type="flex" class="search" justify="end">
-      <el-col
-        :span="4"
-        class="left-search"
-        v-if="hasPermission(permissionFlags.insert)"
-      >
-        <el-button type="primary" @click="add">
-          新增
-        </el-button>
-      </el-col>
-      <el-col :span="20" class="right-search">
+    <!-- 搜索组件 -->
+    <el-row type="flex" justify="end" class="search">
+      <el-col :span="24" class="right-search">
         <el-form
           ref="form"
           v-model="queryParams"
@@ -78,7 +70,53 @@
           <el-button type="primary" @click="getTabelData">
             查询
           </el-button>
+          <el-button type="default" @click="resetSearch">
+            重置
+          </el-button>
         </el-form>
+      </el-col>
+    </el-row>
+
+    <!-- 操作栏 -->
+    <el-row type="flex" justify="center" align="center">
+      <el-col
+        :span="12"
+        class="left-search"
+        v-if="hasPermission(permissionFlags.insert)"
+      >
+        <el-button type="primary" @click="add">
+          新增
+        </el-button>
+      </el-col>
+      <el-col
+        :span="12"
+        style="display: flex; justify-content: flex-end; align-items: center;"
+      >
+        <el-tooltip effect="dark" content="刷新" placement="top-end">
+          <i
+            class="action"
+            @click="getTabelData"
+            :class="listLoading ? 'el-icon-loading' : ' el-icon-refresh'"
+          ></i>
+        </el-tooltip>
+        <el-tooltip title="列配置">
+          <!-- <action-columns
+              :columns="columns"
+              @reset="onColumnsReset"
+              class="action"
+            >
+              <template :slot="slot" v-for="slot in slots">
+                <slot :name="slot"></slot>
+              </template>
+            </action-columns> -->
+        </el-tooltip>
+        <el-tooltip title="全屏">
+          <!-- <el-icon
+              @click="toggleScreen"
+              class="action"
+              :type="fullScreen ? 'fullscreen-exit' : 'fullscreen'"
+            /> -->
+        </el-tooltip>
       </el-col>
     </el-row>
     <div class="table-container">
@@ -372,6 +410,7 @@ export default {
           vm.listLoading = false
           vm.tableData = res.data.data
           vm.page = res.data.pager
+          vm.page.Q = undefined
           vm.setTableHeight(vm.tableData.length)
         })
     },
@@ -439,6 +478,12 @@ export default {
           vm.tableHeight = count * 35.9 + 'px'
         }, 500)
       }
+    },
+    // 重置搜索条件
+    resetSearch() {
+      let vm = this
+      vm.queryParams = {}
+      vm.query()
     }
   }
 }
@@ -474,28 +519,41 @@ export default {
   /* max-height: 110px; */
   padding: 0 10px;
   /* overflow-y: auto; */
+  display: flex;
+  justify-content: flex-end;
 }
 .table-container {
   /* max-height: calc(100vh - 177px); */
   /* overflow-y: auto; */
   height: auto;
-  margin-bottom: 2px;
+  margin: 5px 0 2px 0;
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
 
 .search .el-input,
 .el-button,
 .el-date-editor {
-  margin-right: 2px;
+  margin-right: 10px;
 }
 
 .search .el-date-editor {
   width: 250px;
 }
 
+.search .el-button + .el-button {
+  margin-left: 0px;
+}
+
 /** 操作按钮 */
-.el-table .el-button + .el-button {
-  margin-left: 3px;
+.el-table .el-button {
+  margin: 2px;
+}
+
+/** 表格操作 */
+.action {
+  margin: 0 8px;
+  cursor: pointer;
+  font-size: 17px;
 }
 </style>
 <style>
