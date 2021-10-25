@@ -11,7 +11,6 @@
         v-if="onlyOneChild"
         :to="onlyOneChild.path || onlyOneChild.url"
       >
-        {{ JSON.stringify(onlyOneChild) }}
         <el-menu-item
           :index="onlyOneChild.path || onlyOneChild.url"
           :class="{ 'submenu-title-noDropdown': !isNest }"

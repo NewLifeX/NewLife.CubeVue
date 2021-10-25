@@ -6,9 +6,9 @@
       class="hamburger-container"
     />
     <div class="left-menu">
-      <a href="/"
-        ><span style="display: inline-block;">{{ displayName }}</span></a
-      >
+      <a href="/">
+        <span style="display: inline-block;">{{ displayName }}</span>
+      </a>
     </div>
     <div class="right-menu">
       <!-- <template v-if="device !== 'mobile'"> -->
@@ -30,25 +30,27 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <span><img :src="myAvatar" class="user-avatar"/></span>
+          <span><img :src="myAvatar" class="user-avatar" /></span>
           <span class="user-info">
-            {{ userInfo && userInfo.displayName }}<br />[{{
-              userInfo && userInfo.roleNames
-            }}]</span
-          >
+            {{ userInfo && userInfo.displayName }}
+            <br />
+            [{{ userInfo && userInfo.roleNames }}]
+          </span>
           <i class="el-icon-caret-bottom" />
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>
-            <router-link to="/">
+        <el-dropdown-menu class="avatar-dropdown" slot="dropdown">
+          <router-link to="/">
+            <el-dropdown-item>
               <span style="display:inline-block;">首页</span>
-            </router-link>
-          </el-dropdown-item>
-          <el-dropdown-item divided>
-            <router-link to="/Admin/User/Info">
+            </el-dropdown-item>
+          </router-link>
+
+          <router-link to="/Admin/User/Info">
+            <el-dropdown-item divided>
               <span style="display:inline-block;">个人信息</span>
-            </router-link>
-          </el-dropdown-item>
+            </el-dropdown-item>
+          </router-link>
+
           <el-dropdown-item divided>
             <span style="display:block;" @click="logout">退出登录</span>
           </el-dropdown-item>
@@ -136,6 +138,15 @@ export default {
   float: left;
   padding: 0 10px;
 }
+
+.navbar .left-menu a:link {
+  font-size: 18px;
+}
+.navbar .left-menu a:visited {
+  text-decoration: none;
+  color: #606266;
+}
+
 .navbar .hamburger-container {
   line-height: 58px;
   height: 50px;
@@ -204,5 +215,13 @@ export default {
   right: -20px;
   top: 25px;
   font-size: 12px;
+}
+
+.avatar-dropdown a:visited {
+  text-decoration: none;
+  color: #606266;
+}
+.avatar-dropdown a:hover {
+  color: inherit;
 }
 </style>
