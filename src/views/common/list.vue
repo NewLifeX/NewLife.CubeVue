@@ -12,6 +12,7 @@
         >
           <template v-for="(col, k) in headerData">
             <el-form-item
+              style="height:36px;"
               v-if="col.showInSearch"
               :key="k"
               :prop="col.isDataObjectField ? col.name : col.columnName"
@@ -54,13 +55,12 @@
           <el-date-picker
             v-model="queryParams.dateRange"
             type="daterange"
-            value-format="yyyy-MM-dd"
-            align="right"
             unlink-panels
+            value-format="YYYY-MM-DD"
             range-separator="~"
             start-placeholder="开始"
             end-placeholder="结束"
-            :picker-options="pickerOptions"
+            :shortcuts="shortcuts"
           ></el-date-picker>
           <el-input
             style="width:auto"
@@ -93,32 +93,38 @@
         style="display: flex; justify-content: flex-end; align-items: center;"
       >
         <el-tooltip effect="dark" content="刷新" placement="top-end">
-          <i
-            class="action"
-            @click="getTabelData"
-            :class="listLoading ? 'el-icon-loading' : ' el-icon-refresh'"
-          ></i>
+          <el-icon class="action" @click="getTabelData">
+            <loading v-if="listLoading" />
+            <refresh v-else />
+          </el-icon>
         </el-tooltip>
-        <el-tooltip title="列配置">
+        <el-tooltip effect="dark" content="列配置" placement="top-end">
+          <el-icon class="action">
+            <setting />
+          </el-icon>
           <!-- <action-columns
               :columns="columns"
               @reset="onColumnsReset"
               class="action"
             >
-              <template :slot="slot" v-for="slot in slots">
+              <template v-for="slot in slots">
                 <slot :name="slot"></slot>
               </template>
             </action-columns> -->
         </el-tooltip>
-        <el-tooltip title="全屏">
+        <el-tooltip effect="dark" content="全屏" placement="top-end">
+          <el-icon class="action">
+            <full-screen />
+          </el-icon>
           <!-- <el-icon
-              @click="toggleScreen"
-              class="action"
-              :type="fullScreen ? 'fullscreen-exit' : 'fullscreen'"
-            /> -->
+            @click="toggleScreen"
+            class="action"
+            :type="fullScreen ? 'fullscreen-exit' : 'fullscreen'"
+          /> -->
         </el-tooltip>
       </el-col>
     </el-row>
+
     <div class="table-container">
       <el-table
         :height="tableHeight"
@@ -143,7 +149,7 @@
           >
             <!-- :render-header="(h) => renderHeader(h, col)" -->
 
-            <template slot="header">
+            <template #header>
               <div style="display:inline-flex">
                 <span>{{ col.displayName }}</span>
                 <el-tooltip
@@ -161,7 +167,8 @@
                 </el-tooltip>
               </div>
             </template>
-            <template slot-scope="scope">
+
+            <template v-slot="scope">
               <template v-if="col.dataType === 'Boolean'">
                 <el-switch
                   :value="scope.row[col.name]"
@@ -182,8 +189,9 @@
           align="center"
           width="140"
           class-name="small-padding fixed-width"
+          :fixed="'right'"
         >
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button
               v-if="
                 !hasPermission(permissionFlags.update) &&
@@ -215,7 +223,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div slot="footer">
+    <div>
       <el-pagination
         :current-page="page.pageIndex"
         :page-size="page.pageSize"
@@ -252,46 +260,44 @@ export default {
       },
       headerData: [],
       listLoading: false,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '昨天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-              end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-              picker.$emit('pick', [start, end])
-            }
-          },
-          {
-            text: '今天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              picker.$emit('pick', [start, end])
-            }
-          },
-          {
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
-          },
-          {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
+      shortcuts: [
+        {
+          text: '昨天',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+            return [start, end]
           }
-        ]
-      },
+        },
+        {
+          text: '今天',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            return [start, end]
+          }
+        },
+        {
+          text: '最近一周',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            return [start, end]
+          }
+        },
+        {
+          text: '最近一个月',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            return [start, end]
+          }
+        }
+      ],
       permissionFlags: {
         none: 0,
         detail: 1,
@@ -323,13 +329,19 @@ export default {
       return temp
     }
   },
-  watch: {
-    $route: {
-      handler: function() {
-        this.init()
-      },
-      immediate: true
-    }
+  // watch: {
+  //   $route: {
+  //     handler: function() {
+  //       this.init()
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
+    this.init()
+  },
+  activated() {
+    this.init()
   },
   methods: {
     init() {
@@ -343,7 +355,7 @@ export default {
       for (const key in vm.$route.query) {
         if (Object.hasOwnProperty.call(vm.$route.query, key)) {
           const element = vm.$route.query[key]
-          vm.$set(vm.queryParams, key, element)
+          vm.queryParams[key] = element
         }
       }
     },
@@ -488,7 +500,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .list-container {
   height: -moz-calc(100vh - 51px);
   height: -webkit-calc(100vh - 51px);
@@ -530,16 +542,6 @@ export default {
   box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
 }
 
-.search .el-input,
-.el-button,
-.el-date-editor {
-  margin-right: 10px;
-}
-
-.search .el-date-editor {
-  width: 250px;
-}
-
 .search .el-button + .el-button {
   margin-left: 0px;
 }
@@ -556,9 +558,18 @@ export default {
   font-size: 17px;
 }
 </style>
-<style>
-.search-form-container .el-form-item__content {
-  line-height: 60px;
+<style lang="scss">
+/* 搜索框元素间距 */
+.search {
+  .el-input,
+  .el-button,
+  .el-date-editor {
+    margin-right: 10px;
+  }
+}
+
+.search .el-date-editor {
+  width: 250px;
 }
 
 .search-form-container .el-form-item {

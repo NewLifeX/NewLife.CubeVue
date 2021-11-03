@@ -18,8 +18,7 @@
                 v-model="loginForm.username"
                 placeholder="用户名 / 邮箱"
                 prefix-icon="el-icon-user"
-              >
-              </el-input>
+              ></el-input>
             </el-form-item>
 
             <el-form-item label="">
@@ -28,15 +27,15 @@
                 placeholder="密码"
                 prefix-icon="el-icon-lock"
                 show-password
-              >
-              </el-input>
+              ></el-input>
             </el-form-item>
             <el-form-item label="">
               <el-checkbox
                 class="text text-primary"
                 v-model="loginForm.remember"
-                >记住我</el-checkbox
               >
+                记住我
+              </el-checkbox>
 
               <template v-if="loginConfig.allowRegister">
                 <div
@@ -70,20 +69,19 @@
             </p>
             <el-row>
               <el-col :sm="24">
-                <template v-for="(mi, i) in loginConfig.providers">
-                  <a
-                    :title="mi.nickName || mi.name"
-                    :key="i"
-                    @click="ssoClick(getUrl(mi))"
-                  >
-                    <img
-                      v-if="mi.logo"
-                      :src="getLogoUrl(mi.logo)"
-                      style="width: 64px;height: 64px;"
-                    />
-                    <template v-else>{{ mi.nickName || mi.name }}</template>
-                  </a>
-                </template>
+                <a
+                  v-for="(mi, i) in loginConfig.providers"
+                  :key="i"
+                  :title="mi.nickName || mi.name"
+                  @click="ssoClick(getUrl(mi))"
+                >
+                  <img
+                    v-if="mi.logo"
+                    :src="getLogoUrl(mi.logo)"
+                    style="width: 64px;height: 64px;"
+                  />
+                  <template v-else>{{ mi.nickName || mi.name }}</template>
+                </a>
               </el-col>
             </el-row>
           </el-col>
@@ -108,7 +106,7 @@ export default {
           logo: '', // 系统logo
           allowLogin: true,
           allowRegister: true,
-          providers: [],
+          providers: []
         }
       }
       return loginConfig
@@ -127,15 +125,15 @@ export default {
         (this.sysConfig && this.sysConfig.displayName) ||
         (this.loginConfig && this.loginConfig.displayName)
       )
-    },
+    }
   },
   data() {
     return {
       loginForm: {
         username: null,
         password: null,
-        remember: true,
-      },
+        remember: true
+      }
     }
   },
   created() {
@@ -199,8 +197,8 @@ export default {
       ) {
         vm.ssoClick(vm.getUrl(loginConfig.providers[0]))
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

@@ -53,7 +53,7 @@
         <el-table-column prop="name" label="名称" width="180" />
         <el-table-column prop="displayName" label="显示名" width="100" />
         <!-- <el-table-column label="授权" width="60">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-checkbox
               v-model="form['p' + scope.row.id]"
               @change="handleCheckAllChange"
@@ -61,36 +61,38 @@
           </template>
         </el-table-column> -->
         <el-table-column label="操作">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <template v-if="scope.row.permissions.length > 0">
               <el-checkbox
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="checkAllChange(scope.row)"
-                >全选</el-checkbox
               >
+                全选
+              </el-checkbox>
               <el-checkbox
                 v-for="item in scope.row.permissions"
                 :key="scope.row.id + '' + item.k"
                 :label="item.v"
                 v-model="form['pf' + scope.row.id + '_' + item.k]"
                 @change="checkChange(scope.row)"
-              >
-              </el-checkbox>
+              ></el-checkbox>
             </template>
             <template v-else>
               <el-checkbox
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="parentCheckAllChange(scope.row)"
-                >全选</el-checkbox
               >
+                全选
+              </el-checkbox>
               <!-- <el-checkbox>读写</el-checkbox> -->
               <el-checkbox
                 v-model="form['pc_readonly_' + scope.row.id]"
                 @change="roCheck(scope.row)"
-                >只读</el-checkbox
               >
+                只读
+              </el-checkbox>
             </template>
           </template>
         </el-table-column>
@@ -306,8 +308,8 @@ export default {
         pCheck = pCheck || c
       })
 
-      vm.$set(vm.form, 'p' + id, pCheck)
-      vm.$set(vm.imObj, id, checkCount > 0 && checkCount < permissions.length)
+      vm.form['p' + id] = pCheck
+      vm.imObj[id] = checkCount > 0 && checkCount < permissions.length
 
       // 更新父级全选
       vm.parentCheckUpdate(parentID)
@@ -318,10 +320,10 @@ export default {
       let vm = this
       let pCheck = vm.form['p' + id]
       permissions.forEach((e) => {
-        vm.$set(vm.form, 'pf' + id + '_' + e.k, pCheck)
+        vm.form['pf' + id + '_' + e.k] = pCheck
       })
 
-      vm.$set(vm.imObj, id, false)
+      vm.imObj[id] = false
 
       // 更新父级全选
       vm.parentCheckUpdate(parentID)
@@ -333,7 +335,7 @@ export default {
       let vm = this
       let pCheck = vm.form['p' + id]
       children.forEach((e) => {
-        vm.$set(vm.form, 'p' + e.id, pCheck)
+        vm.form['p' + e.id] = pCheck
         vm.checkAllChange({
           id: e.id,
           permissions: e.permissions,
@@ -341,7 +343,7 @@ export default {
         })
       })
 
-      vm.$set(vm.imObj, id, false)
+      vm.imObj[id] = false
     },
     parentCheckUpdate(parentID) {
       // console.log('parentCheckUpdate', parentID)
@@ -363,15 +365,15 @@ export default {
         parentIm = false
       }
 
-      vm.$set(vm.form, 'p' + parentID, parentCheck)
-      vm.$set(vm.imObj, parentID, parentIm)
+      vm.form['p' + parentID] = parentCheck
+      vm.imObj[parentID] = parentIm
     },
     roCheck({ id, children }) {
       // 只读勾选，勾选所有子权限只读项
       let vm = this
       let pCheck = vm.form['pc_readonly_' + id]
       children.forEach((e) => {
-        vm.$set(vm.form, 'pf' + e.id + '_' + 1, pCheck)
+        vm.form['pf' + e.id + '_' + 1] = pCheck
         vm.checkChange(e)
       })
     },
@@ -389,7 +391,7 @@ export default {
 
             let c = (p.k & vm.rolePermissions[menu.id]) !== 0
             // console.log('allCheckUpdate1', menu.id, p.k, c)
-            vm.$set(vm.form, 'pf' + menu.id + '_' + p.k, c)
+            vm.form['pf' + menu.id + '_' + p.k] = c
           })
         }
 
@@ -404,7 +406,7 @@ export default {
               let c = (p.k & vm.rolePermissions[j.id]) !== 0
               // console.log('allCheckUpdate2', j.id, p.k, c)
 
-              vm.$set(vm.form, 'pf' + j.id + '_' + p.k, c)
+              vm.form['pf' + j.id + '_' + p.k] = c
             })
             vm.checkChange(j)
           })

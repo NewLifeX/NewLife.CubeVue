@@ -20,7 +20,7 @@
             v-if="
               column.description && column.displayName != column.description
             "
-            slot="label"
+            #label
           >
             <div style="display:inline-flex">
               <span>{{ column.displayName || column.name }}</span>
@@ -40,8 +40,8 @@
             v-else-if="column.dataType == 'DateTime'"
             v-model="form[column.name]"
             type="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择日期时间"
           />
 
@@ -89,7 +89,10 @@ export default {
     },
     currentPath() {
       let vm = this
-      let rplStr = `/${vm.type}${vm.id === undefined ? '' : '/' + vm.id}`
+      let rplStr = `/${vm.type}`
+      if (!vm.isAdd) {
+        rplStr += `/${vm.id}`
+      }
       return this.$route.path.replace(rplStr, '')
     },
     type() {
@@ -124,19 +127,25 @@ export default {
     },
     isDetail() {
       return this.type === 'Detail'
+    },
+    isEdit() {
+      return this.type === 'Edit'
     }
   },
-  watch: {
-    $route: {
-      handler: function() {
-        this.init()
-      },
-      immediate: true
-    }
+  // watch: {
+  // 原本是通过路由变化初始化数据，但是切换页面时仍会触发
+  //   $route: {
+  //     handler: function() {
+  //       this.init()
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
+    this.init()
   },
   methods: {
     init() {
-      // this.getFields()
       this.getColumns()
       if (!this.isAdd) {
         this.query()
@@ -146,28 +155,11 @@ export default {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       let vm = this
       let path = vm.currentPath
+
       vm.$store.getters.apis.getColumns(path).then((res) => {
         vm.fields = res.data.data
       })
     },
-    // getFields() {
-    //   let vm = this
-    //   let path = vm.currentPath
-    //   let key = path + '-' + fieldType
-    //   let fields = vm.$store.state.entity[vm.fieldType][key]
-    //   if (fields) {
-    //     vm.fields = fields
-    //     return
-    //   }
-
-    //   // 没有获取过字信息，请求回来后保存一份
-    //   vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
-    //     fields = res.data.data
-    //     vm.fields = fields
-
-    //     vm.$store.dispatch(vm.setFieldType, { key, fields })
-    //   })
-    // },
     query() {
       let vm = this
       if (vm.isDetail) {
@@ -204,20 +196,6 @@ export default {
     },
     returnIndex() {
       this.$router.push(this.currentPath)
-    },
-    renderHeader(h, col) {
-      return (
-        <div style={{ display: 'inline-flex' }}>
-          <span>{col.displayName}</span>
-          <el-tooltip content={col.description}>
-            <i
-              class="el-icon-warning-outline"
-              on-click={(e) => {
-                e.stopPropagation()
-              }}></i>
-          </el-tooltip>
-        </div>
-      )
     },
     showInForm(col) {
       let vm = this

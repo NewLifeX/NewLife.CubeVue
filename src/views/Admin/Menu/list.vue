@@ -10,7 +10,7 @@
           新增
         </el-button>
       </el-col>
-      <el-col :span="20" class="right-search"> </el-col>
+      <el-col :span="20" class="right-search"></el-col>
     </el-row>
     <div class="table-container">
       <el-table
@@ -22,7 +22,7 @@
         @row-dblclick="rowDblclick"
         :tree-props="{
           children: 'children',
-          hasChildren: 'hasChildren',
+          hasChildren: 'hasChildren'
         }"
         row-key="id"
         default-expand-all
@@ -32,7 +32,7 @@
         <el-table-column prop="url" label="链接" width="250" />
         <el-table-column prop="sort" label="排序" width="50" />
         <el-table-column align="center" prop="visible" label="可见" width="80">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-switch
               :value="scope.row.visible"
               active-color="#13ce66"
@@ -46,7 +46,7 @@
           label="必要"
           width="80"
         >
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-switch
               :value="scope.row.necessary"
               active-color="#13ce66"
@@ -62,7 +62,7 @@
           width="140"
           class-name="small-padding fixed-width"
         >
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button
               v-if="
                 !hasPermission(permissionFlags.update) &&
@@ -71,27 +71,30 @@
               type="primary"
               size="mini"
               @click="detail(scope.row)"
-              >查看</el-button
             >
+              查看
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.update)"
               type="primary"
               size="mini"
               @click="editData(scope.row)"
-              >编辑</el-button
             >
+              编辑
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.delete)"
               size="mini"
               type="danger"
               @click="deleteData(scope.row)"
-              >删除</el-button
             >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <div slot="footer">
+    <div>
       <el-pagination
         :current-page="page.pageIndex"
         :page-size="page.pageSize"
@@ -100,8 +103,7 @@
         @current-change="currentChange"
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
-      >
-      </el-pagination>
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -114,12 +116,12 @@ export default {
       tableHeight: '300px',
       queryParams: {
         Q: null,
-        dateRange: null,
+        dateRange: null
       },
       page: {
         pageIndex: 1,
         pageSize: 20,
-        totalCount: 0,
+        totalCount: 0
       },
       listLoading: false,
       permissionFlags: {
@@ -127,8 +129,8 @@ export default {
         detail: 1,
         insert: 2,
         update: 4,
-        delete: 8,
-      },
+        delete: 8
+      }
     }
   },
   computed: {
@@ -151,15 +153,15 @@ export default {
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -172,7 +174,7 @@ export default {
       for (const key in vm.$route.query) {
         if (Object.hasOwnProperty.call(vm.$route.query, key)) {
           const element = vm.$route.query[key]
-          vm.$set(vm.queryParams, key, element)
+          vm.queryParams[key] = element
         }
       }
     },
@@ -238,7 +240,7 @@ export default {
             id: e.id,
             name: e.name,
             displayName: e.displayName,
-            parentID: e.parentID,
+            parentID: e.parentID
           }
           pList.push(e)
           let children = vm.getTreeData(dataList, e.id)
@@ -281,7 +283,7 @@ export default {
       let has = vm.$store.state.user.hasPermission(vm.$store, {
         menuId,
         actionId,
-        permissions,
+        permissions
       })
       return has
     },
@@ -296,8 +298,8 @@ export default {
           vm.tableHeight = count * 35.9 + 'px'
         }, 500)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped>
@@ -353,25 +355,5 @@ export default {
 /** 操作按钮 */
 .el-table .el-button + .el-button {
   margin-left: 3px;
-}
-</style>
-<style>
-.search-form-container .el-form-item__content {
-  line-height: 60px;
-}
-
-.search-form-container .el-form-item {
-  margin-bottom: 0;
-}
-
-/** 表头、行上下间距 */
-.table-container .el-table td,
-.table-container .el-table th {
-  padding: 2px 0 2px 0;
-}
-
-/** 表头、行上下间距 */
-.table-container .cell {
-  padding: 0 1px 0 1px;
 }
 </style>

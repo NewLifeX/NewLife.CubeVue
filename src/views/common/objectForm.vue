@@ -7,43 +7,42 @@
       :model="form"
     >
       <template v-for="(list, cate) in properties">
-        <template v-if="list.length > 0">
+        <div v-if="list.length > 0" :key="cate">
           <div :key="cate">
             <label>
               <h2>{{ cate }}</h2>
             </label>
           </div>
-          <template v-for="(item, k) in list">
-            <el-form-item
-              :key="k + cate"
-              :label="item.displayName"
-              :prop="item.name"
-            >
-              <el-switch
-                v-if="item.typeStr == 'Boolean'"
-                v-model="form[item.name]"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-              />
+          <el-form-item
+            v-for="(item, k) in list"
+            :key="k + cate"
+            :label="item.displayName"
+            :prop="item.name"
+          >
+            <el-switch
+              v-if="item.typeStr == 'Boolean'"
+              v-model="form[item.name]"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            />
 
-              <el-date-picker
-                v-else-if="item.typeStr == 'DateTime'"
-                v-model="form[item.name]"
-                type="datetime"
-                format="yyyy-MM-dd HH:mm:ss"
-                value-format="yyyy-MM-dd HH:mm:ss"
-              />
+            <el-date-picker
+              v-else-if="item.typeStr == 'DateTime'"
+              v-model="form[item.name]"
+              type="datetime"
+              format="YYYY-MM-DD HH:mm:ss"
+              value-format="YYYY-MM-DD HH:mm:ss"
+            />
 
-              <el-input
-                v-else
-                v-model="form[item.name]"
-                type="text"
-                size="medium"
-              />
-              <span>{{ item.description }}</span>
-            </el-form-item>
-          </template>
-        </template>
+            <el-input
+              v-else
+              v-model="form[item.name]"
+              type="text"
+              size="medium"
+            />
+            <span>{{ item.description }}</span>
+          </el-form-item>
+        </div>
       </template>
 
       <el-form-item prop label-name>
@@ -63,21 +62,21 @@ export default {
   data() {
     return {
       form: {},
-      properties: [],
+      properties: []
     }
   },
   computed: {
     currentPath() {
       return this.path
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -102,15 +101,15 @@ export default {
         vm.$message({
           message: msg,
           type: 'success',
-          duration: 3 * 1000,
+          duration: 3 * 1000
         })
 
         if (!vm.form.enableNewUI) {
           location.href = '/'
         }
       })
-    },
-  },
+    }
+  }
 }
 </script>
 

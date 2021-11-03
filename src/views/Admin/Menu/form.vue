@@ -27,8 +27,8 @@
             v-else-if="column.dataType == 'DateTime'"
             v-model="form[column.name]"
             type="datetime"
-            format="yyyy-MM-dd HH:mm:ss"
-            value-format="yyyy-MM-dd HH:mm:ss"
+            format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择日期时间"
           />
 
@@ -39,12 +39,9 @@
             type="textarea"
           />
 
-          <el-input
-            v-else
-            v-model="form[column.name]"
-            type="text"
-          /> </el-form-item
-      ></template>
+          <el-input v-else v-model="form[column.name]" type="text" />
+        </el-form-item>
+      </template>
 
       <el-form-item v-if="!isDetail">
         <div
@@ -70,122 +67,122 @@ export default {
           name: 'id',
           displayName: '编号',
           dataType: 'Int32',
-          description: '编号',
+          description: '编号'
         },
         {
           name: 'name',
           displayName: '名称',
           dataType: 'String',
           length: 50,
-          description: '名称',
+          description: '名称'
         },
         {
           name: 'displayName',
           displayName: '显示名',
           dataType: 'String',
           length: 50,
-          description: '显示名',
+          description: '显示名'
         },
         {
           name: 'fullName',
           displayName: '全名',
           dataType: 'String',
           length: 200,
-          description: '全名',
+          description: '全名'
         },
         {
           name: 'parentID',
           displayName: '父编号',
           dataType: 'Int32',
-          description: '父编号',
+          description: '父编号'
         },
         {
           name: 'url',
           displayName: '链接',
           dataType: 'String',
           length: 200,
-          description: '链接',
+          description: '链接'
         },
         {
           name: 'sort',
           displayName: '排序',
           dataType: 'Int32',
-          description: '排序',
+          description: '排序'
         },
         {
           name: 'icon',
           displayName: '图标',
           dataType: 'String',
           length: 50,
-          description: '图标',
+          description: '图标'
         },
         {
           name: 'visible',
           displayName: '可见',
           dataType: 'Boolean',
-          description: '可见',
+          description: '可见'
         },
         {
           name: 'necessary',
           displayName: '必要',
           dataType: 'Boolean',
           description:
-            '必要。必要的菜单，必须至少有角色拥有这些权限，如果没有则自动授权给系统角色',
+            '必要。必要的菜单，必须至少有角色拥有这些权限，如果没有则自动授权给系统角色'
         },
         {
           name: 'permission',
           displayName: '权限子项',
           dataType: 'String',
           length: 200,
-          description: '权限子项。逗号分隔，每个权限子项名值竖线分隔',
+          description: '权限子项。逗号分隔，每个权限子项名值竖线分隔'
         },
         {
           name: 'ex1',
           displayName: '扩展1',
           dataType: 'Int32',
-          description: '扩展1',
+          description: '扩展1'
         },
         {
           name: 'ex2',
           displayName: '扩展2',
           dataType: 'Int32',
-          description: '扩展2',
+          description: '扩展2'
         },
         {
           name: 'ex3',
           displayName: '扩展3',
           dataType: 'Double',
-          description: '扩展3',
+          description: '扩展3'
         },
         {
           name: 'ex4',
           displayName: '扩展4',
           dataType: 'String',
           length: 50,
-          description: '扩展4',
+          description: '扩展4'
         },
         {
           name: 'ex5',
           displayName: '扩展5',
           dataType: 'String',
           length: 50,
-          description: '扩展5',
+          description: '扩展5'
         },
         {
           name: 'ex6',
           displayName: '扩展6',
           dataType: 'String',
           length: 50,
-          description: '扩展6',
+          description: '扩展6'
         },
         {
           name: 'remark',
           displayName: '备注',
           dataType: 'String',
           length: 500,
-          description: '备注',
-        },
-      ],
+          description: '备注'
+        }
+      ]
     }
   },
   computed: {
@@ -229,15 +226,15 @@ export default {
     },
     isDetail() {
       return this.type === 'Detail'
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -294,7 +291,7 @@ export default {
           vm.$message({
             message: '新增成功',
             type: 'success',
-            duration: 5 * 1000,
+            duration: 5 * 1000
           })
         })
       } else {
@@ -302,15 +299,15 @@ export default {
           vm.$message({
             message: '保存成功',
             type: 'success',
-            duration: 5 * 1000,
+            duration: 5 * 1000
           })
         })
       }
     },
     returnIndex() {
       this.$router.push(this.currentPath)
-    },
-  },
+    }
+  }
 }
 </script>
 

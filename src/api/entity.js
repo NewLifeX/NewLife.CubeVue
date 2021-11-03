@@ -3,12 +3,12 @@ export default function(stroe) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     let params = {
-      kind,
+      kind
     }
     return request({
       url: path + urls.getEntityFields,
       method: 'get',
-      params,
+      params
     })
   }
 
@@ -35,7 +35,7 @@ export default function(stroe) {
     const urls = stroe.getters.urls
     return request({
       url: path + urls.getColumns,
-      method: 'get',
+      method: 'get'
     })
   }
 
@@ -45,7 +45,7 @@ export default function(stroe) {
     return request({
       url: path + urls.getDataList,
       method: 'post',
-      data: page,
+      data: page
     })
   }
 
@@ -53,12 +53,12 @@ export default function(stroe) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     let params = {
-      id,
+      id
     }
     return request({
       url: path + urls.getData,
       method: 'get',
-      params,
+      params
     })
   }
 
@@ -66,12 +66,12 @@ export default function(stroe) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     let params = {
-      id,
+      id
     }
     return request({
       url: path + urls.getDetailData,
       method: 'get',
-      params,
+      params
     })
   }
 
@@ -79,12 +79,12 @@ export default function(stroe) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     let params = {
-      id,
+      id
     }
     return request({
       url: path + urls.deleteById,
       method: 'get',
-      params,
+      params
     })
   }
 
@@ -94,7 +94,7 @@ export default function(stroe) {
     return request({
       url: path + urls.add,
       method: 'post',
-      data: entity,
+      data: entity
     })
   }
 
@@ -104,7 +104,7 @@ export default function(stroe) {
     return request({
       url: path + urls.edit,
       method: 'post',
-      data: entity,
+      data: entity
     })
   }
 
@@ -119,6 +119,6 @@ export default function(stroe) {
     getDetailData,
     add,
     edit,
-    deleteById,
+    deleteById
   }
 }

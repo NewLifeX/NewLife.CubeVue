@@ -11,15 +11,13 @@
           <el-date-picker
             v-model="queryParams.dateRange"
             type="daterange"
-            value-format="yyyy-MM-dd"
-            align="right"
+            value-format="YYYY-MM-DD"
             unlink-panels
             range-separator="~"
             start-placeholder="开始"
             end-placeholder="结束"
-            :picker-options="pickerOptions"
-          >
-          </el-date-picker>
+            :shortcuts="shortcuts"
+          ></el-date-picker>
           <el-input
             style="width:auto"
             v-model="queryParams.key"
@@ -40,7 +38,7 @@
               :label="column.displayName"
               :prop="column.name"
             >
-              <template slot-scope="scope">
+              <template v-slot="scope">
                 <template v-if="column.typeStr == 'Boolean'">
                   <el-switch
                     :value="scope.row[column.name]"
@@ -67,22 +65,27 @@
             fixed="right"
             class-name="small-padding fixed-width"
           >
-            <template slot-scope="scope">
-              <el-button type="primary" size="mini" @click="editData(scope.row)"
-                >编辑</el-button
+            <template v-slot="scope">
+              <el-button
+                type="primary"
+                size="mini"
+                @click="editData(scope.row)"
               >
+                编辑
+              </el-button>
               <el-button
                 v-if="scope.row.status != 'deleted'"
                 size="mini"
                 type="danger"
                 @click="deleteData(scope.row)"
-                >删除</el-button
               >
+                删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div slot="footer">
+      <div>
         <el-pagination
           :current-page="page.pageIndex"
           :page-size="page.pageSize"
@@ -91,8 +94,7 @@
           @current-change="currentchange"
           @size-change="handleSizeChange"
           layout="total, sizes, prev, pager, next, jumper"
-        >
-        </el-pagination>
+        ></el-pagination>
       </div>
     </div>
   </div>
@@ -105,55 +107,53 @@ export default {
       tabledata: [],
       queryParams: {
         key: null,
-        dateRange: null,
+        dateRange: null
       },
       page: {
         PageIndex: 1,
         PageSize: 10,
-        TotalCount: 0,
+        TotalCount: 0
       },
       headerData: [],
       listLoading: false,
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: '昨天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-              end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '今天',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            },
-          },
-          {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            },
-          },
-        ],
-      },
+      shortcuts: [
+        {
+          text: '昨天',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+            return [start, end]
+          }
+        },
+        {
+          text: '今天',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            return [start, end]
+          }
+        },
+        {
+          text: '最近一周',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            return [start, end]
+          }
+        },
+        {
+          text: '最近一个月',
+          value() {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            return [start, end]
+          }
+        }
+      ]
     }
   },
   computed: {
@@ -175,15 +175,15 @@ export default {
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
-    },
+    }
   },
   watch: {
     $route: {
       handler: function() {
         this.init()
       },
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     init() {
@@ -227,7 +227,7 @@ export default {
       this.addform = {
         BusinessPartyId: '',
         TenantIdName: '',
-        BusinessType: '',
+        BusinessType: ''
       }
     },
     clear() {
@@ -256,8 +256,8 @@ export default {
     handleSizeChange(val) {
       this.page.pageSize = val
       this.gettabeldata()
-    },
-  },
+    }
+  }
 }
 </script>
 <style scoped>
