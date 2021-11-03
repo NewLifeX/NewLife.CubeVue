@@ -1,25 +1,32 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import * as VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
-import Element from 'element-ui'
-import CubeUI from './index'
-// console.log(Vue, CubeUI)
+import App from './App.vue'
+import * as Element from 'element-plus'
+import * as ElementIcons from '@element-plus/icons'
+import { createCubeUI } from './index'
 
-import 'element-ui/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 
-Vue.Vuex = Vuex
-Vue.VueRouter = VueRouter
-Vue.Element = Element
-// window.Vue = Vue
-Vue.use(CubeUI)
+let cubeUI = createCubeUI(VueRouter, Vuex, Element, ElementIcons)
+
+const app = createApp(App)
+app.use(cubeUI)
+
+// Vue.Vuex = Vuex
+// Vue.VueRouter = VueRouter
+// Vue.Element = Element
+// // window.Vue = Vue
+// Vue.use(CubeUI)
 // console.log(Vue.Store)
 
-// Vue.Store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-Vue.Store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
+// cubeUI.store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+cubeUI.store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
 
-window.Vue = Vue
-new Vue({
-  router: Vue.Router,
-  store: Vue.Store,
-  render: (h) => h(CubeUI.App),
-}).$mount('#app')
+// // window.Vue = Vue
+// new Vue({
+//   router: Vue.Router,
+//   store: Vue.Store,
+//   render: (h) => h(CubeUI.App)
+// })
+app.mount('#app')

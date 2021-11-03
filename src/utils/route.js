@@ -20,18 +20,22 @@ export function formatRoutes(files, routes, depth = 0) {
 
     // 第一层使用布局模板
     if (depth === 0) {
-      router.component = (resolve) => {
-        require(['@/views/layout/index.vue'], resolve)
-      }
+      router.component = () => Promise.resolve(files('./layout/index.vue'))
     } else {
       // 目前只按照两层处理
       const path = `.${router.path}/list.vue`
-      router.component = (resolve) => {
+      // router.component = () => import('@/views/common/list.vue')
+      // router.component = () => {
+      //   return <div>123</div>
+      // }
+      // router.component = () => Promise.resolve(files('./common/list.vue'))
+
+      router.component = () => {
         // 先尝试加载自定义视图，不存在使用默认视图
         if (fileKeys.includes(path)) {
-          resolve(files(path))
+          return Promise.resolve(files(path))
         } else {
-          resolve(files('./common/list.vue'))
+          return Promise.resolve(files('./common/list.vue'))
         }
       }
 
@@ -62,13 +66,13 @@ function getEditRoute(files, router, path) {
     // path: `User/Edit/:id?`,
     name: router.name + 'Form',
     isFormRoute: true, // 是否表单路由
-    component: (resolve) => {
+    component: () => {
       // 先尝试加载自定义视图，不存在使用默认视图
       path = `.${path}/form.vue`
       if (fileKeys.includes(path)) {
-        resolve(files(path))
+        return Promise.resolve(files(path))
       } else {
-        resolve(files('./common/form.vue'))
+        return Promise.resolve(files('./common/form.vue'))
       }
     }
   }

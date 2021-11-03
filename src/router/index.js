@@ -82,9 +82,9 @@ export const asyncRouterMap = [
 ]
 
 const routerOptions = {
-  mode: 'history',
+  // history: VueRouter.createWebHashHistory(),
   scrollBehavior: () => ({
-    y: 0
+    top: 0
   }),
   routes: constantRouterMap
 }

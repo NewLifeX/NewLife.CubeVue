@@ -1,4 +1,3 @@
-import App from './App.vue'
 import StoreConfig from './store'
 import RouterConfig from './router'
 // console.log(Vue, Element, App, Vuex, VueRouter)
@@ -9,15 +8,50 @@ import '@/styles/index.scss' // global css
 
 const files = require.context('@/views/', true, /^.*\.vue$/)
 
-const install = (Vue) => {
+let store, router, elementUI, elementIcons
+
+const install = (app) => {
   if (install.installed) return
   install.installed = true
 
-  Vue.use(Vue.Vuex)
-  Vue.use(Vue.VueRouter)
+  if (!store || !router) {
+    console.error('请先使用createCubeUI创建store, router')
+    return
+  }
 
-  const store = new Vue.Vuex.Store(StoreConfig)
-  const router = new Vue.VueRouter(RouterConfig.routerOptions)
+  app.use(router)
+  app.use(store)
+  app.use(elementUI, { size: store.getters.app.size })
+  for (const key in elementIcons) {
+    const e = elementIcons[key]
+    app.component(e.name, e)
+  }
+
+  app.config.globalProperties.$message = elementUI.ElMessage
+  app.config.globalProperties.$messageBox = elementUI.ElMessageBox
+  app.config.globalProperties.$warn = (config) => {
+    elementUI.MessageEl.warning(config)
+  }
+  app.config.globalProperties.$api = store.getters.apis
+}
+
+export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
+  // if (install.installed) return
+  // install.installed = true
+
+  // app.use(app.Vuex)
+  // app.use(app.VueRouter)
+
+  // console.log(VueRouter, Vuex, Element, ElementIcons)
+
+  store = Vuex.createStore(StoreConfig)
+
+  router = VueRouter.createRouter({
+    ...RouterConfig.routerOptions,
+    history: VueRouter.createWebHistory()
+  })
+  elementUI = Element
+  elementIcons = ElementIcons
 
   // 注册组件
   store.dispatch('setFiles', files)
@@ -30,28 +64,15 @@ const install = (Vue) => {
   store.dispatch('setRequest', rqeuest)
   // console.log(stroe.getters.request)
   store.dispatch('addApis', apis)
-  store.dispatch('setMessage', Vue.Element.Message)
-  store.dispatch('setMessageBox', Vue.Element.MessageBox)
 
-  Vue.use(Vue.Element, { size: store.getters.app.size })
-  Vue.config.productionTip = false
-  Vue.prototype.$message = Vue.Element.Message
-  Vue.prototype.$messageBox = Vue.Element.MessageBox
-  Vue.prototype.$warn = (config) => {
-    Vue.Element.Message.warning(config)
+  store.dispatch('setMessage', elementUI.ElMessage)
+  store.dispatch('setMessageBox', elementUI.ElMessageBox)
+
+  return {
+    install,
+    router,
+    store
   }
-
-  Object.defineProperties(Vue.prototype, {
-    // 此处挂载在 Vue 原型的 $api 对象上
-    $api: {
-      get() {
-        return store.getters.apis
-      },
-    },
-  })
-
-  Vue.Store = store
-  Vue.Router = router
 }
 
 // // TODO 支持不完善
@@ -62,7 +83,6 @@ const install = (Vue) => {
 export default {
   version: '1.0',
   install,
-  App,
   StoreConfig,
-  RouterConfig,
+  RouterConfig
 }

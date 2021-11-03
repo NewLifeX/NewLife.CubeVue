@@ -35,9 +35,11 @@ module.exports = {
         vuex: 'Vuex',
         'vue-router': 'VueRouter',
         axios: 'axios',
-        'element-ui': 'ELEMENT',
-        'json-bigint': 'JsonBigint'
+        'element-plus': 'ELEMENT'
       }
     }
+
+    // 源码映射，用于调试
+    config.devtool = 'source-map'
   }
 }
