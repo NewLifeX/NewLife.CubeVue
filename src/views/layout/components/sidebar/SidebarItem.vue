@@ -20,14 +20,18 @@
       </router-link>
     </template>
 
-    <el-submenu
+    <el-sub-menu
       v-else
       ref="subMenu"
       :index="item.path || item.url"
       popper-append-to-body
     >
-      <template slot="title">
-        <item v-if="item" :title="item.displayName" />
+      <template v-slot:title>
+        <item
+          v-if="item"
+          :icon="item.meta && item.meta.icon"
+          :title="item.displayName"
+        />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -37,7 +41,7 @@
         :base-path="child.path"
         class="nest-menu"
       />
-    </el-submenu>
+    </el-sub-menu>
   </div>
 </template>
 

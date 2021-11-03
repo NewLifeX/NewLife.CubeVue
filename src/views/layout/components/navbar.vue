@@ -38,23 +38,25 @@
           </span>
           <i class="el-icon-caret-bottom" />
         </div>
-        <el-dropdown-menu class="avatar-dropdown" slot="dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              <span style="display:inline-block;">首页</span>
-            </el-dropdown-item>
-          </router-link>
+        <template #dropdown>
+          <el-dropdown-menu class="avatar-dropdown">
+            <router-link to="/">
+              <el-dropdown-item>
+                <span style="display:inline-block;">首页</span>
+              </el-dropdown-item>
+            </router-link>
 
-          <router-link to="/Admin/User/Info">
+            <router-link to="/Admin/User/Info">
+              <el-dropdown-item divided>
+                <span style="display:inline-block;">个人信息</span>
+              </el-dropdown-item>
+            </router-link>
+
             <el-dropdown-item divided>
-              <span style="display:inline-block;">个人信息</span>
+              <span style="display:block;" @click="logout">退出登录</span>
             </el-dropdown-item>
-          </router-link>
-
-          <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
     </div>
   </div>
