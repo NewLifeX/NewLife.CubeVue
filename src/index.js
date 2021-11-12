@@ -3,6 +3,7 @@ import RouterConfig from './router'
 // console.log(Vue, Element, App, Vuex, VueRouter)
 import getRequest from '@/utils/request'
 import getApis from '@/api'
+import requireComponent from '@/utils/requireComponent'
 
 import '@/styles/index.scss' // global css
 
@@ -19,40 +20,6 @@ const install = (app) => {
     return
   }
 
-  app.use(router)
-  app.use(store)
-  app.use(elementUI, { size: store.getters.app.size })
-  for (const key in elementIcons) {
-    const e = elementIcons[key]
-    app.component(e.name, e)
-  }
-
-  app.config.globalProperties.$message = elementUI.ElMessage
-  app.config.globalProperties.$messageBox = elementUI.ElMessageBox
-  app.config.globalProperties.$warn = (config) => {
-    elementUI.MessageEl.warning(config)
-  }
-  app.config.globalProperties.$api = store.getters.apis
-}
-
-export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
-  // if (install.installed) return
-  // install.installed = true
-
-  // app.use(app.Vuex)
-  // app.use(app.VueRouter)
-
-  // console.log(VueRouter, Vuex, Element, ElementIcons)
-
-  store = Vuex.createStore(StoreConfig)
-
-  router = VueRouter.createRouter({
-    ...RouterConfig.routerOptions,
-    history: VueRouter.createWebHistory()
-  })
-  elementUI = Element
-  elementIcons = ElementIcons
-
   // 注册组件
   store.dispatch('setFiles', files)
   // 注册路由导航
@@ -67,6 +34,39 @@ export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
 
   store.dispatch('setMessage', elementUI.ElMessage)
   store.dispatch('setMessageBox', elementUI.ElMessageBox)
+
+  app.use(router)
+  app.use(store)
+  app.use(elementUI, { size: store.getters.app.size })
+  for (const key in elementIcons) {
+    const e = elementIcons[key]
+    app.component(e.name, e)
+  }
+
+  // 自动注册全局组件
+  app.use(requireComponent)
+
+  app.config.globalProperties.$message = elementUI.ElMessage
+  app.config.globalProperties.$messageBox = elementUI.ElMessageBox
+  app.config.globalProperties.$warn = (config) => {
+    elementUI.MessageEl.warning(config)
+  }
+  app.config.globalProperties.$api = store.getters.apis
+
+  // 注入的计算属性自动解包
+  app.config.unwrapInjectedRef = true
+}
+
+export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
+  store = Vuex.createStore(StoreConfig)
+
+  router = VueRouter.createRouter({
+    ...RouterConfig.routerOptions,
+    history: VueRouter.createWebHistory()
+  })
+
+  elementUI = Element
+  elementIcons = ElementIcons
 
   return {
     install,
