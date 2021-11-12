@@ -23,7 +23,7 @@
             v-model="queryParams.key"
             placeholder="关键字"
           ></el-input>
-          <el-button type="primary" @click="gettabeldata">
+          <el-button type="primary" @click="getTableData">
             查询
           </el-button>
         </div>
@@ -219,7 +219,7 @@ export default {
     deleteData(row) {
       let vm = this
       vm.$api.deleteById(vm.currentPath, row.id).then(() => {
-        vm.gettabeldata()
+        vm.getTableData()
       })
     },
     closes() {
@@ -237,9 +237,9 @@ export default {
     },
     query() {
       this.page.pageIndex = 1
-      this.gettabeldata()
+      this.getTableData()
     },
-    gettabeldata() {
+    getTableData() {
       let vm = this
       vm.listLoading = true
 
@@ -251,11 +251,11 @@ export default {
     },
     currentchange(val) {
       this.page.pageIndex = val
-      this.gettabeldata()
+      this.getTableData()
     },
     handleSizeChange(val) {
       this.page.pageSize = val
-      this.gettabeldata()
+      this.getTableData()
     }
   }
 }

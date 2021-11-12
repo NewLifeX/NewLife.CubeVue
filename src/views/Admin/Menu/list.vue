@@ -198,14 +198,14 @@ export default {
     deleteData(row) {
       let vm = this
       vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
-        vm.getTabelData()
+        vm.getTableData()
       })
     },
     query() {
       this.page.pageIndex = 1
-      this.getTabelData()
+      this.getTableData()
     },
-    getTabelData() {
+    getTableData() {
       let vm = this
       vm.listLoading = true
 
@@ -254,11 +254,11 @@ export default {
     },
     currentChange(val) {
       this.page.pageIndex = val
-      this.getTabelData()
+      this.getTableData()
     },
     handleSizeChange(val) {
       this.page.pageSize = val
-      this.getTabelData()
+      this.getTableData()
     },
     sortChange({ column, prop, order }) {
       if (order === 'ascending') {
@@ -271,7 +271,7 @@ export default {
         this.page.desc = undefined
         this.page.sort = undefined
       }
-      this.getTabelData()
+      this.getTableData()
     },
     rowDblclick(row) {
       this.editData(row)
