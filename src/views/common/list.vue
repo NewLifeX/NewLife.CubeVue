@@ -1,228 +1,27 @@
 <template>
   <div class="list-container">
     <!-- 搜索组件 -->
-    <el-row type="flex" justify="end" class="search">
-      <el-col :span="24" class="right-search">
-        <el-form
-          ref="form"
-          v-model="queryParams"
-          label-position="right"
-          :inline="true"
-          class="search-form-container"
-        >
-          <template v-for="(col, k) in headerData">
-            <el-form-item
-              style="height:36px;"
-              v-if="col.showInSearch"
-              :key="k"
-              :prop="col.isDataObjectField ? col.name : col.columnName"
-              :label="col.displayName || col.name"
-            >
-              <single-select
-                v-if="col.itemType == 'singleSelect' && col.dataSource"
-                v-model="
-                  queryParams[col.isDataObjectField ? col.name : col.columnName]
-                "
-                :url="col.dataSource"
-              ></single-select>
-
-              <multiple-select
-                v-else-if="col.itemType == 'multipleSelect' && col.dataSource"
-                v-model="
-                  queryParams[col.isDataObjectField ? col.name : col.columnName]
-                "
-                :url="col.dataSource"
-              ></multiple-select>
-
-              <el-switch
-                v-else-if="col.dataType == 'Boolean'"
-                v-model="
-                  queryParams[col.isDataObjectField ? col.name : col.columnName]
-                "
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-              />
-
-              <el-input
-                v-else
-                v-model="
-                  queryParams[col.isDataObjectField ? col.name : col.columnName]
-                "
-                type="text"
-              />
-            </el-form-item>
-          </template>
-          <el-date-picker
-            v-model="queryParams.dateRange"
-            type="daterange"
-            unlink-panels
-            value-format="YYYY-MM-DD"
-            range-separator="~"
-            start-placeholder="开始"
-            end-placeholder="结束"
-            :shortcuts="shortcuts"
-          ></el-date-picker>
-          <el-input
-            style="width:auto"
-            v-model="queryParams.Q"
-            placeholder="关键字"
-          ></el-input>
-          <el-button type="primary" @click="getTabelData">
-            查询
-          </el-button>
-          <el-button type="default" @click="resetSearch">
-            重置
-          </el-button>
-        </el-form>
-      </el-col>
-    </el-row>
+    <TableSearch
+      v-model="queryParams"
+      :columns="columns"
+      @operator="operator"
+    ></TableSearch>
 
     <!-- 操作栏 -->
-    <el-row type="flex" justify="center" align="center">
-      <el-col
-        :span="12"
-        class="left-search"
-        v-if="hasPermission(permissionFlags.insert)"
-      >
-        <el-button type="primary" @click="add">
-          新增
-        </el-button>
-      </el-col>
-      <el-col
-        :span="12"
-        style="display: flex; justify-content: flex-end; align-items: center;"
-      >
-        <el-tooltip effect="dark" content="刷新" placement="top-end">
-          <el-icon class="action" @click="getTabelData">
-            <loading v-if="listLoading" />
-            <refresh v-else />
-          </el-icon>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="列配置" placement="top-end">
-          <el-icon class="action">
-            <setting />
-          </el-icon>
-          <!-- <action-columns
-              :columns="columns"
-              @reset="onColumnsReset"
-              class="action"
-            >
-              <template v-for="slot in slots">
-                <slot :name="slot"></slot>
-              </template>
-            </action-columns> -->
-        </el-tooltip>
-        <el-tooltip effect="dark" content="全屏" placement="top-end">
-          <el-icon class="action">
-            <full-screen />
-          </el-icon>
-          <!-- <el-icon
-            @click="toggleScreen"
-            class="action"
-            :type="fullScreen ? 'fullscreen-exit' : 'fullscreen'"
-          /> -->
-        </el-tooltip>
-      </el-col>
-    </el-row>
+    <TableOperator
+      :columns="columns"
+      :operatorList="operatorList"
+      @operator="operator"
+    ></TableOperator>
 
-    <div class="table-container">
-      <el-table
-        :height="tableHeight"
-        v-loading="listLoading"
-        :data="tableData"
-        stripe
-        border
-        @sort-change="sortChange"
-        @row-dblclick="rowDblclick"
-      >
-        <el-table-column align="center" label="序号" type="index" width="50" />
-        <template v-for="(col, idx) in headerData">
-          <el-table-column
-            v-if="col.showInList"
-            :key="idx"
-            :label="col.displayName"
-            :prop="col.name"
-            :sortable="col.isDataObjectField"
-            :show-overflow-tooltip="true"
-            :width="col.width"
-            align="center"
-          >
-            <!-- :render-header="(h) => renderHeader(h, col)" -->
+    <NormalTable
+      :columns="columns"
+      :permissionFlags="permissionFlags"
+      :tableData="tableData"
+      @operator="operator"
+    ></NormalTable>
 
-            <template #header>
-              <div style="display:inline-flex">
-                <span>{{ col.displayName }}</span>
-                <el-tooltip
-                  v-if="col.description && col.displayName != col.description"
-                  :content="col.description"
-                >
-                  <i
-                    class="el-icon-warning-outline"
-                    @click="
-                      (e) => {
-                        e.stopPropagation()
-                      }
-                    "
-                  ></i>
-                </el-tooltip>
-              </div>
-            </template>
-
-            <template v-slot="scope">
-              <template v-if="col.dataType === 'Boolean'">
-                <el-switch
-                  :value="scope.row[col.name]"
-                  active-color="#13ce66"
-                  inactive-color="#ff4949"
-                />
-              </template>
-              <template v-else-if="!col.isDataObjectField && col.cellUrl">
-                <a :href="getUrl(col, scope.row)">{{ col.displayName }}</a>
-              </template>
-              <div v-else>{{ scope.row[col.name] }}</div>
-            </template>
-          </el-table-column>
-        </template>
-
-        <el-table-column
-          label="操作"
-          align="center"
-          width="140"
-          class-name="small-padding fixed-width"
-          :fixed="'right'"
-        >
-          <template v-slot="scope">
-            <el-button
-              v-if="
-                !hasPermission(permissionFlags.update) &&
-                  hasPermission(permissionFlags.detail)
-              "
-              type="primary"
-              size="mini"
-              @click="detail(scope.row)"
-            >
-              查看
-            </el-button>
-            <el-button
-              v-if="hasPermission(permissionFlags.update)"
-              type="primary"
-              size="mini"
-              @click="editData(scope.row)"
-            >
-              编辑
-            </el-button>
-            <el-button
-              v-if="hasPermission(permissionFlags.delete)"
-              size="mini"
-              type="danger"
-              @click="deleteData(scope.row)"
-            >
-              删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <!-- 分页 -->
     <div>
       <el-pagination
         :current-page="page.pageIndex"
@@ -237,15 +36,21 @@
   </div>
 </template>
 <script>
-import singleSelect from '../../components/singleSelect'
-import multipleSelect from '../../components/multipleSelect'
+import { computed } from 'vue'
+import NormalTable from '../components/NormalTable.vue'
+
 export default {
-  name: 'list',
-  components: {
-    singleSelect,
-    multipleSelect
-  },
+  components: { NormalTable },
+  name: 'List',
   data() {
+    let permissionFlags = {
+      none: 0,
+      detail: 1,
+      insert: 2,
+      update: 4,
+      delete: 8
+    }
+
     return {
       tableData: [],
       tableHeight: '300px',
@@ -260,54 +65,60 @@ export default {
       },
       headerData: [],
       listLoading: false,
-      shortcuts: [
+      permissionFlags,
+      operatorList: [
         {
-          text: '昨天',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-            return [start, end]
-          }
+          name: '新增',
+          action: 'add',
+          type: 'primary'
         },
         {
-          text: '今天',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            return [start, end]
-          }
-        },
-        {
-          text: '最近一周',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            return [start, end]
-          }
-        },
-        {
-          text: '最近一个月',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            return [start, end]
-          }
+          name: '导出',
+          action: 'export',
+          type: 'primary'
         }
       ],
-      permissionFlags: {
-        none: 0,
-        detail: 1,
-        insert: 2,
-        update: 4,
-        delete: 8
-      }
+      actionList: [
+        {
+          name: 'actionList',
+          displayName: '操作',
+          width: '125px',
+          showInList: true,
+          actionList: [
+            //             {
+            //   action: 'detail',
+            //   permission: permissionFlags.detail,
+            //   text: '查看',
+            //   type:'primary'
+            // },
+            {
+              action: 'editData',
+              permission: permissionFlags.update,
+              text: '编辑',
+              type: 'primary'
+            },
+            {
+              action: 'deleteData',
+              permission: permissionFlags.delete,
+              text: '删除',
+              type: 'danger'
+            }
+          ]
+        }
+      ]
     }
   },
+  // provide() {
+  //   let vm = this
+  //   return {
+  //     permissionFlags: vm.permissionFlags
+  //   }
+  // },
   computed: {
+    columns() {
+      let vm = this
+      return vm.headerData.concat(vm.actionList)
+    },
     currentPath() {
       return this.$route.path
     },
@@ -405,14 +216,14 @@ export default {
     deleteData(row) {
       let vm = this
       vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
-        vm.getTabelData()
+        vm.getTableData()
       })
     },
     query() {
       this.page.pageIndex = 1
-      this.getTabelData()
+      this.getTableData()
     },
-    getTabelData() {
+    getTableData() {
       let vm = this
       vm.listLoading = true
 
@@ -423,34 +234,52 @@ export default {
           vm.tableData = res.data.data
           vm.page = res.data.pager
           vm.page.Q = undefined
-          vm.setTableHeight(vm.tableData.length)
         })
     },
     currentChange(val) {
       this.page.pageIndex = val
-      this.getTabelData()
+      this.getTableData()
     },
     handleSizeChange(val) {
       this.page.pageSize = val
-      this.getTabelData()
+      this.getTableData()
     },
-    renderHeader(h, col) {
-      return (
-        <div style={{ display: 'inline-flex' }}>
-          <span>{col.displayName}</span>
-          {col.description && col.displayName != col.description ? (
-            <el-tooltip content={col.description}>
-              <i
-                class="el-icon-warning-outline"
-                on-click={(e) => {
-                  e.stopPropagation()
-                }}></i>
-            </el-tooltip>
-          ) : (
-            ''
-          )}
-        </div>
-      )
+    rowDblclick(row) {
+      this.editData(row)
+    },
+    // 判断操作id会否有权限
+    hasPermission(actionId) {
+      let vm = this
+      let menuId = vm.$route.meta.menuId
+      let permissions = vm.$route.meta.permissions
+      let has = vm.$store.state.user.hasPermission(vm.$store, {
+        menuId,
+        actionId,
+        permissions
+      })
+      return has
+    },
+    // 重置搜索条件
+    resetSearch() {
+      let vm = this
+      vm.queryParams = {}
+      vm.query()
+    },
+    // 子组件调用此方法，再通过参数action调用本组件方法
+    operator(option, data, callback) {
+      let vm = this
+      let action = option.action
+      let func = vm[action]
+      if (!func || typeof func !== 'function') {
+        let msg = `未实现的方法：${action}`
+        console.error(msg)
+        vm.$message.error(msg)
+      } else {
+        let returnData = func.call(vm, data)
+        if (typeof callback === 'function') {
+          callback(returnData)
+        }
+      }
     },
     sortChange({ col, prop, order }) {
       if (order === 'ascending') {
@@ -463,39 +292,7 @@ export default {
         this.page.desc = undefined
         this.page.sort = undefined
       }
-      this.getTabelData()
-    },
-    rowDblclick(row) {
-      this.editData(row)
-    },
-    hasPermission(actionId) {
-      let vm = this
-      let menuId = vm.$route.meta.menuId
-      let permissions = vm.$route.meta.permissions
-      let has = vm.$store.state.user.hasPermission(vm.$store, {
-        menuId,
-        actionId,
-        permissions
-      })
-      return has
-    },
-    setTableHeight(count) {
-      // 根据数据条数设置表格高度，最高设置708px，一页最多显示20条
-      let vm = this
-      // console.log(count)
-      if (count && count > 0) {
-        if (count > 20) count = 20
-        else if (count < 8) count = 9
-        setTimeout(() => {
-          vm.tableHeight = count * 35.9 + 'px'
-        }, 500)
-      }
-    },
-    // 重置搜索条件
-    resetSearch() {
-      let vm = this
-      vm.queryParams = {}
-      vm.query()
+      this.getTableData()
     }
   }
 }
@@ -507,83 +304,5 @@ export default {
   height: calc(100vh - 51px);
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-.search {
-  /* height: 60px; */
-  /* overflow: hidden; */
-  /* position: relative; */
-  display: -moz-flex;
-  display: -webkit-flex;
-  display: flex;
-}
-
-.search .left-search {
-  line-height: 58px;
-  /* height: 60px; */
-  /* float: left; */
-  padding: 0 10px;
-}
-.search .right-search {
-  line-height: 58px;
-  /* height: 65px; */
-  /* float: right; */
-  /* max-height: 110px; */
-  padding: 0 10px;
-  /* overflow-y: auto; */
-  display: flex;
-  justify-content: flex-end;
-}
-.table-container {
-  /* max-height: calc(100vh - 177px); */
-  /* overflow-y: auto; */
-  height: auto;
-  margin: 5px 0 2px 0;
-  box-shadow: 1px 1px 4px rgb(0 21 41 / 8%);
-}
-
-.search .el-button + .el-button {
-  margin-left: 0px;
-}
-
-/** 操作按钮 */
-.el-table .el-button {
-  margin: 2px;
-}
-
-/** 表格操作 */
-.action {
-  margin: 0 8px;
-  cursor: pointer;
-  font-size: 17px;
-}
-</style>
-<style lang="scss">
-/* 搜索框元素间距 */
-.search {
-  .el-input,
-  .el-button,
-  .el-date-editor {
-    margin-right: 10px;
-  }
-}
-
-.search .el-date-editor {
-  width: 250px;
-}
-
-.search-form-container .el-form-item {
-  margin-bottom: 0;
-}
-
-/** 表头、行上下间距 */
-.table-container .el-table td,
-.table-container .el-table th {
-  padding: 2px 0 2px 0;
-}
-
-/** 表头、行上下间距 */
-.table-container .cell {
-  padding: 0 1px 0 1px;
 }
 </style>
