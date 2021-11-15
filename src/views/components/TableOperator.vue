@@ -1,6 +1,5 @@
 <template>
-  <!-- 操作栏 -->
-  <el-row type="flex" justify="center" align="center">
+  <el-row type="flex" justify="center" align="center" class="operator">
     <el-col :span="12" class="left-search">
       <el-button
         size="small"
@@ -67,11 +66,18 @@
 <script>
 import { defineComponent } from 'vue'
 export default defineComponent({
-  inject: ['permissionFlags', 'columns'],
   props: {
+    columns: {
+      type: Array,
+      default: () => []
+    },
     operatorList: {
       type: Array,
       default: []
+    },
+    permissionFlags: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ['operator'],
@@ -111,14 +117,18 @@ export default defineComponent({
       val.hidden = !val.hidden
       this.checkChoose()
     },
-    operator(option) {
-      this.$emit('operator', option)
+    operator(option, data) {
+      this.$emit('operator', option, data)
     }
   }
 })
 </script>
 
 <style scoped>
+.operator {
+  margin: 2px 0 10px 0;
+}
+
 .action {
   margin: 0 8px;
   cursor: pointer;

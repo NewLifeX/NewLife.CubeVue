@@ -85,8 +85,11 @@ export default {
     singleSelect,
     multipleSelect
   },
-  inject: ['columns'],
   props: {
+    columns: {
+      type: Array,
+      default: () => []
+    },
     modelValue: {
       type: Object,
       default: () => {}
@@ -148,8 +151,8 @@ export default {
     }
   },
   methods: {
-    operator(option) {
-      this.$emit('operator', option)
+    operator(option, data) {
+      this.$emit('operator', option, data)
     }
   }
 }
@@ -163,6 +166,7 @@ export default {
   display: -moz-flex;
   display: -webkit-flex;
   display: flex;
+  border-bottom: 1 px solid #eeeeee;
 }
 
 .search .left-search {
@@ -184,22 +188,25 @@ export default {
 .search .el-button + .el-button {
   margin-left: 0px;
 }
-</style>
-<style lang="scss">
+
 /* 搜索框元素间距 */
-.search {
-  .el-input,
-  .el-button,
-  .el-date-editor {
-    margin-right: 10px;
-  }
+::v-deep(.el-input) {
+  margin-right: 10px;
 }
 
-.search .el-date-editor {
+::v-deep(.el-button) {
+  margin-right: 10px;
+}
+
+::v-deep(.el-date-editor) {
+  margin-right: 10px;
+}
+
+::v-deep(.el-date-editor) {
   width: 250px;
 }
 
-.search-form-container .el-form-item {
+::v-deep(.el-form-item) {
   margin-bottom: 0;
 }
 </style>
