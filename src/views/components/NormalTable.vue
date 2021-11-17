@@ -6,6 +6,7 @@
       stripe
       border
       :height="tableHeight"
+      ref="table"
       @selection-change="handleSelectionChange"
       @sort-change="sortChange"
       v-bind="$attrs"
@@ -216,7 +217,14 @@ export default {
       }
     }
   },
-  // watch: {},
+  watch: {
+    // 表格数据变化时重新渲染表格
+    tableData() {
+      setTimeout(() => {
+        this.$refs.table.doLayout()
+      }, 1000)
+    }
+  },
   created() {
     // console.log(this.columns)
   },
@@ -230,6 +238,10 @@ export default {
     //     that.$emit('changeScroll', TotalDom.scrollLeft)
     //   })
     // }
+
+    window.addEventListener('resize', () => {
+      this.$refs.table.doLayout()
+    })
   },
   methods: {
     changeHeaderClass(row) {

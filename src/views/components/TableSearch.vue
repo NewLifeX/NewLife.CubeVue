@@ -166,7 +166,7 @@ export default {
   display: -moz-flex;
   display: -webkit-flex;
   display: flex;
-  border-bottom: 1 px solid #eeeeee;
+  // border-bottom: 1px solid #eeeeee;
 }
 
 .search .left-search {
