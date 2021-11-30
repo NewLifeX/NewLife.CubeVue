@@ -64,8 +64,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-export default defineComponent({
+export default {
   props: {
     columns: {
       type: Array,
@@ -73,7 +72,7 @@ export default defineComponent({
     },
     operatorList: {
       type: Array,
-      default: []
+      default: () => []
     },
     permissionFlags: {
       type: Object,
@@ -121,7 +120,7 @@ export default defineComponent({
       this.$emit('operator', option, data)
     }
   }
-})
+}
 </script>
 
 <style scoped>
