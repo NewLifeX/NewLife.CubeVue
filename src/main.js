@@ -13,20 +13,9 @@ let cubeUI = createCubeUI(VueRouter, Vuex, Element, ElementIcons)
 const app = createApp(App)
 app.use(cubeUI)
 
-// Vue.Vuex = Vuex
-// Vue.VueRouter = VueRouter
-// Vue.Element = Element
-// // window.Vue = Vue
-// Vue.use(CubeUI)
-// console.log(Vue.Store)
+let store = cubeUI.store
 
-// cubeUI.store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-cubeUI.store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
+// store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
+store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
 
-// // window.Vue = Vue
-// new Vue({
-//   router: Vue.Router,
-//   store: Vue.Store,
-//   render: (h) => h(CubeUI.App)
-// })
 app.mount('#app')

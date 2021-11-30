@@ -4,6 +4,7 @@ import RouterConfig from './router'
 import getRequest from '@/utils/request'
 import getApis from '@/api'
 import requireComponent from '@/utils/requireComponent'
+import { Navbar, Sidebar, AppMain } from '@/views/layout/components'
 
 import '@/styles/index.scss' // global css
 
@@ -19,6 +20,10 @@ const install = (app) => {
     console.error('请先使用createCubeUI创建store, router')
     return
   }
+
+  app.component('Navbar', Navbar)
+  app.component('Sidebar', Sidebar)
+  app.component('AppMain', AppMain)
 
   // 注册组件
   store.dispatch('setFiles', files)
@@ -75,14 +80,10 @@ export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
   }
 }
 
-// // TODO 支持不完善
-// if (typeof window !== 'undefined' && window.Vue) {
-//   install(window.Vue)
-// }
-
 export default {
   version: '1.0',
   install,
   StoreConfig,
-  RouterConfig
+  RouterConfig,
+  createCubeUI
 }
