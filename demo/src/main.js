@@ -1,30 +1,26 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import * as VueRouter from 'vue-router'
 import Vuex from 'vuex'
-import VueRouter from 'vue-router'
-import Element from 'element-ui'
-import CubeUI from '../../lib/CubeUI.umd.js'
+import * as Element from 'element-plus'
+import * as ElementIcons from '@element-plus/icons'
+import { createCubeUI } from 'CubeUI'
+import App from './App.vue'
 
-import 'element-ui/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 import '../../lib/CubeUI.css'
 
-Vue.Vuex = Vuex
-Vue.VueRouter = VueRouter
-Vue.Element = Element
+let cubeUI = createCubeUI(VueRouter, Vuex, Element, ElementIcons)
 
-Vue.use(CubeUI)
-let store = Vue.Store
-const router = Vue.Router
-const App = CubeUI.App
+const app = createApp(App)
+app.use(cubeUI)
+
+let store = cubeUI.store
 
 // 注册组件
 const files = require.context('@/views/', true, /^.*\.vue$/)
 store.dispatch('setFiles', files)
 
 // store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-store.dispatch('setUrls', { baseUrl: 'https://cube.newlifex.com' })
+store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
 
-new Vue({
-  router,
-  store,
-  render: (h) => h(App)
-}).$mount('#app')
+app.mount('#app')
