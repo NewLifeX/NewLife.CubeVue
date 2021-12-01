@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --no-clean --target lib --dest lib --name CubeUI ./src/index.js",
+    "lib": "vue-cli-service build --no-clean --target lib --dest ../lib --name CubeUI ./src/index.js",
     "publish": "yarn lib && npm publish --access public --registry=https://registry.npmjs.com/"
   },
   "files": [
