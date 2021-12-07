@@ -23,3 +23,13 @@ pnpm-debug.log*
 *.sw?
 /lib
 demo/dist
+src/dist/favicon.ico
+src/dist/index.html
+src/dist/index.js
+src/dist/index.js.map
+src/dist/css/app.89fe9dd6.css
+src/dist/css/chunk-vendors.569693f7.css
+src/dist/fonts/element-icons.abe71f7d.ttf
+src/dist/fonts/element-icons.d9491be2.woff
+src/dist/js/chunk-vendors.542931af.js
+src/dist/js/chunk-vendors.542931af.js.map
