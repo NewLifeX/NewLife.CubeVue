@@ -62,12 +62,13 @@
   </div>
 </template>
 
-<script>
-import Hamburger from '@/views/layout/components/hamburger'
+<script lang="ts">
+import Hamburger from '@/views/layout/components/hamburger.vue'
 // import SizeSelect from 'src/components/SizeSelect'
 // import ThemePicker from 'src/components/ThemePicker'
+import { defineComponent } from 'vue'
 
-export default {
+export default defineComponent({
   components: {
     Hamburger
     // Screenfull,
@@ -88,7 +89,7 @@ export default {
       return this.$store.getters.urls
     },
     myAvatar() {
-      let vm = this
+      let vm = this as any
       let avatar = vm.userInfo && vm.userInfo.avatar
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
@@ -99,7 +100,7 @@ export default {
       return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
     },
     displayName() {
-      let vm = this
+      let vm = this as any
       if (vm.sysConfig && vm.sysConfig.displayName) {
         return vm.sysConfig.displayName
       }
@@ -118,7 +119,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style acoped>

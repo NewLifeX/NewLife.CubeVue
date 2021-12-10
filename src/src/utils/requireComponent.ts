@@ -15,7 +15,7 @@ const requireComponent = require.context(
 )
 
 export default {
-  install(app) {
+  install(app: any) {
     requireComponent.keys().forEach((fileName) => {
       // 获取组件配置
       const componentConfig = requireComponent(fileName)
@@ -27,7 +27,7 @@ export default {
           fileName
             .split('/')
             .pop()
-            .replace(/\.\w+$/, '')
+            ?.replace(/\.\w+$/, '')
         )
       )
 

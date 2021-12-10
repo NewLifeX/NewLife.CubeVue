@@ -2,7 +2,7 @@
  * 将菜单转化成路由
  * @param {*} routes 请求返回菜单
  */
-export function formatRoutes(files, routes, depth = 0) {
+export function formatRoutes(files: __WebpackModuleApi.RequireContext, routes: any[], depth = 0) {
   const fileKeys = files.keys()
   routes.forEach((router) => {
     router.path = router.url
@@ -10,7 +10,7 @@ export function formatRoutes(files, routes, depth = 0) {
       router.path = router.path.substr(1)
     }
     router.displayName = router.displayName || router.name
-    if (router.visible === undefined) console.log(router.name + ' visible为空')
+    if (router.visible === undefined) { console.log(router.name + ' visible为空') }
     if (router.meta) {
       router.meta.menuId = router.id
       router.meta.permissions = router.permissions
@@ -57,7 +57,7 @@ export function formatRoutes(files, routes, depth = 0) {
   return routes
 }
 
-function getEditRoute(files, router, path) {
+function getEditRoute(files: __WebpackModuleApi.RequireContext, router: any, path: string) {
   const fileKeys = files.keys()
   // 添加、编辑页路由
   const r = {

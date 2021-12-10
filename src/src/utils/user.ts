@@ -3,10 +3,10 @@ import Storage from '@/utils/storage'
 const Key = 'userInfo'
 
 export function getUserInfo() {
-  return JSON.parse(Storage.getItem(Key))
+  return JSON.parse(Storage.getItem(Key) || '{}')
 }
 
-export function setUserInfo(value) {
+export function setUserInfo(value: object) {
   return Storage.setItem(Key, JSON.stringify(value))
 }
 

@@ -1,5 +1,5 @@
-export default function(stroe) {
-  function login(loginForm) {
+export default function(stroe: any) {
+  function login(loginForm: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
 
@@ -29,7 +29,7 @@ export default function(stroe) {
     })
   }
 
-  function updateUserInfo(userInfo) {
+  function updateUserInfo(userInfo: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -39,7 +39,7 @@ export default function(stroe) {
     })
   }
 
-  function changePassword(data) {
+  function changePassword(data: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({

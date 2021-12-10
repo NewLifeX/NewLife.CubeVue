@@ -4,25 +4,25 @@ const app = {
     apis: {},
     // http请求封装
     request: () => {
-      throw 'request方法没有实现'
-    },
+      throw new Error('request方法没有实现')
+    }
   },
   mutations: {
-    SET_APIS: (state, apis) => {
+    SET_APIS: (state: any, apis: any) => {
       Object.assign(state.apis, apis)
     },
-    SET_REQUEST: (state, request) => {
+    SET_REQUEST: (state: any, request: any) => {
       state.request = request
-    },
+    }
   },
   actions: {
-    addApis({ commit }, apis) {
+    addApis({ commit }: any, apis: any) {
       commit('SET_APIS', apis)
     },
-    setRequest({ commit }, request) {
+    setRequest({ commit }: any, request: any) {
       commit('SET_REQUEST', request)
-    },
-  },
+    }
+  }
 }
 
 export default app

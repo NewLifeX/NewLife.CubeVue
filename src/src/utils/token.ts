@@ -6,7 +6,7 @@ export function getToken() {
   return Storage.getItem(TokenKey)
 }
 
-export function setToken(token) {
+export function setToken(token: string) {
   return Storage.setItem(TokenKey, token)
 }
 

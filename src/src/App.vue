@@ -4,20 +4,20 @@
   </el-config-provider>
 </template>
 
-<script>
+<script lang="ts">
 // 设置语言为中文
-// import { ElConfigProvider } from 'element-plus'
+import { ElConfigProvider } from 'element-plus'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'App',
   components: {
-    // [ElConfigProvider.name]: ElConfigProvider
+    ElConfigProvider
   },
-  setup() {
+  data() {
     return {
       locale: zhCn
     }
   }
-}
+})
 </script>

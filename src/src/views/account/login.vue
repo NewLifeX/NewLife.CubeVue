@@ -1,6 +1,6 @@
 <template>
-  <el-row type="flex" justify="center">
-    <el-col class="login-col">
+  <div class="center">
+    <div class="login-col">
       <!-- Login -->
       <div>
         <!-- Logo-->
@@ -37,7 +37,7 @@
                 记住我
               </el-checkbox>
 
-              <template v-if="loginConfig.allowRegister">
+              <!-- <template v-if="loginConfig.allowRegister">
                 <div
                   style="display: inline-block; margin-top: 5px; float: right;"
                 >
@@ -49,7 +49,7 @@
                     <span>我要注册</span>
                   </a>
                 </div>
-              </template>
+              </template> -->
             </el-form-item>
           </el-form>
 
@@ -59,40 +59,38 @@
         </template>
       </div>
       <!-- Login3 -->
-      <div v-if="loginConfig.providers.length > 0">
+      <div v-if="loginConfig.providers.length > 0" class="center">
+        <p class="login3">
+          <span class="left"></span>
+          第三方登录
+          <span class="right"></span>
+        </p>
+
         <el-row>
-          <el-col :span="24" class="text-center">
-            <p class="login3">
-              <span class="left"></span>
-              第三方登录
-              <span class="right"></span>
-            </p>
-            <el-row>
-              <el-col :sm="24">
-                <a
-                  v-for="(mi, i) in loginConfig.providers"
-                  :key="i"
-                  :title="mi.nickName || mi.name"
-                  @click="ssoClick(getUrl(mi))"
-                >
-                  <img
-                    v-if="mi.logo"
-                    :src="getLogoUrl(mi.logo)"
-                    style="width: 64px;height: 64px;"
-                  />
-                  <template v-else>{{ mi.nickName || mi.name }}</template>
-                </a>
-              </el-col>
-            </el-row>
+          <el-col :sm="24">
+            <a
+              v-for="(mi, i) in loginConfig.providers"
+              :key="i"
+              :title="mi.nickName || mi.name"
+              @click="ssoClick(getUrl(mi))"
+            >
+              <img
+                v-if="mi.logo"
+                :src="getLogoUrl(mi.logo)"
+                style="width: 64px;height: 64px;"
+              />
+              <template v-else>{{ mi.nickName || mi.name }}</template>
+            </a>
           </el-col>
         </el-row>
       </div>
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   computed: {
     sysConfig() {
       return this.$store.getters.sysConfig
@@ -121,9 +119,10 @@ export default {
       return this.$route.query.redirect
     },
     displayName() {
+      let vm = this as any
       return (
-        (this.sysConfig && this.sysConfig.displayName) ||
-        (this.loginConfig && this.loginConfig.displayName)
+        (vm.sysConfig && vm.sysConfig.displayName) ||
+        (vm.loginConfig && vm.loginConfig.displayName)
       )
     }
   },
@@ -137,7 +136,7 @@ export default {
     }
   },
   created() {
-    let vm = this
+    let vm = this as any
     try {
       // 关闭所有弹窗
       vm.$messageBox.close()
@@ -146,7 +145,7 @@ export default {
     vm.autoAuthRedirect()
 
     // 获取一次登录设置，如果跳转了第三方登录，会被强制取消
-    vm.apis.getLoginConfig().then((res) => {
+    vm.apis.getLoginConfig().then((res: any) => {
       let cfg = res.data.data
       vm.$store.dispatch('setLoginConfig', cfg)
     })
@@ -154,18 +153,18 @@ export default {
   methods: {
     login() {
       let vm = this
-      vm.apis.login(vm.loginForm).then((response) => {
+      vm.apis.login(vm.loginForm).then((response: any) => {
         const data = response.data.data
         let token = data.token
         vm.$store.dispatch('setToken', token)
-        vm.$router.push({ path: vm.redirect || '/' }, () => {})
+        vm.$router.push({ path: vm.redirect || '/' } as any)
       })
     },
-    ssoClick(url) {
+    ssoClick(url: any) {
       location.href = this.urls.baseUrl + url
       // location.href = urls.ssoUrl + url
     },
-    getUrl(mi) {
+    getUrl(mi: any) {
       // console.log(mi)
       let vm = this
       // let name = 'NewLife.Cube'
@@ -179,7 +178,7 @@ export default {
       url += `&redirect_uri=${redirect_uri}`
       return url
     },
-    getLogoUrl(logo) {
+    getLogoUrl(logo: any) {
       let vm = this
       if (logo.indexOf('http') !== 0) {
         logo = vm.urls.baseUrl + logo
@@ -199,7 +198,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <!-- Login -->
@@ -295,15 +294,12 @@ label {
 </style>
 <!-- Login3 -->
 <style scoped>
-.text-center {
-  text-align: center;
-}
-
 p.login3 {
   font-size: 22px;
   position: relative;
   width: 100%;
   color: #333;
+  text-align: center;
 }
 
 p.login3 span {
@@ -320,6 +316,13 @@ p.login3 span.right {
 
 p.login3 span.left {
   left: 65%;
+}
+
+.center {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media screen and (max-width: 680px) {

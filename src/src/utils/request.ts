@@ -1,7 +1,8 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { Store } from 'vuex'
 // import JSONbig from 'json-bigint'
 
-export default function getRequest(store) {
+export default function getRequest(store: Store<any>) {
   const service = axios.create({
     timeout: 50000,
     // 响应拦截处理大数值
@@ -36,7 +37,7 @@ export default function getRequest(store) {
       const token = store.getters.token
       if (token) {
         // 让每个请求携带token-- ['Authorization']为自定义key 请根据实际情况自行修改
-        config.headers['Authorization'] = token
+        config.headers.Authorization = token
       }
 
       return config
@@ -66,9 +67,9 @@ export default function getRequest(store) {
           })
           return Promise.reject('后端服务错误')
         } else if (res.code === 401) {
-          handle401()
+          return handle401()
         } else if (res.code === 403) {
-          handle403(res)
+          return handle403(res)
         } else {
           return response
         }
@@ -126,9 +127,11 @@ export default function getRequest(store) {
           location.reload() // 为了重新实例化vue-router对象 避免bug
         })
       })
+
+    return Promise.reject('登录超时')
   }
 
-  function handle403(res) {
+  function handle403(res: any) {
     store.getters.message({
       message: res.message,
       type: 'warning',

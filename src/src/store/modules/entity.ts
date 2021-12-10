@@ -3,36 +3,36 @@ const route = {
     listFields: {},
     addFormFields: {},
     editFormFields: {},
-    detailFields: {},
+    detailFields: {}
   },
   mutations: {
-    SET_ListFields: (state, { key, fields }) => {
+    SET_ListFields: (state: any, { key, fields }: any) => {
       state.listFields[key] = fields
     },
-    SET_AddFormFields: (state, { key, fields }) => {
+    SET_AddFormFields: (state: any, { key, fields }: any) => {
       state.addFormFields[key] = fields
     },
-    SET_EditFormFields: (state, { key, fields }) => {
+    SET_EditFormFields: (state: any, { key, fields }: any) => {
       state.editFormFields[key] = fields
     },
-    SET_DetailFields: (state, { key, fields }) => {
+    SET_DetailFields: (state: any, { key, fields }: any) => {
       state.detailFields[key] = fields
-    },
+    }
   },
   actions: {
-    setListFields({ commit }, { key, fields }) {
+    setListFields({ commit }: any, { key, fields }: any) {
       commit('SET_ListFields', { key, fields })
     },
-    setAddFormFields({ commit }, { key, fields }) {
+    setAddFormFields({ commit }: any, { key, fields }: any) {
       commit('SET_AddFormFields', { key, fields })
     },
-    setEditFormFields({ commit }, { key, fields }) {
+    setEditFormFields({ commit }: any, { key, fields }: any) {
       commit('SET_EditFormFields', { key, fields })
     },
-    setDetailFields({ commit }, { key, fields }) {
+    setDetailFields({ commit }: any, { key, fields }: any) {
       commit('SET_DetailFields', { key, fields })
-    },
-  },
+    }
+  }
 }
 
 export default route

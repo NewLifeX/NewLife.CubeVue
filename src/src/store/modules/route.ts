@@ -8,46 +8,46 @@ const route = {
     // 将要添加到路由系统中的新路由
     addRouters: [],
     // src/views 文件夹下的文件组件
-    files: function(req) {
+    files(req: any) {
       console.log('no module')
       return null
-    },
+    }
   },
   mutations: {
-    SET_ROUTERS: (state, routers) => {
+    SET_ROUTERS: (state: any, routers: any) => {
       state.addRouters = routers
       state.menuRouters = /* constantRouterMap.concat*/ routers
     },
-    ADD_ROUTERS: (state, routers) => {
+    ADD_ROUTERS: (state: any, routers: any) => {
       state.addRouters = state.addRouters.concat(routers)
     },
-    SET_FILES: (state, files) => {
-      let map = state.files.map || {}
-      files.keys().forEach((key) => {
+    SET_FILES: (state: any, files: any) => {
+      const map = state.files.map || {}
+      files.keys().forEach((key: any) => {
         map[key] = files(key)
       })
-      state.files = function(req) {
+      state.files = function(req: any) {
         return map[req]
       }
       state.files.map = map
       state.files.keys = function() {
         return Object.keys(map)
       }
-    },
+    }
   },
   actions: {
-    generateRoutes({ commit, state }, accessedRouters) {
+    generateRoutes({ commit, state }: any, accessedRouters: any) {
       // 将请求回来的菜单生成为路由
-      let addRouters = formatRoutes(state.files, accessedRouters)
+      const addRouters = formatRoutes(state.files, accessedRouters)
       commit('SET_ROUTERS', addRouters)
     },
-    setRouters({ commit }, addRouters) {
+    setRouters({ commit }: any, addRouters: any) {
       commit('SET_ROUTERS', addRouters)
     },
-    setFiles({ commit }, files) {
+    setFiles({ commit }: any, files: any) {
       commit('SET_FILES', files)
-    },
-  },
+    }
+  }
 }
 
 export default route

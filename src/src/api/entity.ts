@@ -1,8 +1,8 @@
-export default function(stroe) {
-  function getEntityFields(path, kind) {
+export default function(stroe: any) {
+  function getEntityFields(path: any, kind: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
-    let params = {
+    const params = {
       kind
     }
     return request({
@@ -12,16 +12,16 @@ export default function(stroe) {
     })
   }
 
-  function getDetailFields(path) {
+  function getDetailFields(path: any) {
     return getEntityFields(path, 'Detail')
   }
-  function getEditFormFields(path) {
+  function getEditFormFields(path: any) {
     return getEntityFields(path, 'EditForm')
   }
-  function getAddFormFields(path) {
+  function getAddFormFields(path: any) {
     return getEntityFields(path, 'AddForm')
   }
-  function getListFields(path) {
+  function getListFields(path: any) {
     return getEntityFields(path, 'List')
   }
 
@@ -30,7 +30,7 @@ export default function(stroe) {
    * @param {*} path 基础请求路径
    * @returns
    */
-  function getColumns(path) {
+  function getColumns(path: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -39,7 +39,7 @@ export default function(stroe) {
     })
   }
 
-  function getDataList(path, page) {
+  function getDataList(path: any, page: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -49,10 +49,10 @@ export default function(stroe) {
     })
   }
 
-  function getData(path, id) {
+  function getData(path: any, id: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
-    let params = {
+    const params = {
       id
     }
     return request({
@@ -62,10 +62,10 @@ export default function(stroe) {
     })
   }
 
-  function getDetailData(path, id) {
+  function getDetailData(path: any, id: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
-    let params = {
+    const params = {
       id
     }
     return request({
@@ -75,10 +75,10 @@ export default function(stroe) {
     })
   }
 
-  function deleteById(path, id) {
+  function deleteById(path: any, id: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
-    let params = {
+    const params = {
       id
     }
     return request({
@@ -88,7 +88,7 @@ export default function(stroe) {
     })
   }
 
-  function add(path, entity) {
+  function add(path: any, entity: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -98,7 +98,7 @@ export default function(stroe) {
     })
   }
 
-  function edit(path, entity) {
+  function edit(path: any, entity: any) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({

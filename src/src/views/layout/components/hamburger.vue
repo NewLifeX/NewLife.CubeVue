@@ -4,7 +4,7 @@
       :class="{ 'is-active': isActive }"
       t="1492500959545"
       class="hamburger"
-      v-show="$store.getters.app.device === 'mobile'"
+      v-show="show"
       viewBox="0 0 1024 1024"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
@@ -30,20 +30,27 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+
+export default defineComponent({
   name: 'Hamburger',
   props: {
     isActive: {
       type: Boolean,
-      default: false,
+      default: false
     },
     toggleClick: {
-      type: Function,
-      default: null,
-    },
+      type: Function as PropType<() => void>,
+      default: null
+    }
   },
-}
+  computed: {
+    show(): boolean {
+      return this.$store.getters.app.device === 'mobile'
+    }
+  }
+})
 </script>
 
 <style scoped>

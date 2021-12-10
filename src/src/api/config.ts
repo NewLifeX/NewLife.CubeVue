@@ -1,5 +1,7 @@
-export default function getApis(stroe) {
-  function getObject(path) {
+import { Store } from 'vuex'
+
+export default function getApis(stroe: Store<{}>) {
+  function getObject(path: string) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -8,7 +10,7 @@ export default function getApis(stroe) {
     })
   }
 
-  function updateObject(path, obj) {
+  function updateObject(path: string, obj: object) {
     const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
@@ -19,7 +21,7 @@ export default function getApis(stroe) {
   }
 
   function getLoginConfig() {
-    let request = stroe.getters.request
+    const request = stroe.getters.request
     const urls = stroe.getters.urls
     return request({
       url: urls.getLoginConfig,

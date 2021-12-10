@@ -16,12 +16,12 @@ export const constantRouterMap = [
   // },
   {
     path: '/login',
-    component: () => import('@/views/account/login'),
+    component: () => import('@/views/account/login.vue'),
     hidden: true
   },
   {
     path: '/auth-redirect',
-    component: () => import('@/views/account/authRedirect'),
+    component: () => import('@/views/account/authRedirect.vue'),
     hidden: true
   },
   {
@@ -31,7 +31,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '/Admin/User/Info',
-        component: () => import('@/views/Admin/User/info'),
+        component: () => import('@/views/Admin/User/info.vue'),
         name: 'UserInfo',
         meta: {
           title: '个人信息',

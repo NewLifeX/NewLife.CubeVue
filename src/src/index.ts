@@ -4,16 +4,21 @@ import RouterConfig from './router'
 import getRequest from '@/utils/request'
 import getApis from '@/api'
 import requireComponent from '@/utils/requireComponent'
-import { Navbar, Sidebar, AppMain } from '@/views/layout/components'
+import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
 
 import '@/styles/index.scss' // global css
 
 const files = require.context('@/views/', true, /^.*\.vue$/)
 
-let store, router, elementUI, elementIcons
+let store: any
+let router: any
+let elementUI: any
+let elementIcons: any
 
-const install = (app) => {
-  if (install.installed) return
+const install: any = (app: any) => {
+  if (install.installed) {
+    return
+  }
   install.installed = true
 
   if (!store || !router) {
@@ -53,7 +58,7 @@ const install = (app) => {
 
   app.config.globalProperties.$message = elementUI.ElMessage
   app.config.globalProperties.$messageBox = elementUI.ElMessageBox
-  app.config.globalProperties.$warn = (config) => {
+  app.config.globalProperties.$warn = (config: any) => {
     elementUI.MessageEl.warning(config)
   }
   app.config.globalProperties.$api = store.getters.apis
@@ -62,7 +67,12 @@ const install = (app) => {
   app.config.unwrapInjectedRef = true
 }
 
-export const createCubeUI = (VueRouter, Vuex, Element, ElementIcons) => {
+export const createCubeUI = (
+  VueRouter: any,
+  Vuex: any,
+  Element: any,
+  ElementIcons: any
+) => {
   store = Vuex.createStore(StoreConfig)
 
   router = VueRouter.createRouter({

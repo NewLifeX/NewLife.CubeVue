@@ -5,7 +5,10 @@ module.exports = {
   },
   extends: ['plugin:vue/essential'],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: 'babel-eslint',
+    ecmaFeatures: {
+      legacyDecorators: true
+    }
   },
   rules: {}
 }
