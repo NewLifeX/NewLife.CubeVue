@@ -5,10 +5,13 @@ import getRequest from '@/utils/request'
 import getApis from '@/api'
 import requireComponent from '@/utils/requireComponent'
 import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
+import fileContext from './services/file-context'
 
 import '@/styles/index.scss' // global css
 
 const files = require.context('@/views/', true, /^.*\.vue$/)
+
+fileContext.addFiles(files)
 
 let store: any
 let router: any

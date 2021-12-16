@@ -1,6 +1,16 @@
-import beforeEach from './beforeEach'
+import {
+  createRouter,
+  createWebHistory,
+  NavigationGuardWithThis,
+  NavigationHookAfter,
+  Router,
+  RouterOptions
+} from 'vue-router'
+import fileContext from '@/services/file-context'
+import beforeEachFn from './beforeEach'
 
-const Layout = () => import('@/views/layout/index.vue')
+const Layout = () => Promise.resolve(fileContext('@/views/layout/index.vue'))
+// () => import('@/views/layout/index.vue')
 
 export const constantRouterMap = [
   // {
@@ -16,12 +26,13 @@ export const constantRouterMap = [
   // },
   {
     path: '/login',
-    component: () => import('@/views/account/login.vue'),
+    component: () => Promise.resolve(fileContext('@/views/account/login.vue')),
     hidden: true
   },
   {
     path: '/auth-redirect',
-    component: () => import('@/views/account/authRedirect.vue'),
+    component: () =>
+      Promise.resolve(fileContext('@/views/account/authRedirect.vue')),
     hidden: true
   },
   {
@@ -31,7 +42,8 @@ export const constantRouterMap = [
     children: [
       {
         path: '/Admin/User/Info',
-        component: () => import('@/views/Admin/User/info.vue'),
+        component: () =>
+          Promise.resolve(fileContext('@/views/Admin/User/info.vue')),
         name: 'UserInfo',
         meta: {
           title: '个人信息',
@@ -57,7 +69,8 @@ export const constantRouterMap = [
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/Admin/Index/Main.vue'),
+        component: () =>
+          Promise.resolve(fileContext('@/views/Admin/Index/Main.vue')),
         name: 'Dashboard',
         meta: {
           title: '首页',
@@ -82,11 +95,44 @@ export const asyncRouterMap = [
 ]
 
 const routerOptions = {
-  // history: VueRouter.createWebHashHistory(),
+  history: createWebHistory(),
   scrollBehavior: () => ({
     top: 0
   }),
   routes: constantRouterMap
 }
 
-export default { routerOptions, beforeEach }
+// /**
+//  * 安装路由
+//  * @param app vue app实例
+//  * @param options 配置方法，可自定义修改
+//  * @beforeEach 路由前执行，比如 (to, from, next)=>{}
+//  * @returns Router实例
+//  */
+// const useRouter = (
+//   app: any,
+//   options: (routerOptions: RouterOptions) => void | undefined,
+//   beforeEach: NavigationGuardWithThis<undefined> | undefined,
+//   afterEach: NavigationHookAfter | undefined
+// ): Router => {
+//   if (options !== undefined) {
+//     options(routerOptions)
+//   }
+
+//   const router = createRouter(routerOptions)
+//   app.use(router)
+
+//   if (beforeEach !== undefined) {
+//     router.beforeEach(beforeEach)
+//   } else {
+//     router.beforeEach(beforeEachFn)
+//   }
+
+//   if (afterEach !== undefined) {
+//     router.afterEach(afterEach)
+//   }
+
+//   return router
+// }
+
+export default { routerOptions, beforeEach: beforeEachFn /*, useRouter*/ }
