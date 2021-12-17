@@ -2,52 +2,44 @@
   <el-tabs v-model="activeName">
     <el-tab-pane label="基本信息" name="UserInfo">
       <div class="objform">
-        <el-form
-          label-position="right"
-          label-width="120px"
-          ref="form"
-          :model="form"
-        >
+        <el-form label-position="right" label-width="120px" ref="form" :model="form">
           <el-form-item label="头像" prop="avatar">
-            <img
-              style="height:100px;width:100px;"
-              :src="$store.getters.urls.baseUrl + form.avatar"
-            />
+            <img style="height:100px;width:100px;" :src="$store.getters.urls.baseUrl + form.avatar" />
           </el-form-item>
-          <el-form-item label="名称" prop="name"
-            ><el-input :value="form.name" disabled></el-input
-          ></el-form-item>
-          <el-form-item label="显示名" prop="displayName"
-            ><el-input v-model="form.displayName"></el-input
-          ></el-form-item>
+          <el-form-item label="名称" prop="name">
+            <el-input v-model="form.name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="显示名" prop="displayName">
+            <el-input v-model="form.displayName"></el-input>
+          </el-form-item>
           <el-form-item label="性别" prop="sex">
             <el-select v-model="form.sex" filterable>
-              <el-option :key="0" label="未知" :value="0"> </el-option>
-              <el-option :key="1" label="男" :value="1"> </el-option>
-              <el-option :key="2" label="女" :value="-1"> </el-option>
+              <el-option :key="0" label="未知" :value="0"></el-option>
+              <el-option :key="1" label="男" :value="1"></el-option>
+              <el-option :key="2" label="女" :value="-1"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="邮箱" prop="mail"
-            ><el-input v-model="form.mail"></el-input
-          ></el-form-item>
-          <el-form-item label="手机" prop="mobile"
-            ><el-input v-model="form.mobile"></el-input
-          ></el-form-item>
-          <el-form-item label="代码" prop="code"
-            ><el-input v-model="form.code"></el-input
-          ></el-form-item>
+          <el-form-item label="邮箱" prop="mail">
+            <el-input v-model="form.mail"></el-input>
+          </el-form-item>
+          <el-form-item label="手机" prop="mobile">
+            <el-input v-model="form.mobile"></el-input>
+          </el-form-item>
+          <el-form-item label="代码" prop="code">
+            <el-input v-model="form.code"></el-input>
+          </el-form-item>
           <el-form-item label="角色" prop="name">
             <span>{{ form.roleNames }}</span>
           </el-form-item>
-          <el-form-item label="登录次数" prop="name"
-            ><span>{{ form.logins }}</span></el-form-item
-          >
-          <el-form-item label="最后登录时间" prop="name"
-            ><span>{{ form.lastLogin }}</span></el-form-item
-          >
-          <el-form-item label="最后登录IP" prop="name"
-            ><span>{{ form.lastLoginIP }}</span></el-form-item
-          >
+          <el-form-item label="登录次数" prop="name">
+            <span>{{ form.logins }}</span>
+          </el-form-item>
+          <el-form-item label="最后登录时间" prop="name">
+            <span>{{ form.lastLogin }}</span>
+          </el-form-item>
+          <el-form-item label="最后登录IP" prop="name">
+            <span>{{ form.lastLoginIP }}</span>
+          </el-form-item>
 
           <el-form-item prop label-name>
             <div
@@ -61,12 +53,7 @@
     </el-tab-pane>
     <el-tab-pane label="修改密码" name="ChangePassword">
       <div class="objform">
-        <el-form
-          label-position="right"
-          label-width="120px"
-          ref="form2"
-          :model="form2"
-        >
+        <el-form label-position="right" label-width="120px" ref="form2" :model="form2">
           <el-form-item label="旧密码" prop="oldPassword">
             <el-input type="password" v-model="form2.oldPassword"></el-input>
           </el-form-item>
@@ -86,19 +73,18 @@
         </el-form>
       </div>
     </el-tab-pane>
-    <el-tab-pane label="第三方授权" name="OAuthConfig">
-      3
-    </el-tab-pane>
+    <el-tab-pane label="第三方授权" name="OAuthConfig">3</el-tab-pane>
   </el-tabs>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: ['path'],
   data() {
     return {
-      form: {},
-      form2: {},
+      form: {} as any,
+      form2: {} as any,
       properties: [],
       activeName: 'UserInfo'
     }
@@ -110,7 +96,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function() {
+      handler: function () {
         this.init()
       },
       immediate: true
@@ -125,7 +111,7 @@ export default {
       vm.form = vm.$store.getters.userInfo
     },
     confirm() {
-      let vm = this
+      let vm = this as any
       vm.$store.getters.apis.updateUserInfo(vm.form).then(() => {
         let msg = '保存成功'
 
@@ -137,7 +123,7 @@ export default {
       })
     },
     confirm2() {
-      let vm = this
+      let vm = this as any
       vm.$store.getters.apis.changePassword(vm.form2).then(() => {
         let msg = '保存成功'
 
@@ -151,7 +137,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>
