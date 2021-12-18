@@ -1,5 +1,5 @@
 import StoreConfig from './store'
-import RouterConfig from './router'
+import routerConfig from './router'
 // console.log(Vue, Element, App, Vuex, VueRouter)
 import getRequest from '@/utils/request'
 import getApis from '@/api'
@@ -8,13 +8,14 @@ import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
 import fileContext from './services/file-context'
 
 import '@/styles/index.scss' // global css
+import { createWebHashHistory } from 'vue-router'
+import { getMenu } from './utils/menu'
 
 const files = require.context('@/views/', true, /^.*\.vue$/)
-
+// 注入视图文件
 fileContext.addFiles(files)
 
 let store: any
-let router: any
 let elementUI: any
 let elementIcons: any
 
@@ -24,8 +25,8 @@ const install: any = (app: any) => {
   }
   install.installed = true
 
-  if (!store || !router) {
-    console.error('请先使用createCubeUI创建store, router')
+  if (!store) {
+    console.error('请先使用createCubeUI创建store')
     return
   }
 
@@ -35,8 +36,6 @@ const install: any = (app: any) => {
 
   // 注册组件
   store.dispatch('setFiles', files)
-  // 注册路由导航
-  router.beforeEach(RouterConfig.beforeEach(store, router))
   // 注册请求封装和api
   const rqeuest = getRequest(store)
   const apis = getApis(store)
@@ -48,12 +47,34 @@ const install: any = (app: any) => {
   store.dispatch('setMessage', elementUI.ElMessage)
   store.dispatch('setMessageBox', elementUI.ElMessageBox)
 
-  app.use(router)
+  // 尝试从本地缓存加载菜单
+  const accessedRouters = getMenu()
+  let menuRouters: any[] = []
+  if (accessedRouters && accessedRouters.length > 0) {
+    // 设置路由信息
+    store.dispatch('generateRoutes', accessedRouters)
+
+    // 添加路由信息
+    menuRouters = store.getters.addRouters
+  }
+
+  // 配置路由
+  const router = routerConfig.install(app, (options) => {
+    // options.history = createWebHashHistory()
+
+    // 从本地缓存加载的路由必须在这里添加
+    // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
+    options.routes = menuRouters.concat(options.routes)
+  })
+
   app.use(store)
+
   app.use(elementUI, { size: store.getters.app.size })
   for (const key in elementIcons) {
-    const e = elementIcons[key]
-    app.component(e.name, e)
+    if (Object.prototype.hasOwnProperty.call(elementIcons, key)) {
+      const e = elementIcons[key]
+      app.component(e.name, e)
+    }
   }
 
   // 自动注册全局组件
@@ -78,17 +99,11 @@ export const createCubeUI = (
 ) => {
   store = Vuex.createStore(StoreConfig)
 
-  router = VueRouter.createRouter({
-    ...RouterConfig.routerOptions,
-    history: VueRouter.createWebHistory()
-  })
-
   elementUI = Element
   elementIcons = ElementIcons
 
   return {
     install,
-    router,
     store
   }
 }
@@ -97,6 +112,5 @@ export default {
   version: '1.0',
   install,
   StoreConfig,
-  RouterConfig,
   createCubeUI
 }

@@ -17,20 +17,22 @@
 
         <!-- <el-tooltip content="全屏" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item" />
-        </el-tooltip> -->
+        </el-tooltip>-->
 
         <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select class="international right-menu-item" />
-        </el-tooltip> -->
+        </el-tooltip>-->
 
         <!-- <el-tooltip content="换肤" effect="dark" placement="bottom">
           <theme-picker class="theme-switch right-menu-item" />
-        </el-tooltip> -->
+        </el-tooltip>-->
       </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <span><img :src="myAvatar" class="user-avatar" /></span>
+          <span>
+            <img :src="myAvatar" class="user-avatar" />
+          </span>
           <span class="user-info">
             {{ userInfo && userInfo.displayName }}
             <br />
@@ -80,7 +82,7 @@ export default defineComponent({
       return this.$store.getters.sidebar
     },
     userInfo() {
-      return this.$store.getters.userInfo
+      return this.$store.getters.userInfo || {}
     },
     sysConfig() {
       return this.$store.getters.sysConfig

@@ -2,15 +2,20 @@
  * 将菜单转化成路由
  * @param {*} routes 请求返回菜单
  */
-export function formatRoutes(files: __WebpackModuleApi.RequireContext, routes: any[], depth = 0) {
-  const fileKeys = files.keys()
+export function formatRoutes(
+  files: __WebpackModuleApi.RequireContext,
+  routes: any[],
+  depth = 0
+) {
   routes.forEach((router) => {
     router.path = router.url
     if (router.path.startsWith('~')) {
       router.path = router.path.substr(1)
     }
     router.displayName = router.displayName || router.name
-    if (router.visible === undefined) { console.log(router.name + ' visible为空') }
+    if (router.visible === undefined) {
+      console.log(router.name + ' visible为空')
+    }
     if (router.meta) {
       router.meta.menuId = router.id
       router.meta.permissions = router.permissions
@@ -20,22 +25,23 @@ export function formatRoutes(files: __WebpackModuleApi.RequireContext, routes: a
 
     // 第一层使用布局模板
     if (depth === 0) {
-      router.component = () => Promise.resolve(files('./layout/index.vue'))
+      router.component = () =>
+        Promise.resolve(files('@/views/layout/index.vue'))
     } else {
       // 目前只按照两层处理
-      const path = `.${router.path}/list.vue`
+      const filePath = `@/views${router.path}/list.vue`
       // router.component = () => import('@/views/common/list.vue')
       // router.component = () => {
       //   return <div>123</div>
       // }
-      // router.component = () => Promise.resolve(files('./common/list.vue'))
+      // router.component = () => Promise.resolve(files('@/views/common/list.vue'))
 
       router.component = () => {
         // 先尝试加载自定义视图，不存在使用默认视图
-        if (fileKeys.includes(path)) {
-          return Promise.resolve(files(path))
+        if (files.resolve(filePath)) {
+          return Promise.resolve(files(filePath))
         } else {
-          return Promise.resolve(files('./common/list.vue'))
+          return Promise.resolve(files('@/views/common/list.vue'))
         }
       }
 
@@ -57,8 +63,11 @@ export function formatRoutes(files: __WebpackModuleApi.RequireContext, routes: a
   return routes
 }
 
-function getEditRoute(files: __WebpackModuleApi.RequireContext, router: any, path: string) {
-  const fileKeys = files.keys()
+function getEditRoute(
+  files: __WebpackModuleApi.RequireContext,
+  router: any,
+  path: string
+) {
   // 添加、编辑页路由
   const r = {
     visible: false,
@@ -68,11 +77,11 @@ function getEditRoute(files: __WebpackModuleApi.RequireContext, router: any, pat
     isFormRoute: true, // 是否表单路由
     component: () => {
       // 先尝试加载自定义视图，不存在使用默认视图
-      path = `.${path}/form.vue`
-      if (fileKeys.includes(path)) {
-        return Promise.resolve(files(path))
+      const filePath = `@/views${path}/form.vue`
+      if (files.resolve(filePath)) {
+        return Promise.resolve(files(filePath))
       } else {
-        return Promise.resolve(files('./common/form.vue'))
+        return Promise.resolve(files('@/views/common/form.vue'))
       }
     }
   }

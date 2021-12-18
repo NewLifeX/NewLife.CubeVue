@@ -13,7 +13,7 @@
           <el-form :model="loginForm" size="medium" class="cube-login">
             <!-- 登录-->
             <span class="heading text-primary">{{ displayName }} 登录</span>
-            <el-form-item label="">
+            <el-form-item label>
               <el-input
                 v-model="loginForm.username"
                 placeholder="用户名 / 邮箱"
@@ -21,7 +21,7 @@
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="">
+            <el-form-item label>
               <el-input
                 v-model="loginForm.password"
                 placeholder="密码"
@@ -29,13 +29,8 @@
                 show-password
               ></el-input>
             </el-form-item>
-            <el-form-item label="">
-              <el-checkbox
-                class="text text-primary"
-                v-model="loginForm.remember"
-              >
-                记住我
-              </el-checkbox>
+            <el-form-item label>
+              <el-checkbox class="text text-primary" v-model="loginForm.remember">记住我</el-checkbox>
 
               <!-- <template v-if="loginConfig.allowRegister">
                 <div
@@ -49,13 +44,11 @@
                     <span>我要注册</span>
                   </a>
                 </div>
-              </template> -->
+              </template>-->
             </el-form-item>
           </el-form>
 
-          <button class="btn" @click="login">
-            登录
-          </button>
+          <button class="btn" @click="login">登录</button>
         </template>
       </div>
       <!-- Login3 -->
@@ -74,11 +67,7 @@
               :title="mi.nickName || mi.name"
               @click="ssoClick(getUrl(mi))"
             >
-              <img
-                v-if="mi.logo"
-                :src="getLogoUrl(mi.logo)"
-                style="width: 64px;height: 64px;"
-              />
+              <img v-if="mi.logo" :src="getLogoUrl(mi.logo)" style="width: 64px;height: 64px;" />
               <template v-else>{{ mi.nickName || mi.name }}</template>
             </a>
           </el-col>
@@ -89,8 +78,18 @@
 </template>
 
 <script lang="ts">
+import { setMenu } from '@/utils/menu'
 import { defineComponent } from 'vue'
 export default defineComponent({
+  data() {
+    return {
+      loginForm: {
+        username: null,
+        password: null,
+        remember: true
+      }
+    }
+  },
   computed: {
     sysConfig() {
       return this.$store.getters.sysConfig
@@ -126,21 +125,12 @@ export default defineComponent({
       )
     }
   },
-  data() {
-    return {
-      loginForm: {
-        username: null,
-        password: null,
-        remember: true
-      }
-    }
-  },
   created() {
     let vm = this as any
     try {
       // 关闭所有弹窗
       vm.$messageBox.close()
-    } catch (error) {}
+    } catch (error) { }
     // 为了本地快速检查是否需要自动跳转第三方登录，使用缓存的配置立即进行检查跳转
     vm.autoAuthRedirect()
 
@@ -153,11 +143,40 @@ export default defineComponent({
   methods: {
     login() {
       let vm = this
-      vm.apis.login(vm.loginForm).then((response: any) => {
+      vm.apis.login(vm.loginForm).then(async (response: any) => {
         const data = response.data.data
         let token = data.token
-        vm.$store.dispatch('setToken', token)
-        vm.$router.push({ path: vm.redirect || '/' } as any)
+        await vm.$store.dispatch('setToken', token)
+
+        // 获取用户信息
+        vm.$store.getters.apis
+          .getUserInfo()
+          .then((response: any) => {
+            const data = response.data.data
+            // 设置用户信息
+            vm.$store.dispatch('setUserInfo', data)
+          })
+
+        // 获取菜单信息， 将请求回来的菜单转化成路由以及菜单信息
+        vm.$store.getters.apis.getMenu().then((routeRes: any) => {
+          const accessedRouters = routeRes.data.data
+
+          // 保存一份在浏览器
+          setMenu(accessedRouters)
+
+          // 设置路由信息
+          vm.$store.dispatch('generateRoutes', accessedRouters)
+
+          // 添加路由信息
+          const addRouters = vm.$store.getters.addRouters
+          if (addRouters) {
+            addRouters.forEach((e: any) => {
+              vm.$router.addRoute(e) // 动态添加可访问路由表
+            })
+          }
+
+          vm.$router.push({ path: vm.redirect || '/' } as any)
+        })
       })
     },
     ssoClick(url: any) {
@@ -172,8 +191,8 @@ export default defineComponent({
       // let url = `/sso/authorize?response_type=token&client_id=${name}`
       let redirect_uri = encodeURIComponent(
         location.origin +
-          '/auth-redirect' +
-          (vm.redirect ? '?redirect=' + vm.redirect : '')
+        '/auth-redirect' +
+        (vm.redirect ? '?redirect=' + vm.redirect : '')
       )
       url += `&redirect_uri=${redirect_uri}`
       return url

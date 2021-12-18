@@ -1,6 +1,6 @@
 import Storage from '@/utils/storage'
 import urls from '@/api/constant'
-
+const loginConfig = Storage.getItem('loginConfig')
 const app = {
   state: {
     sidebar: {
@@ -13,7 +13,7 @@ const app = {
     // 系统配置
     sysConfig: undefined,
     // 登录页面配置
-    loginConfig: JSON.parse(Storage.getItem('loginConfig') || '{}'),
+    loginConfig: loginConfig ? JSON.parse(loginConfig) : null,
     // 是否隐藏布局
     hiddenLayout: false,
     // 信息弹窗

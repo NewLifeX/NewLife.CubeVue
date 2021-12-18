@@ -1,10 +1,11 @@
+import { removeMenu } from '@/utils/menu'
 import { getToken, setToken, removeToken } from '@/utils/token'
 import * as userInfoStorage from '@/utils/user'
 import { Store } from 'vuex'
 
 const user = {
   state: {
-    userInfo: undefined, // userInfoStorage.getUserInfo(),
+    userInfo: userInfoStorage.getUserInfo(),
     permission: undefined, // 权限集合
     token: getToken(),
     hasPermission
@@ -29,6 +30,9 @@ const user = {
     },
     SET_PERMISSION: (state: any, permission: any) => {
       state.permission = permission
+    },
+    REMOVE_MENU: (state: any) => {
+      removeMenu()
     }
   },
 
@@ -46,6 +50,8 @@ const user = {
       commit('REMOVE_TOKEN')
       // 移除用户信息
       commit('REMOVE_USERINFO')
+      // 移除菜单信息
+      commit('REMOVE_MENU')
     }
   }
 }

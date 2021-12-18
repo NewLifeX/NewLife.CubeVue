@@ -108,7 +108,14 @@ export default defineComponent({
     },
     query() {
       let vm = this
-      vm.form = vm.$store.getters.userInfo
+      vm.$store.getters.apis
+        .getUserInfo()
+        .then((resp: any) => {
+          const data = resp.data.data
+          // 设置用户信息，本页修改信息后再掉此方法刷新
+          vm.$store.dispatch('setUserInfo', data)
+          vm.form = data
+        })
     },
     confirm() {
       let vm = this as any
@@ -120,6 +127,9 @@ export default defineComponent({
           type: 'success',
           duration: 3 * 1000
         })
+
+        // 刷新用户信息
+        vm.query()
       })
     },
     confirm2() {

@@ -1,8 +1,8 @@
 import Storage from '@/utils/storage'
 
-const Key = 'userInfo'
+const Key = 'menu'
 
-export function getUserInfo(): any | null {
+export function getMenu(): any | null {
   const u = Storage.getItem(Key)
   if (u) {
     return JSON.parse(u)
@@ -11,10 +11,10 @@ export function getUserInfo(): any | null {
   return null
 }
 
-export function setUserInfo(value: object) {
+export function setMenu(value: object) {
   return Storage.setItem(Key, JSON.stringify(value))
 }
 
-export function removeUserInfo() {
+export function removeMenu() {
   return Storage.removeItem(Key)
 }

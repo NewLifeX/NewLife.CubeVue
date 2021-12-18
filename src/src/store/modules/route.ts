@@ -1,3 +1,4 @@
+import fileContext from '@/services/file-context'
 import { formatRoutes } from '@/utils/route'
 
 const route = {
@@ -26,19 +27,15 @@ const route = {
       files.keys().forEach((key: any) => {
         map[key] = files(key)
       })
-      state.files = function(req: any) {
-        return map[req]
-      }
+      state.files = (req: any) => map[req]
       state.files.map = map
-      state.files.keys = function() {
-        return Object.keys(map)
-      }
+      state.files.keys = () => Object.keys(map)
     }
   },
   actions: {
     generateRoutes({ commit, state }: any, accessedRouters: any) {
       // 将请求回来的菜单生成为路由
-      const addRouters = formatRoutes(state.files, accessedRouters)
+      const addRouters = formatRoutes(fileContext, accessedRouters)
       commit('SET_ROUTERS', addRouters)
     },
     setRouters({ commit }: any, addRouters: any) {

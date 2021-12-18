@@ -94,7 +94,7 @@ export const asyncRouterMap = [
   }
 ]
 
-const routerOptions = {
+export const routerOptions = {
   history: createWebHistory(),
   scrollBehavior: () => ({
     top: 0
@@ -102,37 +102,37 @@ const routerOptions = {
   routes: constantRouterMap
 }
 
-// /**
-//  * 安装路由
-//  * @param app vue app实例
-//  * @param options 配置方法，可自定义修改
-//  * @beforeEach 路由前执行，比如 (to, from, next)=>{}
-//  * @returns Router实例
-//  */
-// const useRouter = (
-//   app: any,
-//   options: (routerOptions: RouterOptions) => void | undefined,
-//   beforeEach: NavigationGuardWithThis<undefined> | undefined,
-//   afterEach: NavigationHookAfter | undefined
-// ): Router => {
-//   if (options !== undefined) {
-//     options(routerOptions)
-//   }
+/**
+ * 安装路由
+ * @param app vue app实例
+ * @param options 配置方法，可自定义修改
+ * @beforeEach 路由前执行，比如 (to, from, next)=>{}
+ * @returns Router实例
+ */
+export const install = (
+  app: any,
+  options: (routerOptions: RouterOptions) => void | undefined,
+  beforeEach: NavigationGuardWithThis<undefined> | undefined | null = null,
+  afterEach: NavigationHookAfter | undefined | null = null
+): Router => {
+  if (options !== undefined) {
+    options(routerOptions)
+  }
 
-//   const router = createRouter(routerOptions)
-//   app.use(router)
+  const router = createRouter(routerOptions)
+  app.use(router)
 
-//   if (beforeEach !== undefined) {
-//     router.beforeEach(beforeEach)
-//   } else {
-//     router.beforeEach(beforeEachFn)
-//   }
+  if (beforeEach) {
+    router.beforeEach(beforeEach)
+  } else {
+    router.beforeEach(beforeEachFn)
+  }
 
-//   if (afterEach !== undefined) {
-//     router.afterEach(afterEach)
-//   }
+  if (afterEach) {
+    router.afterEach(afterEach)
+  }
 
-//   return router
-// }
+  return router
+}
 
-export default { routerOptions, beforeEach: beforeEachFn /*, useRouter*/ }
+export default { routerOptions, beforeEach: beforeEachFn, install }

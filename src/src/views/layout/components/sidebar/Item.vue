@@ -9,8 +9,9 @@
     </template>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'MenuItem',
   props: {
     icon: {
@@ -40,7 +41,7 @@ export default {
   //   }
   //   return vnodes
   // }
-}
+})
 </script>
 
 <style scoped>
