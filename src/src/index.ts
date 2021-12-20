@@ -1,7 +1,7 @@
 import StoreConfig from './store'
 import routerConfig from './router'
 // console.log(Vue, Element, App, Vuex, VueRouter)
-import getRequest from '@/utils/request'
+import { createAxios } from '@/utils/request'
 import getApis from '@/api'
 import requireComponent from '@/utils/requireComponent'
 import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
@@ -36,11 +36,17 @@ const install: any = (app: any) => {
 
   // 注册组件
   store.dispatch('setFiles', files)
+
   // 注册请求封装和api
-  const rqeuest = getRequest(store)
+  const axios = createAxios(app)
+  axios.interceptors.request.use((config) => {
+    config.baseURL = store.getters.urls.getBaseUrl()
+    return config
+  })
+
   const apis = getApis(store)
   // console.log(stroe)
-  store.dispatch('setRequest', rqeuest)
+  store.dispatch('setRequest', axios)
   // console.log(stroe.getters.request)
   store.dispatch('addApis', apis)
 
