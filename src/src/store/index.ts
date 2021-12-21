@@ -2,7 +2,6 @@ import route from './modules/route'
 import user from './modules/user'
 import entity from './modules/entity'
 import app from './modules/app'
-import api from './modules/api'
 import getters from './getters'
 
 export default {
@@ -10,8 +9,7 @@ export default {
     route,
     user,
     entity,
-    app,
-    api,
+    app
   },
-  getters,
+  getters
 }

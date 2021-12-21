@@ -9,8 +9,6 @@ const getters = {
   sidebar: (state: any) => state.app.sidebar,
   app: (state: any) => state.app,
   urls: (state: any) => state.app.urls,
-  request: (state: any) => state.api.request,
-  apis: (state: any) => state.api.apis,
   message: (state: any) => state.app.message,
   messageBox: (state: any) => state.app.messageBox
 }

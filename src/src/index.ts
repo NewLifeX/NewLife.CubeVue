@@ -1,8 +1,7 @@
 import StoreConfig from './store'
 import routerConfig from './router'
-// console.log(Vue, Element, App, Vuex, VueRouter)
 import { createAxios } from '@/utils/request'
-import getApis from '@/api'
+import { createApi } from '@/api'
 import requireComponent from '@/utils/requireComponent'
 import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
 import fileContext from './services/file-context'
@@ -37,18 +36,15 @@ const install: any = (app: any) => {
   // 注册组件
   store.dispatch('setFiles', files)
 
-  // 注册请求封装和api
+  // 注册请求封装和api，注入$http
   const axios = createAxios(app)
   axios.interceptors.request.use((config) => {
     config.baseURL = store.getters.urls.getBaseUrl()
     return config
   })
 
-  const apis = getApis(store)
-  // console.log(stroe)
-  store.dispatch('setRequest', axios)
-  // console.log(stroe.getters.request)
-  store.dispatch('addApis', apis)
+  // 创建api，公用接口,注入$api
+  createApi(app, axios)
 
   store.dispatch('setMessage', elementUI.ElMessage)
   store.dispatch('setMessageBox', elementUI.ElMessageBox)
@@ -91,7 +87,6 @@ const install: any = (app: any) => {
   app.config.globalProperties.$warn = (config: any) => {
     elementUI.MessageEl.warning(config)
   }
-  app.config.globalProperties.$api = store.getters.apis
 
   // 注入的计算属性自动解包
   app.config.unwrapInjectedRef = true
