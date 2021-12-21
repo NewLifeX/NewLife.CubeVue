@@ -1,23 +1,12 @@
 <template>
-  <el-select
-    v-model="data"
-    :multiple="true"
-    filterable
-    clearable
-    @focus="getData"
-  >
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.key"
-      :value="item.value"
-    >
-    </el-option>
+  <el-select v-model="data" :multiple="true" filterable clearable @focus="getData">
+    <el-option v-for="item in options" :key="item.value" :label="item.key" :value="item.value"></el-option>
   </el-select>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'multipleSelect',
   props: {
     url: {
@@ -31,9 +20,9 @@ export default {
   computed: {
     kv() {
       var search = this.url.substring(this.url.lastIndexOf('?') + 1)
-      var obj = {}
+      var obj = {} as any
       var reg = /([^?&=]+)=([^?&=]*)/g
-      search.replace(reg, function(rs, $1, $2) {
+      search.replace(reg, function (rs, $1, $2) {
         var name = decodeURIComponent($1)
         var val = decodeURIComponent($2)
         val = String(val)
@@ -45,7 +34,7 @@ export default {
   },
   data() {
     return {
-      options: [],
+      options: [] as any[],
       data: '',
     }
   },
@@ -59,11 +48,10 @@ export default {
       let vm = this
 
       if (vm.options.length > 0) return
-      vm.$store.getters
-        .request({
-          url: vm.url,
-          method: 'post',
-        })
+      vm.$http({
+        url: vm.url,
+        method: 'post',
+      })
         .then((resp) => {
           let array = resp.data.data
           for (let i = 0; i < array.length; i++) {
@@ -74,7 +62,7 @@ export default {
         })
     },
   },
-}
+})
 </script>
 
 <style></style>

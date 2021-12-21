@@ -13,18 +13,10 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="启用" prop="enable">
-        <el-switch
-          v-model="form.enable"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        />
+        <el-switch v-model="form.enable" active-color="#13ce66" inactive-color="#ff4949" />
       </el-form-item>
       <el-form-item label="系统" prop="isSystem">
-        <el-switch
-          v-model="form.isSystem"
-          active-color="#13ce66"
-          inactive-color="#ff4949"
-        />
+        <el-switch v-model="form.isSystem" active-color="#13ce66" inactive-color="#ff4949" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input :rows="4" type="textarea" v-model="form.remark" />
@@ -59,7 +51,7 @@
               @change="handleCheckAllChange"
             />
           </template>
-        </el-table-column> -->
+        </el-table-column>-->
         <el-table-column label="操作">
           <template v-slot="scope">
             <template v-if="scope.row.permissions.length > 0">
@@ -67,9 +59,7 @@
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="checkAllChange(scope.row)"
-              >
-                全选
-              </el-checkbox>
+              >全选</el-checkbox>
               <el-checkbox
                 v-for="item in scope.row.permissions"
                 :key="scope.row.id + '' + item.k"
@@ -83,16 +73,12 @@
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="parentCheckAllChange(scope.row)"
-              >
-                全选
-              </el-checkbox>
+              >全选</el-checkbox>
               <!-- <el-checkbox>读写</el-checkbox> -->
               <el-checkbox
                 v-model="form['pc_readonly_' + scope.row.id]"
                 @change="roCheck(scope.row)"
-              >
-                只读
-              </el-checkbox>
+              >只读</el-checkbox>
             </template>
           </template>
         </el-table-column>
@@ -101,14 +87,15 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   data() {
     return {
-      form: {},
+      form: {} as any,
       fields: [],
-      imObj: {},
-      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' }
+      imObj: {} as any,
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' } as any
     }
   },
   computed: {
@@ -116,49 +103,25 @@ export default {
       return this.$route.params.id
     },
     currentPath() {
-      let vm = this
+      let vm = this as any
       let rplStr = `/${vm.type}${vm.id === undefined ? '' : '/' + vm.id}`
       return this.$route.path.replace(rplStr, '')
     },
     type() {
-      return this.$route.params.type
-    },
-    getFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'getAddFormFields'
-        : vm.isDetail
-        ? 'getDetailFields'
-        : 'getEditFormFields'
-    },
-    setFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'setAddFormFields'
-        : vm.isDetail
-        ? 'setDetailFields'
-        : 'setEditFormFields'
-    },
-    fieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'addFormFields'
-        : vm.isDetail
-        ? 'detailFields'
-        : 'editFormFields'
+      return this.$route.params.type as any
     },
     isAdd() {
-      return this.type === 'Add'
+      return (this as any).type === 'Add'
     },
     isDetail() {
-      return this.type === 'Detail'
+      return (this as any).type === 'Detail'
     },
     rolePermissions() {
       // 角色菜单权限
       let vm = this
       // permission格式: 1#255,2#255。#前为菜单id，#后为权限值
       let permission = vm.form.permission
-      let pObj = {}
+      let pObj = {} as any
       if (!permission) return pObj
       let mlist = permission.split(',')
       for (const key in mlist) {
@@ -172,23 +135,23 @@ export default {
       // console.log('init')
       // 角色菜单数据
       let vm = this
-      let menuRouters = vm.$store.getters.menuRouters
-      let menus = []
-      menuRouters.map((i) => {
+      let menuRouters: any[] = vm.$store.getters.menuRouters
+      let menus: any[] = []
+      menuRouters.map((i: any) => {
         let menu = {
           id: i.id,
           name: i.name,
           displayName: i.displayName,
           permissions: i.permissions,
           parentID: i.parentID
-        }
+        } as any
 
         // // 父级全选勾选框是否勾选
         // let pCheck = false
 
         if (i.hasChildren) {
           menu.children = []
-          i.children.map((j) => {
+          i.children.map((j: any) => {
             // 表单路由不处理
             if (j.isFormRoute) return
             let menuChild = {
@@ -233,42 +196,29 @@ export default {
       return menus
     }
   },
-  watch: {
-    $route: {
-      handler: function() {
-        this.init()
-      },
-      immediate: true
-    }
+  // watch: {
+  //   $route: {
+  //     handler: function () {
+  //       this.init()
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
+    this.init()
+  },
+  activated() {
+    this.init()
   },
   methods: {
     init() {
-      this.getFields()
       if (!this.isAdd) {
         this.query()
       }
     },
-    getFields() {
-      let vm = this
-      let path = vm.currentPath
-      let key = path + '-' + vm.fieldType
-      let fields = vm.$store.state.entity[vm.fieldType][key]
-      if (fields) {
-        vm.fields = fields
-        return
-      }
-
-      // 没有获取过字信息，请求回来后保存一份
-      vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
-        fields = res.data.data
-        vm.fields = fields
-
-        vm.$store.dispatch(vm.setFieldType, { key, fields })
-      })
-    },
     query() {
       let vm = this
-      vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
+      vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
         vm.form = res.data.data
         vm.allCheckUpdate()
       })
@@ -276,7 +226,7 @@ export default {
     confirm() {
       let vm = this
       if (vm.isAdd) {
-        vm.$store.getters.apis.add(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '新增成功',
             type: 'success',
@@ -284,7 +234,7 @@ export default {
           })
         })
       } else {
-        vm.$store.getters.apis.edit(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.edit(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '保存成功',
             type: 'success',
@@ -296,13 +246,13 @@ export default {
     returnIndex() {
       this.$router.push(this.currentPath)
     },
-    checkChange({ id, permissions, parentID }) {
+    checkChange({ id, permissions, parentID }: any) {
       // console.log('checkChange', id)
       // 子权限项勾选，
       let vm = this
       let pCheck = false
       let checkCount = 0
-      permissions.forEach((e) => {
+      permissions.forEach((e: any) => {
         let c = vm.form['pf' + id + '_' + e.k]
         if (c) checkCount = checkCount + 1
         pCheck = pCheck || c
@@ -314,12 +264,12 @@ export default {
       // 更新父级全选
       vm.parentCheckUpdate(parentID)
     },
-    checkAllChange({ id, permissions, parentID }) {
+    checkAllChange({ id, permissions, parentID }: any) {
       // console.log('checkAllChange', id, permissions)
       // 子权限项全勾选，更新子级级勾选
       let vm = this
       let pCheck = vm.form['p' + id]
-      permissions.forEach((e) => {
+      permissions.forEach((e: any) => {
         vm.form['pf' + id + '_' + e.k] = pCheck
       })
 
@@ -328,13 +278,13 @@ export default {
       // 更新父级全选
       vm.parentCheckUpdate(parentID)
     },
-    parentCheckAllChange({ id, children }) {
+    parentCheckAllChange({ id, children }: any) {
       // console.log('parentCheckAllChange', id, children)
 
       // 父级全选，勾选所有子权限项
       let vm = this
       let pCheck = vm.form['p' + id]
-      children.forEach((e) => {
+      children.forEach((e: any) => {
         vm.form['p' + e.id] = pCheck
         vm.checkAllChange({
           id: e.id,
@@ -345,7 +295,7 @@ export default {
 
       vm.imObj[id] = false
     },
-    parentCheckUpdate(parentID) {
+    parentCheckUpdate(parentID: any) {
       // console.log('parentCheckUpdate', parentID)
 
       // 父级勾选状态更新
@@ -353,7 +303,7 @@ export default {
       let parentCheck = false
       let parentIm = false
       let parent = vm.tableData.find((f) => f.id == parentID)
-      parent.children.forEach((e) => {
+      parent.children.forEach((e: any) => {
         let c = vm.form['p' + e.id]
         let im = vm.imObj[e.id]
         parentCheck = parentCheck || c || false
@@ -368,11 +318,11 @@ export default {
       vm.form['p' + parentID] = parentCheck
       vm.imObj[parentID] = parentIm
     },
-    roCheck({ id, children }) {
+    roCheck({ id, children }: any) {
       // 只读勾选，勾选所有子权限只读项
       let vm = this
       let pCheck = vm.form['pc_readonly_' + id]
-      children.forEach((e) => {
+      children.forEach((e: any) => {
         vm.form['pf' + e.id + '_' + 1] = pCheck
         vm.checkChange(e)
       })
@@ -386,7 +336,7 @@ export default {
 
         // 处理当前菜单权限勾选
         if (menu.permissions) {
-          menu.permissions.map((p) => {
+          menu.permissions.map((p: any) => {
             // console.log('1', p)
 
             let c = (p.k & vm.rolePermissions[menu.id]) !== 0
@@ -397,10 +347,10 @@ export default {
 
         // 子菜单
         if (menu.children) {
-          menu.children.map((j) => {
+          menu.children.map((j: any) => {
             // console.log('2', j)
             // 设置操作勾选框
-            j.permissions.map((p) => {
+            j.permissions.map((p: any) => {
               // console.log('3', p)
 
               let c = (p.k & vm.rolePermissions[j.id]) !== 0
@@ -414,7 +364,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>

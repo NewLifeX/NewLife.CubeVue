@@ -115,7 +115,7 @@ export default defineComponent({
     },
     logout() {
       let vm = this
-      vm.$store.getters.apis.logout().then(() => {
+      vm.$api.user.logout().then(() => {
         vm.$store.dispatch('logout')
         location.reload() // 为了重新实例化vue-router对象 避免bug
       })

@@ -108,11 +108,8 @@ export default defineComponent({
       }
       return loginConfig
     },
-    urls() {
-      return this.$store.getters.urls
-    },
-    apis() {
-      return this.$store.getters.apis
+    baseUrl() {
+      return this.$store.getters.urls.baseUrl
     },
     redirect() {
       return this.$route.query.redirect
@@ -126,7 +123,7 @@ export default defineComponent({
     }
   },
   created() {
-    let vm = this as any
+    let vm = this
     try {
       // 关闭所有弹窗
       vm.$messageBox.close()
@@ -135,7 +132,7 @@ export default defineComponent({
     vm.autoAuthRedirect()
 
     // 获取一次登录设置，如果跳转了第三方登录，会被强制取消
-    vm.apis.getLoginConfig().then((res: any) => {
+    vm.$api.config.getLoginConfig().then((res: any) => {
       let cfg = res.data.data
       vm.$store.dispatch('setLoginConfig', cfg)
     })
@@ -143,14 +140,13 @@ export default defineComponent({
   methods: {
     login() {
       let vm = this
-      vm.apis.login(vm.loginForm).then(async (response: any) => {
+      vm.$api.user.login(vm.loginForm).then(async (response: any) => {
         const data = response.data.data
         let token = data.token
         await vm.$store.dispatch('setToken', token)
 
         // 获取用户信息
-        vm.$store.getters.apis
-          .getUserInfo()
+        vm.$api.user.getUserInfo()
           .then((response: any) => {
             const data = response.data.data
             // 设置用户信息
@@ -158,7 +154,7 @@ export default defineComponent({
           })
 
         // 获取菜单信息， 将请求回来的菜单转化成路由以及菜单信息
-        vm.$store.getters.apis.getMenu().then((routeRes: any) => {
+        vm.$api.menu.getMenu().then((routeRes: any) => {
           const accessedRouters = routeRes.data.data
 
           // 保存一份在浏览器
@@ -180,7 +176,7 @@ export default defineComponent({
       })
     },
     ssoClick(url: any) {
-      location.href = this.urls.baseUrl + url
+      location.href = this.baseUrl + url
       // location.href = urls.ssoUrl + url
     },
     getUrl(mi: any) {
@@ -200,7 +196,7 @@ export default defineComponent({
     getLogoUrl(logo: any) {
       let vm = this
       if (logo.indexOf('http') !== 0) {
-        logo = vm.urls.baseUrl + logo
+        logo = vm.baseUrl + logo
       }
       return logo
     },

@@ -1,14 +1,8 @@
 <template>
   <div class="list-container">
     <el-row type="flex" class="search" justify="end">
-      <el-col
-        :span="4"
-        class="left-search"
-        v-if="hasPermission(permissionFlags.insert)"
-      >
-        <el-button type="primary" @click="add">
-          新增
-        </el-button>
+      <el-col :span="4" class="left-search" v-if="hasPermission(permissionFlags.insert)">
+        <el-button type="primary" @click="add">新增</el-button>
       </el-col>
       <el-col :span="20" class="right-search"></el-col>
     </el-row>
@@ -33,19 +27,10 @@
         <el-table-column prop="sort" label="排序" width="50" />
         <el-table-column align="center" prop="visible" label="可见" width="80">
           <template v-slot="scope">
-            <el-switch
-              :value="scope.row.visible"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            />
+            <el-switch :value="scope.row.visible" active-color="#13ce66" inactive-color="#ff4949" />
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          prop="necessary"
-          label="必要"
-          width="80"
-        >
+        <el-table-column align="center" prop="necessary" label="必要" width="80">
           <template v-slot="scope">
             <el-switch
               :value="scope.row.necessary"
@@ -66,30 +51,24 @@
             <el-button
               v-if="
                 !hasPermission(permissionFlags.update) &&
-                  hasPermission(permissionFlags.detail)
+                hasPermission(permissionFlags.detail)
               "
               type="primary"
               size="mini"
               @click="detail(scope.row)"
-            >
-              查看
-            </el-button>
+            >查看</el-button>
             <el-button
               v-if="hasPermission(permissionFlags.update)"
               type="primary"
               size="mini"
               @click="editData(scope.row)"
-            >
-              编辑
-            </el-button>
+            >编辑</el-button>
             <el-button
               v-if="hasPermission(permissionFlags.delete)"
               size="mini"
               type="danger"
               @click="deleteData(scope.row)"
-            >
-              删除
-            </el-button>
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -107,22 +86,23 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'MenuList',
   data() {
     return {
-      tableData: [],
+      tableData: [] as any,
       tableHeight: '300px',
       queryParams: {
         Q: null,
         dateRange: null
-      },
+      } as any,
       page: {
         pageIndex: 1,
         pageSize: 20,
         totalCount: 0
-      },
+      } as any,
       listLoading: false,
       permissionFlags: {
         none: 0,
@@ -148,20 +128,26 @@ export default {
         vm.queryParams.dtEnd = null
       }
 
-      let temp = {}
+      let temp = {} as any
       // 查询参数也添加上
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
       return temp
     }
   },
-  watch: {
-    $route: {
-      handler: function() {
-        this.init()
-      },
-      immediate: true
-    }
+  // watch: {
+  //   $route: {
+  //     handler: function () {
+  //       this.init()
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
+    this.init()
+  },
+  activated() {
+    this.init()
   },
   methods: {
     init() {
@@ -178,26 +164,26 @@ export default {
         }
       }
     },
-    getUrl(column, entity) {
+    getUrl(column: any, entity: any) {
       // 针对指定实体对象计算url，替换其中变量
       const reg = /{(\w+)}/g
-      return column.cellUrl.replace(reg, (a, b) => entity[b])
+      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b])
     },
     add() {
       let vm = this
       vm.$router.push(vm.currentPath + '/Add')
     },
-    detail(row) {
+    detail(row: any) {
       let vm = this
       vm.$router.push(vm.currentPath + '/Detail/' + row.id)
     },
-    editData(row) {
+    editData(row: any) {
       let vm = this
       vm.$router.push(vm.currentPath + '/Edit/' + row.id)
     },
-    deleteData(row) {
+    deleteData(row: any) {
       let vm = this
-      vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
+      vm.$api.base.deleteById(vm.currentPath, row.id).then(() => {
         vm.getTableData()
       })
     },
@@ -209,7 +195,7 @@ export default {
       let vm = this
       vm.listLoading = true
 
-      vm.$store.getters.apis
+      vm.$api.base
         .getDataList(vm.currentPath, vm.queryData)
         .then((res) => {
           vm.listLoading = false
@@ -220,7 +206,7 @@ export default {
           vm.setTableHeight(vm.tableData.length)
         })
     },
-    getTreeData(dataList, pId = 0) {
+    getTreeData(dataList: any, pId = 0) {
       // 将列表数据构造成树状结构数据
 
       let vm = this
@@ -252,15 +238,15 @@ export default {
 
       return pList
     },
-    currentChange(val) {
+    currentChange(val: any) {
       this.page.pageIndex = val
       this.getTableData()
     },
-    handleSizeChange(val) {
+    handleSizeChange(val: any) {
       this.page.pageSize = val
       this.getTableData()
     },
-    sortChange({ column, prop, order }) {
+    sortChange({ column, prop, order }: any) {
       if (order === 'ascending') {
         this.page.desc = false
         this.page.sort = prop
@@ -268,16 +254,16 @@ export default {
         this.page.desc = true
         this.page.sort = prop
       } else {
-        this.page.desc = undefined
+        this.page.desc = true
         this.page.sort = undefined
       }
       this.getTableData()
     },
-    rowDblclick(row) {
+    rowDblclick(row: any) {
       this.editData(row)
     },
-    hasPermission(actionId) {
-      let vm = this
+    hasPermission(actionId: any) {
+      let vm = this as any
       let menuId = vm.$route.meta.menuId
       let permissions = vm.$route.meta.permissions
       let has = vm.$store.state.user.hasPermission(vm.$store, {
@@ -287,7 +273,7 @@ export default {
       })
       return has
     },
-    setTableHeight(count) {
+    setTableHeight(count: any) {
       // 根据数据条数设置表格高度，最高设置708px，一页最多显示20条
       let vm = this
       // console.log(count)
@@ -300,7 +286,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 <style scoped>
 .list-container {

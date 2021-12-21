@@ -107,9 +107,8 @@ export default defineComponent({
       this.query()
     },
     query() {
-      let vm = this
-      vm.$store.getters.apis
-        .getUserInfo()
+      let vm = this as any
+      vm.$api.user.getUserInfo()
         .then((resp: any) => {
           const data = resp.data.data
           // 设置用户信息，本页修改信息后再掉此方法刷新
@@ -119,7 +118,7 @@ export default defineComponent({
     },
     confirm() {
       let vm = this as any
-      vm.$store.getters.apis.updateUserInfo(vm.form).then(() => {
+      vm.$api.user.updateUserInfo(vm.form).then(() => {
         let msg = '保存成功'
 
         vm.$message({
@@ -134,7 +133,7 @@ export default defineComponent({
     },
     confirm2() {
       let vm = this as any
-      vm.$store.getters.apis.changePassword(vm.form2).then(() => {
+      vm.$api.user.changePassword(vm.form2).then(() => {
         let msg = '保存成功'
 
         vm.$message({

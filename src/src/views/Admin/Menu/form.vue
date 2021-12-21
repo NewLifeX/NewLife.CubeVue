@@ -55,13 +55,13 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   data() {
     return {
-      form: {},
-
-      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' },
+      form: {} as any,
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' } as any,
       fields: [
         {
           name: 'id',
@@ -182,7 +182,7 @@ export default {
           length: 500,
           description: '备注'
         }
-      ]
+      ] as any
     }
   },
   computed: {
@@ -190,51 +190,33 @@ export default {
       return this.$route.params.id
     },
     currentPath() {
-      let vm = this
+      let vm = this as any
       let rplStr = `/${vm.type}${vm.id === undefined ? '' : '/' + vm.id}`
       return this.$route.path.replace(rplStr, '')
     },
-    type() {
+    type(): any {
       return this.$route.params.type
     },
-    getFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'getAddFormFields'
-        : vm.isDetail
-        ? 'getDetailFields'
-        : 'getEditFormFields'
-    },
-    setFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'setAddFormFields'
-        : vm.isDetail
-        ? 'setDetailFields'
-        : 'setEditFormFields'
-    },
-    fieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'addFormFields'
-        : vm.isDetail
-        ? 'detailFields'
-        : 'editFormFields'
-    },
     isAdd() {
-      return this.type === 'Add'
+      return (this as any).type === 'Add'
     },
     isDetail() {
-      return this.type === 'Detail'
+      return (this as any).type === 'Detail'
     }
   },
-  watch: {
-    $route: {
-      handler: function() {
-        this.init()
-      },
-      immediate: true
-    }
+  // watch: {
+  //   $route: {
+  //     handler: function () {
+  //       this.init()
+  //     },
+  //     immediate: true
+  //   }
+  // },
+  created() {
+    this.init()
+  },
+  activated() {
+    this.init()
   },
   methods: {
     init() {
@@ -248,38 +230,19 @@ export default {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       let vm = this
       let path = vm.currentPath
-      vm.$store.getters.apis.getColumns(path).then((res) => {
+      vm.$api.base.getColumns(path).then((res) => {
         vm.fields = res.data.data
       })
     },
-    // getFields() {
-    //   let vm = this
-    //   let path = vm.currentPath
-    //   let key = path + '-' + fieldType
-    //   let fields = vm.$store.state.entity[vm.fieldType][key]
-    //   if (fields) {
-    //     vm.fields = fields
-    //     return
-    //   }
-
-    //   // 没有获取过字信息，请求回来后保存一份
-    //   vm.$store.getters.apis[vm.getFieldType](path).then((res) => {
-    //     fields = res.data.data
-    //     vm.fields = fields
-
-    //     vm.$store.dispatch(vm.setFieldType, { key, fields })
-    //   })
-    // },
     query() {
       let vm = this
       if (vm.isDetail) {
-        vm.$store.getters.apis
-          .getDetailData(vm.currentPath, vm.id)
+        vm.$api.base.getDetailData(vm.currentPath, vm.id)
           .then((res) => {
             vm.form = res.data.data
           })
       } else {
-        vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
+        vm.$api.base.getData(vm.currentPath, vm.id).then((res) => {
           vm.form = res.data.data
         })
       }
@@ -287,7 +250,7 @@ export default {
     confirm() {
       let vm = this
       if (vm.isAdd) {
-        vm.$store.getters.apis.add(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '新增成功',
             type: 'success',
@@ -295,7 +258,7 @@ export default {
           })
         })
       } else {
-        vm.$store.getters.apis.edit(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.edit(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '保存成功',
             type: 'success',
@@ -308,7 +271,7 @@ export default {
       this.$router.push(this.currentPath)
     }
   }
-}
+})
 </script>
 
 <style scoped>

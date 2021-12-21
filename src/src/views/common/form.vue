@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{ typeMap[type] }}</div>
+    <div>{{ title }}</div>
     <el-form
       ref="form"
       v-model="form"
@@ -74,12 +74,14 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from "vue"
+
+export default defineComponent({
   data() {
     return {
-      form: {},
-      fields: [],
+      form: {} as any,
+      fields: [] as any,
       typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' }
     }
   },
@@ -88,48 +90,27 @@ export default {
       return this.$route.params.id
     },
     currentPath() {
-      let vm = this
+      let vm = this as any
       let rplStr = `/${vm.type}`
       if (!vm.isAdd) {
         rplStr += `/${vm.id}`
       }
       return this.$route.path.replace(rplStr, '')
     },
-    type() {
-      return this.$route.params.type
-    },
-    getFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'getAddFormFields'
-        : vm.isDetail
-        ? 'getDetailFields'
-        : 'getEditFormFields'
-    },
-    setFieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'setAddFormFields'
-        : vm.isDetail
-        ? 'setDetailFields'
-        : 'setEditFormFields'
-    },
-    fieldType() {
-      let vm = this
-      return vm.isAdd
-        ? 'addFormFields'
-        : vm.isDetail
-        ? 'detailFields'
-        : 'editFormFields'
+    type(): string {
+      return this.$route.params.type.toString()
     },
     isAdd() {
-      return this.type === 'Add'
+      return (this as any).type === 'Add'
     },
     isDetail() {
-      return this.type === 'Detail'
+      return (this as any).type === 'Detail'
     },
     isEdit() {
-      return this.type === 'Edit'
+      return (this as any).type === 'Edit'
+    }
+    , title() {
+      return (this as any).typeMap[(this as any).type]
     }
   },
   // watch: {
@@ -156,20 +137,19 @@ export default {
       let vm = this
       let path = vm.currentPath
 
-      vm.$store.getters.apis.getColumns(path).then((res) => {
+      vm.$api.base.getColumns(path).then((res: any) => {
         vm.fields = res.data.data
       })
     },
     query() {
       let vm = this
       if (vm.isDetail) {
-        vm.$store.getters.apis
-          .getDetailData(vm.currentPath, vm.id)
-          .then((res) => {
+        vm.$api.base.getDetailData(vm.currentPath, vm.id)
+          .then((res: any) => {
             vm.form = res.data.data
           })
       } else {
-        vm.$store.getters.apis.getData(vm.currentPath, vm.id).then((res) => {
+        vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
           vm.form = res.data.data
         })
       }
@@ -177,7 +157,7 @@ export default {
     confirm() {
       let vm = this
       if (vm.isAdd) {
-        vm.$store.getters.apis.add(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '新增成功',
             type: 'success',
@@ -185,7 +165,7 @@ export default {
           })
         })
       } else {
-        vm.$store.getters.apis.edit(vm.currentPath, vm.form).then(() => {
+        vm.$api.base.edit(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '保存成功',
             type: 'success',
@@ -197,7 +177,7 @@ export default {
     returnIndex() {
       this.$router.push(this.currentPath)
     },
-    showInForm(col) {
+    showInForm(col: any) {
       let vm = this
       if (vm.isAdd) {
         return col.showInAddForm
@@ -208,7 +188,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

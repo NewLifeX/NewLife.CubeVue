@@ -1,11 +1,6 @@
 <template>
   <div class="objform">
-    <el-form
-      label-position="right"
-      label-width="120px"
-      ref="form"
-      :model="form"
-    >
+    <el-form label-position="right" label-width="120px" ref="form" :model="form">
       <template v-for="(list, cate) in properties">
         <div v-if="list.length > 0" :key="cate">
           <div :key="cate">
@@ -34,12 +29,7 @@
               value-format="YYYY-MM-DD HH:mm:ss"
             />
 
-            <el-input
-              v-else
-              v-model="form[item.name]"
-              type="text"
-              size="medium"
-            />
+            <el-input v-else v-model="form[item.name]" type="text" size="medium" />
             <span>{{ item.description }}</span>
           </el-form-item>
         </div>
@@ -56,13 +46,14 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   props: ['path'],
   data() {
     return {
-      form: {},
-      properties: []
+      form: {} as any,
+      properties: [] as any
     }
   },
   computed: {
@@ -72,7 +63,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function() {
+      handler: function () {
         this.init()
       },
       immediate: true
@@ -84,14 +75,14 @@ export default {
     },
     query() {
       let vm = this
-      vm.$store.getters.apis.getObject(vm.currentPath).then((res) => {
+      vm.$api.config.getObject(vm.currentPath).then((res) => {
         vm.form = res.data.data.value
         vm.properties = res.data.data.properties
       })
     },
     confirm() {
       let vm = this
-      vm.$store.getters.apis.updateObject(vm.currentPath, vm.form).then(() => {
+      vm.$api.config.updateObject(vm.currentPath, vm.form).then(() => {
         let msg = '保存成功'
 
         if (!vm.form.enableNewUI) {
@@ -110,7 +101,7 @@ export default {
       })
     }
   }
-}
+})
 </script>
 
 <style scoped>

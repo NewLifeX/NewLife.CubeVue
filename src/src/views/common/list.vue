@@ -1,18 +1,10 @@
 <template>
   <div class="list-container">
     <!-- 搜索组件 -->
-    <TableSearch
-      v-model="queryParams"
-      :columns="columns"
-      @operator="operator"
-    ></TableSearch>
+    <TableSearch v-model="queryParams" :columns="columns" @operator="operator"></TableSearch>
 
     <!-- 操作栏 -->
-    <TableOperator
-      :columns="columns"
-      :operatorList="operatorList"
-      @operator="operator"
-    ></TableOperator>
+    <TableOperator :columns="columns" :operatorList="operatorList" @operator="operator"></TableOperator>
 
     <NormalTable
       :columns="columns"
@@ -35,12 +27,9 @@
     </div>
   </div>
 </template>
-<script>
-import { computed } from 'vue'
-import NormalTable from '../components/NormalTable.vue'
-
-export default {
-  components: { NormalTable },
+<script lang="ts">
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'List',
   data() {
     let permissionFlags = {
@@ -56,12 +45,17 @@ export default {
       tableHeight: '300px',
       queryParams: {
         Q: null,
-        dateRange: null
+        dateRange: null,
+        dtStart: null,
+        dtEnd: null
       },
       page: {
         pageIndex: 1,
         pageSize: 20,
-        totalCount: 0
+        totalCount: 0,
+        Q: undefined,
+        desc: true,
+        sort: undefined,
       },
       headerData: [],
       listLoading: false,
@@ -116,7 +110,7 @@ export default {
   // },
   computed: {
     columns() {
-      let vm = this
+      let vm = this as any
       return vm.headerData.concat(vm.actionList)
     },
     currentPath() {
@@ -133,7 +127,7 @@ export default {
         vm.queryParams.dtEnd = null
       }
 
-      let temp = {}
+      let temp: any = {}
       // 查询参数也添加上
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
@@ -165,57 +159,39 @@ export default {
       let vm = this
       for (const key in vm.$route.query) {
         if (Object.hasOwnProperty.call(vm.$route.query, key)) {
-          const element = vm.$route.query[key]
-          vm.queryParams[key] = element
+          (vm.queryParams as any)[key] = (vm.$route.query as any)[key]
         }
       }
     },
-    getUrl(column, entity) {
+    getUrl(column: any, entity: any) {
       // 针对指定实体对象计算url，替换其中变量
       const reg = /{(\w+)}/g
-      return column.cellUrl.replace(reg, (a, b) => entity[b])
+      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b])
     },
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       let vm = this
       let path = vm.currentPath
-      vm.$store.getters.apis.getColumns(path).then((res) => {
+
+      vm.$api.base.getColumns(path).then((res) => {
         vm.headerData = res.data.data
-      })
-    },
-    getListFields() {
-      let vm = this
-      let path = vm.currentPath
-      let key = path + '-list'
-      let fields = vm.$store.state.entity.listFields[key]
-      if (fields) {
-        vm.headerData = fields
-        return
-      }
-
-      // 没有获取过字信息，请求回来后保存一份
-      vm.$store.getters.apis.getListFields(path).then((res) => {
-        fields = res.data.data
-        vm.headerData = fields
-
-        vm.$store.dispatch('setListFields', { key, fields })
       })
     },
     add() {
       let vm = this
       vm.$router.push(vm.currentPath + '/Add')
     },
-    detail(row) {
+    detail(row: any) {
       let vm = this
       vm.$router.push(vm.currentPath + '/Detail/' + row.id)
     },
-    editData(row) {
+    editData(row: any) {
       let vm = this
       vm.$router.push(vm.currentPath + '/Edit/' + row.id)
     },
-    deleteData(row) {
+    deleteData(row: any) {
       let vm = this
-      vm.$store.getters.apis.deleteById(vm.currentPath, row.id).then(() => {
+      vm.$api.base.deleteById(vm.currentPath, row.id).then(() => {
         vm.getTableData()
       })
     },
@@ -227,32 +203,31 @@ export default {
       let vm = this
       vm.listLoading = true
 
-      vm.$store.getters.apis
-        .getDataList(vm.currentPath, vm.queryData)
-        .then((res) => {
+      vm.$api.base.getDataList(vm.currentPath, vm.queryData)
+        .then((res: any) => {
           vm.listLoading = false
           vm.tableData = res.data.data
           vm.page = res.data.pager
           vm.page.Q = undefined
         })
     },
-    currentChange(val) {
+    currentChange(val: any) {
       this.page.pageIndex = val
       this.getTableData()
     },
-    handleSizeChange(val) {
+    handleSizeChange(val: any) {
       this.page.pageSize = val
       this.getTableData()
     },
-    rowDblclick(row) {
+    rowDblclick(row: any) {
       this.editData(row)
     },
     // 判断操作id会否有权限
-    hasPermission(actionId) {
+    hasPermission(actionId: any) {
       let vm = this
       let menuId = vm.$route.meta.menuId
       let permissions = vm.$route.meta.permissions
-      let has = vm.$store.state.user.hasPermission(vm.$store, {
+      let has = (vm.$store.state as any).user.hasPermission(vm.$store, {
         menuId,
         actionId,
         permissions
@@ -262,11 +237,11 @@ export default {
     // 重置搜索条件
     resetSearch() {
       let vm = this
-      vm.queryParams = {}
+      vm.queryParams = {} as any
       vm.query()
     },
     // 子组件调用此方法，再通过参数action调用本组件方法
-    operator(option, data, callback) {
+    operator(option: any, data: any, callback: any) {
       let vm = this
       let action = option.action
       let func = vm[action]
@@ -275,13 +250,13 @@ export default {
         console.error(msg)
         vm.$message.error(msg)
       } else {
-        let returnData = func.call(vm, data)
+        let returnData = (func as Function).call(vm, data)
         if (typeof callback === 'function') {
           callback(returnData)
         }
       }
     },
-    sortChange({ col, prop, order }) {
+    sortChange({ col, prop, order }: any) {
       if (order === 'ascending') {
         this.page.desc = false
         this.page.sort = prop
@@ -289,13 +264,13 @@ export default {
         this.page.desc = true
         this.page.sort = prop
       } else {
-        this.page.desc = undefined
+        this.page.desc = true
         this.page.sort = undefined
       }
       this.getTableData()
     }
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .list-container {
