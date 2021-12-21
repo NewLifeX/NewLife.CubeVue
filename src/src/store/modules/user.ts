@@ -1,11 +1,11 @@
 import { removeMenu } from '@/utils/menu'
 import { getToken, setToken, removeToken } from '@/utils/token'
-import * as userInfoStorage from '@/utils/user'
+import { getUserInfo, removeUserInfo, setUserInfo } from '@/utils/user'
 import { Store } from 'vuex'
 
 const user = {
   state: {
-    userInfo: userInfoStorage.getUserInfo(),
+    userInfo: getUserInfo(),
     permission: undefined, // 权限集合
     token: getToken(),
     hasPermission
@@ -13,11 +13,11 @@ const user = {
 
   mutations: {
     SET_USERINFO: (state: any, userInfo: any) => {
-      userInfoStorage.setUserInfo(userInfo)
+      setUserInfo(userInfo)
       state.userInfo = userInfo
     },
     REMOVE_USERINFO: (state: any) => {
-      userInfoStorage.removeUserInfo()
+      removeUserInfo()
       state.userInfo = undefined
     },
     SET_TOKEN: (state: any, token: any) => {
