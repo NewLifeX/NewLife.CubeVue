@@ -1,3 +1,4 @@
+import { getApi } from '@/api'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import message from 'element-plus/lib/components/message'
 import messageBox from 'element-plus/lib/components/message-box'
@@ -28,11 +29,12 @@ function handle401() {
     })
     .then(() => {
       isLoginTimeout = false
-      // store.getters.apis.logout().then(() => {
-      //   store.dispatch('logout')
-      //   isLoginTimeout = false
-      //   location.reload() // 为了重新实例化vue-router对象 避免bug
-      // })
+      getApi()
+        .user.logout()
+        .then(() => {
+          isLoginTimeout = false
+          location.reload() // 为了重新实例化vue-router对象 避免bug
+        })
     })
 
   return Promise.reject('登录超时')
