@@ -1,4 +1,5 @@
 import { Store } from 'vuex'
+import ApiBase from './api-base'
 
 export default function getApis(stroe: Store<{}>) {
   function getObject(path: string) {
@@ -6,7 +7,7 @@ export default function getApis(stroe: Store<{}>) {
     const urls = stroe.getters.urls
     return request({
       url: path + urls.getObject,
-      method: 'get',
+      method: 'get'
     })
   }
 
@@ -16,7 +17,7 @@ export default function getApis(stroe: Store<{}>) {
     return request({
       url: path + urls.updateObject,
       method: 'post',
-      data: obj,
+      data: obj
     })
   }
 
@@ -25,13 +26,43 @@ export default function getApis(stroe: Store<{}>) {
     const urls = stroe.getters.urls
     return request({
       url: urls.getLoginConfig,
-      method: 'get',
+      method: 'get'
     })
   }
 
   return {
     getObject,
     updateObject,
-    getLoginConfig,
+    getLoginConfig
+  }
+}
+
+export class ApiConfig extends ApiBase {
+  public getObject(path: string) {
+    const request = this.request
+
+    return request({
+      url: path + '/Index',
+      method: 'get'
+    })
+  }
+
+  public updateObject(path: string, obj: object) {
+    const request = this.request
+
+    return request({
+      url: path + '/Update',
+      method: 'post',
+      data: obj
+    })
+  }
+
+  public getLoginConfig() {
+    const request = this.request
+
+    return request({
+      url: '/Admin/Cube/GetLoginConfig',
+      method: 'get'
+    })
   }
 }
