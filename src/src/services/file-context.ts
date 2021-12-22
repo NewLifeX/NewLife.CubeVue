@@ -14,7 +14,7 @@
 const map: any = {}
 
 function fileContext(id: string) {
-  console.log('获取文件', id)
+  // console.log('获取文件', id)
   //   console.log(__webpack_require__)
   //   return __webpack_require__(id)
   id = resolve(id)

@@ -15,7 +15,7 @@ interface S {
 
 export const storeOptions: StoreOptions<S> = {
   modules: {
-    moduleApp,
+    app: moduleApp,
     entity,
     route,
     user

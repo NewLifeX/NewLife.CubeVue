@@ -1,5 +1,5 @@
 import {
-  createRouter,
+  createRouter as create,
   createWebHistory,
   NavigationGuardWithThis,
   NavigationHookAfter,
@@ -109,17 +109,17 @@ export const routerOptions = {
  * @beforeEach 路由前执行，比如 (to, from, next)=>{}
  * @returns Router实例
  */
-export const install = (
+export const createRouter = (
   app: any,
-  options: (routerOptions: RouterOptions) => void | undefined,
+  configure: ((routerOptions: RouterOptions) => void) | undefined | null = null,
   beforeEach: NavigationGuardWithThis<undefined> | undefined | null = null,
   afterEach: NavigationHookAfter | undefined | null = null
 ): Router => {
-  if (options !== undefined) {
-    options(routerOptions)
+  if (configure) {
+    configure(routerOptions)
   }
 
-  const router = createRouter(routerOptions)
+  const router = create(routerOptions)
   app.use(router)
 
   if (beforeEach) {
@@ -134,5 +134,3 @@ export const install = (
 
   return router
 }
-
-export default { routerOptions, beforeEach: beforeEachFn, install }

@@ -1,5 +1,5 @@
-import StoreConfig from './store'
-import routerConfig from './router'
+import { createStore } from './store'
+import { createRouter } from './router'
 import { createAxios } from '@/utils/request'
 import { createApi } from '@/api'
 import requireComponent from '@/utils/requireComponent'
@@ -14,7 +14,6 @@ const files = require.context('@/views/', true, /^.*\.vue$/)
 // 注入视图文件
 fileContext.addFiles(files)
 
-let store: any
 let elementUI: any
 let elementIcons: any
 
@@ -24,14 +23,11 @@ const install: any = (app: any) => {
   }
   install.installed = true
 
-  if (!store) {
-    console.error('请先使用createCubeUI创建store')
-    return
-  }
-
   app.component('Navbar', Navbar)
   app.component('Sidebar', Sidebar)
   app.component('AppMain', AppMain)
+
+  const store = createStore(app)
 
   // 注册组件
   store.dispatch('setFiles', files)
@@ -61,7 +57,7 @@ const install: any = (app: any) => {
   }
 
   // 配置路由
-  const router = routerConfig.install(app, (options) => {
+  const router = createRouter(app, (options) => {
     // options.history = createWebHashHistory()
 
     // 从本地缓存加载的路由必须在这里添加
@@ -69,9 +65,7 @@ const install: any = (app: any) => {
     options.routes = menuRouters.concat(options.routes)
   })
 
-  app.use(store)
-
-  app.use(elementUI, { size: store.getters.app.size })
+  app.use(elementUI, { size: store.state.app.size })
   for (const key in elementIcons) {
     if (Object.prototype.hasOwnProperty.call(elementIcons, key)) {
       const e = elementIcons[key]
@@ -85,7 +79,7 @@ const install: any = (app: any) => {
   app.config.globalProperties.$message = elementUI.ElMessage
   app.config.globalProperties.$messageBox = elementUI.ElMessageBox
   app.config.globalProperties.$warn = (config: any) => {
-    elementUI.MessageEl.warning(config)
+    elementUI.ElMessage.warning(config)
   }
 
   // 注入的计算属性自动解包
@@ -98,20 +92,16 @@ export const createCubeUI = (
   Element: any,
   ElementIcons: any
 ) => {
-  store = Vuex.createStore(StoreConfig)
-
   elementUI = Element
   elementIcons = ElementIcons
 
   return {
-    install,
-    store
+    install
   }
 }
-
 export default {
   version: '1.0',
-  install,
-  StoreConfig,
-  createCubeUI
+  install
 }
+
+export { fileContext, createStore, createRouter, createAxios, createApi }
