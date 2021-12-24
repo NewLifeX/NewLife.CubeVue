@@ -8103,11 +8103,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npm.taobao.org/vm-browserify/download/vm-browserify-1.1.2.tgz"
   integrity sha1-eGQcSIuObKkadfUR56OzKobl3aA=
 
-vue-class-component@^8.0.0-0:
-  version "8.0.0-rc.1"
-  resolved "https://registry.npm.taobao.org/vue-class-component/download/vue-class-component-8.0.0-rc.1.tgz"
-  integrity sha1-22ks2XZW65oIIGwD0Lc5jNsdlCA=
-
 vue-demi@*:
   version "0.12.0"
   resolved "https://registry.npmmirror.com/vue-demi/download/vue-demi-0.12.0.tgz?cache=0&sync_timestamp=1635386602167&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fvue-demi%2Fdownload%2Fvue-demi-0.12.0.tgz"

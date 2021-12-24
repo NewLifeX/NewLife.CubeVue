@@ -5,6 +5,8 @@ import { createApi } from '@/api'
 import requireComponent from '@/utils/requireComponent'
 import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
 import fileContext from './services/file-context'
+import * as Element from 'element-plus'
+import * as ElementIcons from '@element-plus/icons'
 
 import '@/styles/index.scss' // global css
 import { createWebHashHistory } from 'vue-router'
@@ -86,12 +88,7 @@ const install: any = (app: any) => {
   app.config.unwrapInjectedRef = true
 }
 
-export const createCubeUI = (
-  VueRouter: any,
-  Vuex: any,
-  Element: any,
-  ElementIcons: any
-) => {
+export const createCubeUI = () => {
   elementUI = Element
   elementIcons = ElementIcons
 
@@ -104,4 +101,13 @@ export default {
   install
 }
 
-export { fileContext, createStore, createRouter, createAxios, createApi }
+export {
+  fileContext,
+  createStore,
+  createRouter,
+  createAxios,
+  createApi,
+  Navbar,
+  Sidebar,
+  AppMain
+}

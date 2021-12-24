@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ESNext",
+    "module": "UMD",
     "strict": true,
+    "declaration": true,
+    "declarationDir": "./src",
+    "outDir": "../lib",
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
@@ -14,6 +17,10 @@
     "baseUrl": ".",
     "types": [
       "webpack-env"
+    ],
+    "typeRoots": [
+      "./src",
+      "./node_modules/@types"
     ],
     "paths": {
       "@/*": [

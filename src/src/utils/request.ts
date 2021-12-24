@@ -1,7 +1,6 @@
 import { getApi } from '@/api'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import message from 'element-plus/lib/components/message'
-import messageBox from 'element-plus/lib/components/message-box'
+import { ElMessage as message, ElMessageBox as messageBox } from 'element-plus'
 import { App } from 'vue'
 import { getToken } from './token'
 // import JSONbig from 'json-bigint'

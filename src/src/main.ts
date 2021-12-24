@@ -1,14 +1,10 @@
 import { createApp } from 'vue'
-import * as VueRouter from 'vue-router'
-import Vuex from 'vuex'
 import App from './App.vue'
-import * as Element from 'element-plus'
-import * as ElementIcons from '@element-plus/icons'
-import { createCubeUI, fileContext } from './index'
+import { createCubeUI } from './index'
 
 import 'element-plus/dist/index.css'
 
-const cubeUI = createCubeUI(VueRouter, Vuex, Element, ElementIcons)
+const cubeUI = createCubeUI()
 
 const app = createApp(App)
 app.use(cubeUI)

@@ -6,17 +6,17 @@ module.exports = {
   configureWebpack: (config) => {
     if (isProduction) {
       config.externals = {
-        // vue: {
-        //   root: 'Vue', // 指向全局变量
-        //   commonjs: 'vue',
-        //   commonjs2: 'vue',
-        //   amd: 'vue'
-        // }
-        // vue: 'Vue',
-        // vuex: 'Vuex',
-        // 'vue-router': 'VueRouter',
-        // axios: 'axios',
-        // 'element-plus': 'ELEMENT'
+        vue: {
+          root: 'Vue', // 指向全局变量
+          commonjs: 'vue',
+          commonjs2: 'vue',
+          amd: 'vue'
+        },
+        vuex: 'vuex',
+        'vue-router': 'vue-router',
+        axios: 'axios',
+        'element-plus': 'element-plus',
+        '@element-plus/icons': '@element-plus/icons'
       }
     }
 
