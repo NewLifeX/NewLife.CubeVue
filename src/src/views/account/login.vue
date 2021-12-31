@@ -173,6 +173,14 @@ export default defineComponent({
 
           vm.$router.push({ path: vm.redirect || '/' } as any)
         })
+
+        // 拉取系统配置信息
+        vm.$api.config
+          .getObject('/Admin/Sys')
+          .then((res: any) => {
+            const cfg = res.data.data.value
+            vm.$store.dispatch('setSysConfig', cfg)
+          })
       })
     },
     ssoClick(url: any) {
