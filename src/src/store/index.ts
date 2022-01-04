@@ -14,6 +14,9 @@ interface S {
 }
 
 export const storeOptions: StoreOptions<S> = {
+  state: {} as S,
+  mutations: {},
+  actions: {},
   modules: {
     app: moduleApp,
     entity,
