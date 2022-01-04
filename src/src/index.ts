@@ -2,7 +2,7 @@ import { createStore } from './store'
 import { createRouter } from './router'
 import { createAxios } from '@/utils/request'
 import { createApi } from '@/api'
-import requireComponent from '@/utils/requireComponent'
+import { requireComponent } from '@/utils/requireComponent'
 import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index'
 import fileContext from './services/file-context'
 import * as Element from 'element-plus'
@@ -11,10 +11,13 @@ import * as ElementIcons from '@element-plus/icons'
 import '@/styles/index.scss' // global css
 import { createWebHashHistory } from 'vue-router'
 import { getMenu } from './utils/menu'
+import * as utils from './utils'
 
-const files = require.context('@/views/', true, /^.*\.vue$/)
-// 注入视图文件
-fileContext.addFiles(files)
+const golbalComponent = require.context(
+  '@/views/components',
+  true,
+  /\w+\.(vue|js)$/
+)
 
 let elementUI: any
 let elementIcons: any
@@ -24,6 +27,11 @@ const install: any = (app: any) => {
     return
   }
   install.installed = true
+
+  const files = require.context('@/views/', true, /^.*\.vue$/)
+
+  // 注入视图文件
+  fileContext.addFiles(files)
 
   app.component('Navbar', Navbar)
   app.component('Sidebar', Sidebar)
@@ -35,7 +43,12 @@ const install: any = (app: any) => {
   store.dispatch('setFiles', files)
 
   // 注册请求封装和api，注入$http
-  const axios = createAxios(app)
+  const axios = createAxios(app, undefined, (options) => {
+    // options.response = (res) => {
+    //   return Promise.resolve(res)
+    // }
+    // options.responseError = (err) => {}
+  })
   axios.interceptors.request.use((config) => {
     config.baseURL = store.getters.urls.getBaseUrl()
     return config
@@ -76,7 +89,7 @@ const install: any = (app: any) => {
   }
 
   // 自动注册全局组件
-  app.use(requireComponent)
+  requireComponent(app, golbalComponent)
 
   app.config.globalProperties.$message = elementUI.ElMessage
   app.config.globalProperties.$messageBox = elementUI.ElMessageBox
@@ -107,7 +120,9 @@ export {
   createRouter,
   createAxios,
   createApi,
-  Navbar,
-  Sidebar,
-  AppMain
+  requireComponent,
+  utils
 }
+
+export * from '@/views/layout/components/index'
+export * from '@/views/components/index'
