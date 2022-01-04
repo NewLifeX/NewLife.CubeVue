@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "UMD",
+    "target": "esnext",
+    "module": "esnext",
     "strict": true,
     "declaration": true,
     "declarationDir": "./src",
