@@ -17,11 +17,11 @@ function fileContext(id: string) {
   // console.log('获取文件', id)
   //   console.log(__webpack_require__)
   //   return __webpack_require__(id)
-  id = resolve(id)
-  if (!id) {
+  const req = resolve(id)
+  if (!req) {
     throw new Error('找不到模块：' + id)
   }
-  return map[id]
+  return map[req]
 }
 
 const keys = function fileContextKeys() {
