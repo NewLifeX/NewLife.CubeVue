@@ -7,24 +7,13 @@
       border
       :height="tableHeight"
       ref="table"
-      @selection-change="handleSelectionChange"
-      @sort-change="sortChange"
       v-bind="$attrs"
     >
+      <!-- @selection-change="handleSelectionChange" -->
       <!-- 勾选框 -->
-      <el-table-column
-        v-if="selection"
-        type="selection"
-        width="40"
-      ></el-table-column>
+      <el-table-column v-if="selection" type="selection" width="40"></el-table-column>
       <!-- 编号 -->
-      <el-table-column
-        v-if="showIndex"
-        align="center"
-        label="序号"
-        type="index"
-        width="50"
-      />
+      <el-table-column v-if="showIndex" align="center" label="序号" type="index" width="50" />
       <!-- 常规列 -->
       <template v-if="!vertical">
         <template v-for="(col, idx) in columns">
@@ -59,15 +48,11 @@
             </template>
 
             <template v-slot="scope">
-              <slot
-                :name="'col-' + scope.column.property"
-                :colData="col"
-                :colScope="scope"
-              >
+              <slot :name="'col-' + scope.column.property" :colData="col" :colScope="scope">
                 <!-- 使用示例 -->
                 <!-- <template v-slot:col-colName="{ colData: col, colScope: { row } }">
         {{ col.name }}1{{ row[col.name] }},
-      </template> -->
+                </template>-->
                 <template v-if="col.dataType === 'Boolean'">
                   <el-switch
                     :value="scope.row[col.name]"
@@ -91,9 +76,7 @@
                       :type="actionItem.type"
                       size="mini"
                       @click="operator(actionItem, scope.row)"
-                    >
-                      {{ actionItem.text }}
-                    </el-button>
+                    >{{ actionItem.text }}</el-button>
                   </template>
                 </template>
                 <div v-else>{{ scope.row[col.name] }}</div>
@@ -104,7 +87,7 @@
       </template>
 
       <!-- 垂直列-第一列为表头 -->
-      <el-table-column v-if="vertical" label="" width="150px">
+      <el-table-column v-if="vertical" label width="150px">
         <template v-for="(col, cindex) in columns">
           <div :key="cindex" v-if="col.showInList && !col.hidden">
             <span>{{ col.displayName }}</span>
@@ -113,24 +96,20 @@
       </el-table-column>
 
       <!-- 垂直列-第二列为内容 -->
-      <el-table-column label="" v-if="vertical">
+      <el-table-column label v-if="vertical">
         <template v-slot="scope">
           <div v-for="(col, index) in columns" :key="index">
             <div v-if="col.showInList && !col.hidden">
-              <span v-if="!col.actionList">
-                {{ scope.row[col.name] || '&nbsp;' }}
-              </span>
+              <span v-if="!col.actionList">{{ scope.row[col.name] || '&nbsp;' }}</span>
 
               <!-- 操作栏 -->
               <div v-if="col.actionList">
                 <span
                   class="handbtn"
+                  v-for="(actionItem, hIndex) in col.actionList"
                   @click="operator(actionItem, scope.row)"
-                  v-for="(hand, hIndex) in col.actionList"
                   :key="hIndex"
-                >
-                  {{ hand.text }}
-                </span>
+                >{{ actionItem.text }}</span>
               </div>
             </div>
           </div>
@@ -140,67 +119,69 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue'
+export default defineComponent({
   name: 'NormalTable',
   description: '常规表格封装，使用的地方的父级必须指定高度',
   props: {
     // 表格列配置
     columns: {
-      Array,
+      type: Array as PropType<any[]>,
       default: []
     },
     // 表格数据
     tableData: {
-      Array,
+      type: Array,
       default: []
     },
     // 是否垂直展示数据
     vertical: {
-      Boolean,
+      type: Boolean,
       default: false
     },
     // 是否树状结构数据
     isTree: {
-      Boolean,
+      type: Boolean,
       default: false
     },
     // 树形结构key值
     treeKey: {
-      String,
+      type: String,
       require: false
     },
     // 是否设置了改变表头颜色
     changeHeader: {
-      Boolean,
+      type: Boolean,
       default: false
     },
     // 表格最大高度需要减去的高度，这个值不能太低，否则表格高度会自己不断拉长
     height: {
-      String,
+      type: String,
       default: 'calc(100% - 170px)'
     },
-    /* 表格height属性，与height组合，可达到不同效果。
+    /**
+     *  表格height属性，与height组合，可达到不同效果。
        1、height设置100%，表格没有数据时也能撑开一定高度，此时tableHeight设置100%，
         表格高度超过height时自动出现滚动条
        2、tableHeight设置为null，表格内容自动撑开高度
      */
     tableHeight: {
-      String,
+      type: String,
       default: '100%'
     },
     // 是否显示勾选框
     selection: {
-      Boolean,
+      type: Boolean,
       default: true
     },
     showIndex: {
-      Boolean,
+      type: Boolean,
       default: false
     },
     // 显示标题
     showHeader: {
-      Boolean,
+      type: Boolean,
       default: true
     }
   },
@@ -220,33 +201,29 @@ export default {
   watch: {
     // 表格数据变化时重新渲染表格
     tableData() {
-      setTimeout(() => {
-        this.$refs.table.doLayout()
-      }, 1000)
+      let vm = this as any
+      let table = vm.$refs.table
+      if (table) {
+        setTimeout(() => {
+          table.doLayout()
+        }, 1000)
+      }
+
     }
   },
   created() {
     // console.log(this.columns)
   },
   mounted() {
-    // if (this.changeHeader) {
-    //   let TotalDom = this.$refs.table.bodyWrapper
-    //   let that = this
-    //   TotalDom.addEventListener('scroll', function() {
-    //     // console.log('1231231231')
-    //     // console.log(TotalDom.scrollLeft)
-    //     that.$emit('changeScroll', TotalDom.scrollLeft)
-    //   })
-    // }
-
-    window.addEventListener('resize', () => {
-      this.$refs.table.doLayout()
-    })
+    window.addEventListener("resize", this.resize)
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resize)
   },
   methods: {
-    changeHeaderClass(row) {
+    changeHeaderClass(row: any) {
       if (this.changeHeader) {
-        let colorMap = {}
+        let colorMap = {} as any
         this.columns.forEach((item) => {
           colorMap[item.label] = item.color || '#fff'
         })
@@ -261,8 +238,8 @@ export default {
         // fontWeight: 'normal'
       }
     },
-    rowChangeStyle(row) {
-      console.log(row)
+    rowChangeStyle(row: any) {
+      // console.log(row)
       if (
         row.row.childTransferObject &&
         row.row.childTransferObject.length > 0 &&
@@ -273,30 +250,28 @@ export default {
         }
       }
     },
-    getUrl(column, entity) {
+    getUrl(column: any, entity: any) {
       // 针对指定实体对象计算url，替换其中变量
       const reg = /{(\w+)}/g
-      return column.cellUrl.replace(reg, (a, b) => entity[b])
+      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b])
     },
-    handleSelectionChange(val) {
-      this.$emit('setBatchList', val)
-    },
-    handler(hand, scope) {
+    handler(hand: any, scope: any) {
       this.$emit('operator', hand, scope.row)
     },
-    sortChange({ col, prop, order }) {
-      this.operator({ action: 'sortChange' }, { col, prop, order })
-    },
-    operator(option, data) {
+    operator(option: any, data: any) {
       let returnData = null
-      this.$emit('operator', option, data, (val) => {
+      this.$emit('operator', option, data, (val: any) => {
         returnData = val
       })
 
       return returnData
+    },
+    resize() {
+      let vm = this as any
+      vm.$refs.table.doLayout()
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -336,5 +311,10 @@ export default {
 /** 表头、行上下间距 */
 ::v-deep(.cell) {
   padding: 0 1px 0 1px;
+}
+
+// 表格行高度设置48px，避免内容高度过低使得表格变得紧凑
+::v-deep(.el-table .el-table__cell) {
+  height: 48px;
 }
 </style>

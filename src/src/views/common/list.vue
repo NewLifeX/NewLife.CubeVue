@@ -11,6 +11,8 @@
       :permissionFlags="permissionFlags"
       :tableData="tableData"
       @operator="operator"
+      @selection-change="selectionChange"
+      @sort-change="sortChange"
     ></NormalTable>
 
     <!-- 分页 -->
@@ -268,6 +270,10 @@ export default defineComponent({
         this.page.sort = undefined
       }
       this.getTableData()
+    },
+    selectionChange() {
+      console.log('selectionChange', arguments);
+
     }
   }
 })
