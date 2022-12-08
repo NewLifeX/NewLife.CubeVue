@@ -1,74 +1,31 @@
 <template>
   <el-row type="flex" justify="end" class="search">
-    <el-col :span="24" class="right-search">
+    <el-col :span="24" class="letf-search">
       <el-form
         ref="form"
-        v-model="modelValue"
+        v-model="model"
         label-position="right"
         :inline="true"
         class="search-form-container"
       >
-        <template v-for="(col, k) in columns">
+        <template v-for="item in columns">
           <el-form-item
-            style="height:36px;"
-            v-if="col.showInSearch"
-            :key="k"
-            :prop="col.isDataObjectField ? col.name : col.columnName"
-            :label="col.displayName || col.name"
+            :label="item.displayName"
+            :key="item.name"
+            v-if="item.showInSearch"
+            v-show="!item.hidden"
           >
-            <single-select
-              v-if="col.itemType == 'singleSelect' && col.dataSource"
-              v-model="
-                modelValue[col.isDataObjectField ? col.name : col.columnName]
-              "
-              :url="col.dataSource"
-            ></single-select>
-
-            <multiple-select
-              v-else-if="col.itemType == 'multipleSelect' && col.dataSource"
-              v-model="
-                modelValue[col.isDataObjectField ? col.name : col.columnName]
-              "
-              :url="col.dataSource"
-            ></multiple-select>
-
-            <el-switch
-              v-else-if="col.dataType == 'Boolean'"
-              v-model="
-                modelValue[col.isDataObjectField ? col.name : col.columnName]
-              "
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-            />
-
-            <el-input
-              v-else
-              v-model="
-                modelValue[col.isDataObjectField ? col.name : col.columnName]
-              "
-              type="text"
-            />
+            <template v-if="!item.if || item.if(model)">
+              <slot :name="'search-' + item.name" :model="model" :config="item">
+                <FormControl v-model="model" :configs="item"></FormControl>
+              </slot>
+            </template>
           </el-form-item>
         </template>
-        <el-date-picker
-          v-model="modelValue.dateRange"
-          type="daterange"
-          unlink-panels
-          value-format="YYYY-MM-DD"
-          range-separator="~"
-          start-placeholder="开始"
-          end-placeholder="结束"
-          :shortcuts="shortcuts"
-        ></el-date-picker>
-        <el-input
-          style="width:auto"
-          v-model="modelValue.Q"
-          placeholder="关键字"
-        ></el-input>
-        <el-button type="primary" @click="operator({ action: 'getTableData' })">
+        <el-button size="default" type="primary" @click="search">
           查询
         </el-button>
-        <el-button type="default" @click="operator({ action: 'resetSearch' })">
+        <el-button size="default" type="default" @click="resetSearch">
           重置
         </el-button>
       </el-form>
@@ -76,86 +33,102 @@
   </el-row>
 </template>
 
-<script>
-import { ref } from 'vue'
-import singleSelect from '../../components/singleSelect'
-import multipleSelect from '../../components/multipleSelect'
-export default {
+<script lang="ts">
+import { defineComponent, PropType, ref } from 'vue'
+// import singleSelect from '../../components/singleSelect'
+// import multipleSelect from '../../components/multipleSelect'
+import FormControl from './FormControl.vue'
+
+export default defineComponent({
+  name: 'TableSearch',
   components: {
-    singleSelect,
-    multipleSelect
+    FormControl
   },
   props: {
     columns: {
-      type: Array,
-      default: () => []
+      type: Array as PropType<any[]>,
+      default: () => [] as any[]
     },
     modelValue: {
       type: Object,
       default: () => {}
+    },
+    searchMethod: {
+      type: Function,
+      default: undefined
+    },
+    resetSearchMethod: {
+      type: Function,
+      default: undefined
     }
   },
-  emits: ['operator'],
+  emits: ['getDataList', 'resetSearch', 'update:modelValue'],
   data() {
     return {
-      shortcuts: [
-        {
-          text: '昨天',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-            return [start, end]
-          }
-        },
-        {
-          text: '今天',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            return [start, end]
-          }
-        },
-        {
-          text: '最近一周',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            return [start, end]
-          }
-        },
-        {
-          text: '最近一个月',
-          value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            return [start, end]
-          }
-        }
-      ]
+      model: {} as any
     }
   },
-  setup(props, context) {
-    // console.log(arguments)
+  watch: {
+    model: {
+      handler(val) {
+        this.$emit('update:modelValue', val)
+      },
+      deep: true
+    },
+    modelValue(val) {
+      this.model = val
+    }
+  },
+  created() {
+    this.model = this.modelValue // JSON.parse(JSON.stringify(this.modelValue))
 
-    const a = ref({
-      Q: null,
-      dateRange: null
-    })
+    let columns = this.columns
+    for (const key in columns) {
+      if (Object.prototype.hasOwnProperty.call(columns, key)) {
+        const item = columns[key]
+        if (
+          item.itemType === 'datePicker' &&
+          item.options &&
+          item.options.includes('type=daterange') &&
+          !item.options.includes('setDefaultValue=false')
+        ) {
+          // 如果是日期范围选择器，默认值设为最近一个月
+          const end = new Date()
+          const start = new Date()
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          this.model[item.name] = [
+            // 此格式化可能不同浏览器表现不同，返回的可能不是YYYY-MM-DD格式
+            start.toLocaleDateString('fr-CA'),
+            end.toLocaleDateString('fr-CA')
+          ]
+        }
 
-    return {
-      a
+        // 默认值设置
+        if (typeof item.value !== 'undefined') {
+          this.model[item.name] = item.value
+        }
+      }
     }
   },
   methods: {
-    operator(option, data) {
-      this.$emit('operator', option, data)
+    search() {
+      let vm = this
+      if (vm.searchMethod) {
+        vm.searchMethod()
+      } else {
+        this.$emit('getDataList')
+      }
+    },
+    resetSearch() {
+      let vm = this
+      if (vm.resetSearchMethod) {
+        vm.resetSearchMethod()
+      } else {
+        this.$emit('resetSearch')
+      }
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>
@@ -167,6 +140,10 @@ export default {
   display: -webkit-flex;
   display: flex;
   // border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  min-height: 50px;
+  padding-bottom: 8px;
+  // margin-bottom: 10px;
 }
 
 .search .left-search {
@@ -175,38 +152,38 @@ export default {
   /* float: left; */
   padding: 0 10px;
 }
-.search .right-search {
-  line-height: 58px;
+.search .letf-search {
+  line-height: 40px;
   /* height: 65px; */
   /* float: right; */
   /* max-height: 110px; */
   padding: 0 10px;
   /* overflow-y: auto; */
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 .search .el-button + .el-button {
   margin-left: 0px;
 }
 
 /* 搜索框元素间距 */
-::v-deep(.el-input) {
+:deep(.el-input) {
   margin-right: 10px;
 }
 
-::v-deep(.el-button) {
+:deep(.el-button) {
   margin-right: 10px;
 }
 
-::v-deep(.el-date-editor) {
+:deep(.el-date-editor) {
   margin-right: 10px;
 }
 
-::v-deep(.el-date-editor) {
+:deep(.el-date-editor) {
   width: 250px;
 }
 
-::v-deep(.el-form-item) {
+:deep(.el-form-item) {
   margin-bottom: 0;
 }
 </style>
