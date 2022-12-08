@@ -31,7 +31,7 @@ export default defineComponent({
   name: 'Sidebar',
   components: { SidebarItem },
   computed: {
-    menuRouters() {
+    menuRouters(): any {
       let vm = this
       let menuRouters = vm.$store.getters.menuRouters
 
@@ -60,10 +60,10 @@ export default defineComponent({
 
       return menuRouters
     },
-    sidebar() {
+    sidebar(): any {
       return this.$store.getters.sidebar
     },
-    isCollapse() {
+    isCollapse(): any {
       return !(this as any).sidebar.opened
     }
   },

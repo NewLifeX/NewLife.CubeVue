@@ -1,10 +1,18 @@
 <template>
   <div class="list-container">
     <!-- 搜索组件 -->
-    <TableSearch v-model="queryParams" :columns="columns" @operator="operator"></TableSearch>
+    <TableSearch
+      v-model="queryParams"
+      :columns="columns"
+      @operator="operator"
+    ></TableSearch>
 
     <!-- 操作栏 -->
-    <TableOperator :columns="columns" :operatorList="operatorList" @operator="operator"></TableOperator>
+    <TableOperator
+      :columns="columns"
+      :operatorList="operatorList"
+      @operator="operator"
+    ></TableOperator>
 
     <NormalTable
       :columns="columns"
@@ -34,7 +42,7 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'List',
   data() {
-    let permissionFlags = {
+    const permissionFlags = {
       none: 0,
       detail: 1,
       insert: 2,
@@ -57,7 +65,7 @@ export default defineComponent({
         totalCount: 0,
         Q: undefined,
         desc: true,
-        sort: undefined,
+        sort: undefined
       },
       headerData: [],
       listLoading: false,
@@ -112,15 +120,15 @@ export default defineComponent({
   // },
   computed: {
     columns() {
-      let vm = this as any
+      const vm = this as any
       return vm.headerData.concat(vm.actionList)
     },
     currentPath() {
       return this.$route.path
     },
     queryData() {
-      let vm = this
-      let dateRange = vm.queryParams.dateRange
+      const vm = this
+      const dateRange = vm.queryParams.dateRange
       if (dateRange) {
         vm.queryParams.dtStart = dateRange[0]
         vm.queryParams.dtEnd = dateRange[1]
@@ -129,7 +137,7 @@ export default defineComponent({
         vm.queryParams.dtEnd = null
       }
 
-      let temp: any = {}
+      const temp: any = {}
       // 查询参数也添加上
       Object.assign(temp, vm.page, vm.queryParams)
       temp.dateRange = undefined
@@ -158,10 +166,10 @@ export default defineComponent({
     },
     setQueryParams() {
       // 设置查询参数
-      let vm = this
+      const vm = this
       for (const key in vm.$route.query) {
         if (Object.hasOwnProperty.call(vm.$route.query, key)) {
-          (vm.queryParams as any)[key] = (vm.$route.query as any)[key]
+          ;(vm.queryParams as any)[key] = (vm.$route.query as any)[key]
         }
       }
     },
@@ -172,27 +180,27 @@ export default defineComponent({
     },
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
-      let vm = this
-      let path = vm.currentPath
+      const vm = this
+      const path = vm.currentPath
 
       vm.$api.base.getColumns(path).then((res) => {
         vm.headerData = res.data.data
       })
     },
     add() {
-      let vm = this
+      const vm = this
       vm.$router.push(vm.currentPath + '/Add')
     },
     detail(row: any) {
-      let vm = this
+      const vm = this
       vm.$router.push(vm.currentPath + '/Detail/' + row.id)
     },
     editData(row: any) {
-      let vm = this
+      const vm = this
       vm.$router.push(vm.currentPath + '/Edit/' + row.id)
     },
     deleteData(row: any) {
-      let vm = this
+      const vm = this
       vm.$api.base.deleteById(vm.currentPath, row.id).then(() => {
         vm.getTableData()
       })
@@ -202,10 +210,11 @@ export default defineComponent({
       this.getTableData()
     },
     getTableData() {
-      let vm = this
+      const vm = this
       vm.listLoading = true
 
-      vm.$api.base.getDataList(vm.currentPath, vm.queryData)
+      vm.$api.base
+        .getDataList(vm.currentPath, vm.queryData)
         .then((res: any) => {
           vm.listLoading = false
           vm.tableData = res.data.data
@@ -226,10 +235,10 @@ export default defineComponent({
     },
     // 判断操作id会否有权限
     hasPermission(actionId: any) {
-      let vm = this
-      let menuId = vm.$route.meta.menuId
-      let permissions = vm.$route.meta.permissions
-      let has = (vm.$store.state as any).user.hasPermission(vm.$store, {
+      const vm = this
+      const menuId = vm.$route.meta.menuId
+      const permissions = vm.$route.meta.permissions
+      const has = (vm.$store.state as any).user.hasPermission(vm.$store, {
         menuId,
         actionId,
         permissions
@@ -238,21 +247,21 @@ export default defineComponent({
     },
     // 重置搜索条件
     resetSearch() {
-      let vm = this
+      const vm = this
       vm.queryParams = {} as any
       vm.query()
     },
     // 子组件调用此方法，再通过参数action调用本组件方法
     operator(option: any, data: any, callback: any) {
-      let vm = this
+      let vm = this as any
       let action = option.action
       let func = vm[action]
       if (!func || typeof func !== 'function') {
-        let msg = `未实现的方法：${action}`
+        const msg = `未实现的方法：${action}`
         console.error(msg)
         vm.$message.error(msg)
       } else {
-        let returnData = (func as Function).call(vm, data)
+        const returnData = (func as Function).call(vm, data)
         if (typeof callback === 'function') {
           callback(returnData)
         }
@@ -272,8 +281,7 @@ export default defineComponent({
       this.getTableData()
     },
     selectionChange() {
-      console.log('selectionChange', arguments);
-
+      console.log('selectionChange', arguments)
     }
   }
 })
