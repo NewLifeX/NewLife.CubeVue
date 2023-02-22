@@ -222,6 +222,7 @@ export default defineComponent({
   right: -20px;
   top: 25px;
   font-size: 12px;
+  color: #c7c7c7;
 }
 
 .avatar-dropdown a:visited {
