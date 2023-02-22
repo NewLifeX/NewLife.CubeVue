@@ -1,23 +1,25 @@
 // base color
-$blue:#324157;
-$light-blue:#3A71A8;
-$red:#C03639;
+$blue: #324157;
+$light-blue: #3A71A8;
+$red: #C03639;
 $pink: #E65D6E;
 $green: #30B08F;
 $tiffany: #4AB7BD;
-$yellow:#FEC171;
+$yellow: #FEC171;
 $panGreen: #30B08F;
 
 // sidebar
-$menuText:#bfcbd9;
-$menuActiveText:#409EFF;
-$subMenuActiveText:#f4f4f5; // https://github.com/ElemeFE/element/issues/12951
+$menuText: #ffffff; //#bfcbd9;
+$menuActiveText: #292929; // #409EFF;
+$subMenuActiveText: #f4f4f5; // https://github.com/ElemeFE/element/issues/12951
+$menuItemActiveBg: #fff;
+$menuItemActiveText: #292929;
+$menuItemActiveHoverText: #f4f4f5;
+$menuBg: #333333; // #304156;
+$menuHover: #292929; // #263445;
 
-$menuBg:#304156;
-$menuHover:#263445;
-
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
+$subMenuBg: #333333; // #1f2d3d;
+$subMenuHover: #292929; // #001528;
 
 $sideBarWidth: 210px;
 
@@ -27,6 +29,9 @@ $sideBarWidth: 210px;
   menuText: $menuText;
   menuActiveText: $menuActiveText;
   subMenuActiveText: $subMenuActiveText;
+  menuItemActiveBg: $menuItemActiveBg;
+  menuItemActiveText: $menuItemActiveText;
+  menuItemActiveHoverText: $menuItemActiveHoverText;
   menuBg: $menuBg;
   menuHover: $menuHover;
   subMenuBg: $subMenuBg;

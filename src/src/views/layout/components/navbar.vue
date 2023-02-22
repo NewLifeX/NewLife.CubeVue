@@ -91,7 +91,7 @@ export default defineComponent({
       return this.$store.getters.urls
     },
     myAvatar() {
-      let vm = this as any
+      const vm = this as any
       let avatar = vm.userInfo && vm.userInfo.avatar
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
@@ -102,7 +102,7 @@ export default defineComponent({
       return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
     },
     displayName() {
-      let vm = this as any
+      const vm = this as any
       if (vm.sysConfig && vm.sysConfig.displayName) {
         return vm.sysConfig.displayName
       }
@@ -114,7 +114,7 @@ export default defineComponent({
       this.$store.dispatch('toggleSideBar')
     },
     logout() {
-      let vm = this
+      const vm = this
       vm.$api.user.logout().then(() => {
         vm.$store.dispatch('logout')
         location.reload() // 为了重新实例化vue-router对象 避免bug
@@ -132,7 +132,8 @@ export default defineComponent({
   top: 0;
   left: 0;
   width: 100%;
-  background: #fff;
+  /* background: #fff; */
+  background: #1d5e91;
   -webkit-box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
 }
@@ -213,6 +214,7 @@ export default defineComponent({
   position: relative;
   top: 6px;
   margin-left: 5px;
+  color: #c7c7c7;
 }
 .navbar .right-menu .avatar-container .avatar-wrapper .el-icon-caret-bottom {
   cursor: pointer;

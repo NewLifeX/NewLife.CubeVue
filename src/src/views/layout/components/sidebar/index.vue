@@ -4,7 +4,7 @@
       <el-menu
         :default-active="$route.path"
         :collapse="isCollapse"
-        background-color="#304156"
+        background-color="#333333"
         text-color="#bfcbd9"
         :unique-opened="true"
         active-text-color="#409EFF"
@@ -32,7 +32,7 @@ export default defineComponent({
   components: { SidebarItem },
   computed: {
     menuRouters(): any {
-      let vm = this
+      const vm = this
       let menuRouters = vm.$store.getters.menuRouters
 
       if (menuRouters && menuRouters.length > 0) {

@@ -3,11 +3,14 @@
     <template
       v-if="
         onlyOneChild &&
-        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-        !item.alwaysShow
+          (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+          !item.alwaysShow
       "
     >
-      <router-link v-if="onlyOneChild" :to="onlyOneChild.path || onlyOneChild.url">
+      <router-link
+        v-if="onlyOneChild"
+        :to="onlyOneChild.path || onlyOneChild.url"
+      >
         <el-menu-item
           :index="onlyOneChild.path || onlyOneChild.url"
           :class="{ 'submenu-title-noDropdown': !isNest }"
@@ -17,9 +20,18 @@
       </router-link>
     </template>
 
-    <el-sub-menu v-else ref="subMenu" :index="item.path || item.url" popper-append-to-body>
+    <el-sub-menu
+      v-else
+      ref="subMenu"
+      :index="item.path || item.url"
+      popper-append-to-body
+    >
       <template v-slot:title>
-        <item v-if="item" :icon="item.meta && item.meta.icon" :title="item.displayName" />
+        <item
+          v-if="item"
+          :icon="item.meta && item.meta.icon"
+          :title="item.displayName"
+        />
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -57,9 +69,9 @@ export default defineComponent({
   },
   computed: {
     onlyOneChild() {
-      let vm = this as any
-      let children = vm.item.children
-      let parent = vm.item
+      const vm = this as any
+      const children = vm.item.children
+      const parent = vm.item
       let showingChildren = []
       let child = null
       if (children) {
@@ -88,7 +100,7 @@ export default defineComponent({
 
       return null
     }
-  },
+  }
   // methods: {
   //   hasOneShowingChild(children: any[] = [], parent: any) {
   //     let showingChildren = []
