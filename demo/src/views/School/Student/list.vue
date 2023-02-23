@@ -3,9 +3,7 @@
     <div>
       <div class="search">
         <div class="left-search">
-          <el-button type="primary" @click="add">
-            新增
-          </el-button>
+          <el-button type="primary" @click="add">新增</el-button>
         </div>
         <div class="right-search">
           <el-date-picker
@@ -19,13 +17,11 @@
             :shortcuts="shortcuts"
           ></el-date-picker>
           <el-input
-            style="width:auto"
+            style="width: auto"
             v-model="queryParams.key"
             placeholder="关键字"
           ></el-input>
-          <el-button type="primary" @click="getTableData">
-            查询
-          </el-button>
+          <el-button type="primary" @click="getTableData">查询</el-button>
         </div>
       </div>
       <div class="table-container">
@@ -179,7 +175,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function() {
+      handler: function () {
         this.init()
       },
       immediate: true
@@ -202,7 +198,7 @@ export default {
 
       // 没有获取过字信息，请求回来后保存一份
       vm.$store.getters.apis.getListFields(path).then((res) => {
-        fields = res.data.data
+        fields = res.data
         vm.headerData = fields
 
         vm.$store.dispatch('setListFields', { key, fields })
@@ -245,7 +241,7 @@ export default {
 
       vm.$api.getDataList(vm.currentPath, vm.queryData).then((res) => {
         vm.listLoading = false
-        vm.tabledata = res.data.data
+        vm.tabledata = res.data
         vm.page = res.data.pager
       })
     },
