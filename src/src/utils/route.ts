@@ -28,6 +28,9 @@ export function formatRoutes(
       router.component = () =>
         Promise.resolve(files('@/views/layout/index.vue'))
     } else {
+      // 处理名称，避免冲突
+      router.name = router.path.replace(/\//g, '')
+
       // 目前只按照两层处理
       const filePath = `@/views${router.path}/list.vue`
       // router.component = () => import('@/views/common/list.vue')

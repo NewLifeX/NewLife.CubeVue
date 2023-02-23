@@ -49,22 +49,22 @@ function handle403(res: any) {
 }
 
 const axiosRequestConfig: AxiosRequestConfig = {
-  timeout: 50000,
-  // 响应拦截处理大数值
-  transformResponse: [
-    (data) => {
-      try {
-        // 使用正则将长整数替换为字符串
-        data = data.replace(/(\d{16,})/gi, '"$1"')
-        return JSON.parse(data)
-        // // 使用json-bigint将大数值转成
-        // data = JSONbig.parse(data)
-        // return data
-      } catch (err) {
-        return data
-      }
-    }
-  ]
+  timeout: 50000
+  // // 响应拦截处理大数值
+  // transformResponse: [
+  //   (data) => {
+  //     try {
+  //       // 使用正则将长整数替换为字符串
+  //       data = data.replace(/(\d{16,})/gi, '"$1"')
+  //       return JSON.parse(data)
+  //       // // 使用json-bigint将大数值转成
+  //       // data = JSONbig.parse(data)
+  //       // return data
+  //     } catch (err) {
+  //       return data
+  //     }
+  //   }
+  // ]
 }
 
 const interceptorsConfig = {
@@ -96,7 +96,10 @@ const interceptorsConfig = {
   ): AxiosResponse<any> | Promise<AxiosResponse<any>> => {
     // console.log(response)
     // http状态不是200不会到这里
-    const res = response.data
+    let res = response.data
+    if (typeof res === 'string') {
+      res = JSON.parse(res)
+    }
     if (res.code !== undefined && res.code !== null) {
       if (res.code >= 500) {
         message({

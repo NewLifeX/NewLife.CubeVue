@@ -149,7 +149,6 @@ export default defineComponent({
       this.loadingTable = true
       this.$http.post(this.url, data).then((res) => {
         this.tableData = res.data.list || res.data.rows || res.data
-        console.log(res)
 
         if (res.data.pagerModel) {
           this.pager.total = res.data.pagerModel.total
