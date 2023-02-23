@@ -219,7 +219,7 @@ export default defineComponent({
         let tableData = vm.getTreeData(res.data)
         // console.log(tableData)
         vm.tableData = tableData
-        vm.page = res.data.pager
+        vm.page = (res as any).pager
         vm.setTableHeight(vm.tableData.length)
       })
     },
@@ -295,8 +295,11 @@ export default defineComponent({
       let vm = this
       // console.log(count)
       if (count && count > 0) {
-        if (count > 20) count = 20
-        else if (count < 8) count = 9
+        if (count > 20) {
+          count = 20
+        } else if (count < 8) {
+          count = 9
+        }
         setTimeout(() => {
           vm.tableHeight = count * 35.9 + 'px'
         }, 500)
