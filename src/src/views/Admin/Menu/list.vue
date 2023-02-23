@@ -1,7 +1,11 @@
 <template>
   <div class="list-container">
     <el-row type="flex" class="search" justify="end">
-      <el-col :span="4" class="left-search" v-if="hasPermission(permissionFlags.insert)">
+      <el-col
+        :span="4"
+        class="left-search"
+        v-if="hasPermission(permissionFlags.insert)"
+      >
         <el-button type="primary" @click="add">新增</el-button>
       </el-col>
       <el-col :span="20" class="right-search"></el-col>
@@ -27,10 +31,19 @@
         <el-table-column prop="sort" label="排序" width="50" />
         <el-table-column align="center" prop="visible" label="可见" width="80">
           <template v-slot="scope">
-            <el-switch :value="scope.row.visible" active-color="#13ce66" inactive-color="#ff4949" />
+            <el-switch
+              :value="scope.row.visible"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+            />
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="necessary" label="必要" width="80">
+        <el-table-column
+          align="center"
+          prop="necessary"
+          label="必要"
+          width="80"
+        >
           <template v-slot="scope">
             <el-switch
               :value="scope.row.necessary"
@@ -51,24 +64,30 @@
             <el-button
               v-if="
                 !hasPermission(permissionFlags.update) &&
-                hasPermission(permissionFlags.detail)
+                  hasPermission(permissionFlags.detail)
               "
               type="primary"
               size="mini"
               @click="detail(scope.row)"
-            >查看</el-button>
+            >
+              查看
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.update)"
               type="primary"
               size="mini"
               @click="editData(scope.row)"
-            >编辑</el-button>
+            >
+              编辑
+            </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.delete)"
               size="mini"
               type="danger"
               @click="deleteData(scope.row)"
-            >删除</el-button>
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -195,16 +214,14 @@ export default defineComponent({
       let vm = this
       vm.listLoading = true
 
-      vm.$api.base
-        .getDataList(vm.currentPath, vm.queryData)
-        .then((res) => {
-          vm.listLoading = false
-          let tableData = vm.getTreeData(res.data.data)
-          // console.log(tableData)
-          vm.tableData = tableData
-          vm.page = res.data.pager
-          vm.setTableHeight(vm.tableData.length)
-        })
+      vm.$api.base.getDataList(vm.currentPath, vm.queryData).then((res) => {
+        vm.listLoading = false
+        let tableData = vm.getTreeData(res.data)
+        // console.log(tableData)
+        vm.tableData = tableData
+        vm.page = res.data.pager
+        vm.setTableHeight(vm.tableData.length)
+      })
     },
     getTreeData(dataList: any, pId = 0) {
       // 将列表数据构造成树状结构数据

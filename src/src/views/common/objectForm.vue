@@ -1,6 +1,11 @@
 <template>
   <div class="objform">
-    <el-form label-position="right" label-width="120px" ref="form" :model="form">
+    <el-form
+      label-position="right"
+      label-width="120px"
+      ref="form"
+      :model="form"
+    >
       <template v-for="(list, cate) in properties">
         <div v-if="list.length > 0" :key="cate">
           <div :key="cate">
@@ -29,7 +34,12 @@
               value-format="YYYY-MM-DD HH:mm:ss"
             />
 
-            <el-input v-else v-model="form[item.name]" type="text" size="medium" />
+            <el-input
+              v-else
+              v-model="form[item.name]"
+              type="text"
+              size="medium"
+            />
             <span>{{ item.description }}</span>
           </el-form-item>
         </div>
@@ -63,7 +73,7 @@ export default defineComponent({
   },
   watch: {
     $route: {
-      handler: function () {
+      handler: function() {
         this.init()
       },
       immediate: true
@@ -76,8 +86,8 @@ export default defineComponent({
     query() {
       let vm = this
       vm.$api.config.getObject(vm.currentPath).then((res) => {
-        vm.form = res.data.data.value
-        vm.properties = res.data.data.properties
+        vm.form = res.data.value
+        vm.properties = res.data.properties
       })
     },
     confirm() {

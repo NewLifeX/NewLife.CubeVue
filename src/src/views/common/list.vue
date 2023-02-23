@@ -1,30 +1,30 @@
 <template>
   <div class="list-container">
     <!-- 搜索组件 -->
-    <TableSearch
+    <!-- <TableSearch
       v-model="queryParams"
       :columns="columns"
       @operator="operator"
-    ></TableSearch>
+    ></TableSearch> -->
 
     <!-- 操作栏 -->
-    <TableOperator
+    <!-- <TableOperator
       :columns="columns"
       :operatorList="operatorList"
       @operator="operator"
-    ></TableOperator>
+    ></TableOperator> -->
 
-    <NormalTable
+    <!-- <NormalTable
       :columns="columns"
       :permissionFlags="permissionFlags"
       :tableData="tableData"
       @operator="operator"
       @selection-change="selectionChange"
       @sort-change="sortChange"
-    ></NormalTable>
+    ></NormalTable> -->
 
     <!-- 分页 -->
-    <div>
+    <!-- <div>
       <el-pagination
         :current-page="page.pageIndex"
         :page-size="page.pageSize"
@@ -34,13 +34,24 @@
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
-    </div>
+    </div> -->
+    <AdvancedTable
+      ref="advancedTable"
+      :searchList="columns"
+      :tableHandlerList="tableHandlerList"
+      :columns="columns"
+      :url="currentPath"
+    ></AdvancedTable>
   </div>
 </template>
 <script lang="ts">
+import AdvancedTable from '@/components/AdvancedTable.vue'
 import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'List',
+  components: {
+    AdvancedTable
+  },
   data() {
     const permissionFlags = {
       none: 0,
@@ -51,6 +62,7 @@ export default defineComponent({
     }
 
     return {
+      tableHandlerList: [],
       tableData: [],
       tableHeight: '300px',
       queryParams: {
@@ -121,7 +133,16 @@ export default defineComponent({
   computed: {
     columns() {
       const vm = this as any
-      return vm.headerData.concat(vm.actionList)
+      const columns = vm.headerData.concat(vm.actionList)
+      columns.push({
+        name: 'Q',
+        displayName: '',
+        showInSearch: true,
+        options: {
+          placeholder: '请输入关键字'
+        }
+      })
+      return columns
     },
     currentPath() {
       return this.$route.path
@@ -184,7 +205,7 @@ export default defineComponent({
       const path = vm.currentPath
 
       vm.$api.base.getColumns(path).then((res) => {
-        vm.headerData = res.data.data
+        vm.headerData = res.data
       })
     },
     add() {
@@ -217,8 +238,8 @@ export default defineComponent({
         .getDataList(vm.currentPath, vm.queryData)
         .then((res: any) => {
           vm.listLoading = false
-          vm.tableData = res.data.data
-          vm.page = res.data.pager
+          vm.tableData = res.data
+          vm.page = res.pager
           vm.page.Q = undefined
         })
     },
@@ -253,9 +274,9 @@ export default defineComponent({
     },
     // 子组件调用此方法，再通过参数action调用本组件方法
     operator(option: any, data: any, callback: any) {
-      let vm = this as any
-      let action = option.action
-      let func = vm[action]
+      const vm = this as any
+      const action = option.action
+      const func = vm[action]
       if (!func || typeof func !== 'function') {
         const msg = `未实现的方法：${action}`
         console.error(msg)
@@ -293,5 +314,6 @@ export default defineComponent({
   height: calc(100vh - 51px);
   overflow-x: hidden;
   overflow-y: auto;
+  padding: 5px;
 }
 </style>

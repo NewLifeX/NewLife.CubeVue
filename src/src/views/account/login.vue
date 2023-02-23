@@ -30,7 +30,12 @@
               ></el-input>
             </el-form-item>
             <el-form-item label>
-              <el-checkbox class="text text-primary" v-model="loginForm.remember">记住我</el-checkbox>
+              <el-checkbox
+                class="text text-primary"
+                v-model="loginForm.remember"
+              >
+                记住我
+              </el-checkbox>
 
               <!-- <template v-if="loginConfig.allowRegister">
                 <div
@@ -67,7 +72,11 @@
               :title="mi.nickName || mi.name"
               @click="ssoClick(getUrl(mi))"
             >
-              <img v-if="mi.logo" :src="getLogoUrl(mi.logo)" style="width: 64px;height: 64px;" />
+              <img
+                v-if="mi.logo"
+                :src="getLogoUrl(mi.logo)"
+                style="width: 64px;height: 64px;"
+              />
               <template v-else>{{ mi.nickName || mi.name }}</template>
             </a>
           </el-col>
@@ -127,13 +136,13 @@ export default defineComponent({
     try {
       // 关闭所有弹窗
       vm.$messageBox.close()
-    } catch (error) { }
+    } catch (error) {}
     // 为了本地快速检查是否需要自动跳转第三方登录，使用缓存的配置立即进行检查跳转
     vm.autoAuthRedirect()
 
     // 获取一次登录设置，如果跳转了第三方登录，会被强制取消
     vm.$api.config.getLoginConfig().then((res: any) => {
-      let cfg = res.data.data
+      let cfg = res.data
       vm.$store.dispatch('setLoginConfig', cfg)
     })
   },
@@ -141,21 +150,20 @@ export default defineComponent({
     login() {
       let vm = this
       vm.$api.user.login(vm.loginForm).then(async (response: any) => {
-        const data = response.data.data
+        const data = response.data
         let token = data.token
         await vm.$store.dispatch('setToken', token)
 
         // 获取用户信息
-        vm.$api.user.getUserInfo()
-          .then((response: any) => {
-            const data = response.data.data
-            // 设置用户信息
-            vm.$store.dispatch('setUserInfo', data)
-          })
+        vm.$api.user.getUserInfo().then((response: any) => {
+          const data = response.data
+          // 设置用户信息
+          vm.$store.dispatch('setUserInfo', data)
+        })
 
         // 获取菜单信息， 将请求回来的菜单转化成路由以及菜单信息
         vm.$api.menu.getMenu().then((routeRes: any) => {
-          const accessedRouters = routeRes.data.data
+          const accessedRouters = routeRes.data
 
           // 保存一份在浏览器
           setMenu(accessedRouters)
@@ -175,12 +183,10 @@ export default defineComponent({
         })
 
         // 拉取系统配置信息
-        vm.$api.config
-          .getObject('/Admin/Sys')
-          .then((res: any) => {
-            const cfg = res.data.data.value
-            vm.$store.dispatch('setSysConfig', cfg)
-          })
+        vm.$api.config.getObject('/Admin/Sys').then((res: any) => {
+          const cfg = res.data.value
+          vm.$store.dispatch('setSysConfig', cfg)
+        })
       })
     },
     ssoClick(url: any) {
@@ -195,8 +201,8 @@ export default defineComponent({
       // let url = `/sso/authorize?response_type=token&client_id=${name}`
       let redirect_uri = encodeURIComponent(
         location.origin +
-        '/auth-redirect' +
-        (vm.redirect ? '?redirect=' + vm.redirect : '')
+          '/auth-redirect' +
+          (vm.redirect ? '?redirect=' + vm.redirect : '')
       )
       url += `&redirect_uri=${redirect_uri}`
       return url

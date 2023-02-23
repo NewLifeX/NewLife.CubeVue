@@ -1,6 +1,6 @@
 <script lang="ts">
-import { setMenu } from "@/utils/menu"
-import { defineComponent } from "vue"
+import { setMenu } from '@/utils/menu'
+import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'AuthRedirect',
   async created() {
@@ -11,16 +11,15 @@ export default defineComponent({
     // 报错解决：Redirected when going from "/auth-redirect" to "/Admin/User" via a navigation guard
     // https://blog.csdn.net/Tom__cy/article/details/112846816
     // 获取用户信息
-    vm.$api.user.getUserInfo()
-      .then((response: any) => {
-        const data = response.data.data
-        // 设置用户信息
-        vm.$store.dispatch('setUserInfo', data)
-      })
+    vm.$api.user.getUserInfo().then((response: any) => {
+      const data = response.data
+      // 设置用户信息
+      vm.$store.dispatch('setUserInfo', data)
+    })
 
     // 获取菜单信息， 将请求回来的菜单转化成路由以及菜单信息
     vm.$api.menu.getMenu().then((routeRes: any) => {
-      const accessedRouters = routeRes.data.data
+      const accessedRouters = routeRes.data
 
       // 保存一份在浏览器
       setMenu(accessedRouters)
@@ -41,6 +40,6 @@ export default defineComponent({
   },
   render() {
     return ''
-  },
+  }
 })
 </script>

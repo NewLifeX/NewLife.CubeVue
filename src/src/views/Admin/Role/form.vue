@@ -13,10 +13,18 @@
         <el-input v-model="form.name" />
       </el-form-item>
       <el-form-item label="启用" prop="enable">
-        <el-switch v-model="form.enable" active-color="#13ce66" inactive-color="#ff4949" />
+        <el-switch
+          v-model="form.enable"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
       </el-form-item>
       <el-form-item label="系统" prop="isSystem">
-        <el-switch v-model="form.isSystem" active-color="#13ce66" inactive-color="#ff4949" />
+        <el-switch
+          v-model="form.isSystem"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input :rows="4" type="textarea" v-model="form.remark" />
@@ -59,7 +67,9 @@
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="checkAllChange(scope.row)"
-              >全选</el-checkbox>
+              >
+                全选
+              </el-checkbox>
               <el-checkbox
                 v-for="item in scope.row.permissions"
                 :key="scope.row.id + '' + item.k"
@@ -73,12 +83,16 @@
                 :indeterminate="imObj[scope.row.id]"
                 v-model="form['p' + scope.row.id]"
                 @change="parentCheckAllChange(scope.row)"
-              >全选</el-checkbox>
+              >
+                全选
+              </el-checkbox>
               <!-- <el-checkbox>读写</el-checkbox> -->
               <el-checkbox
                 v-model="form['pc_readonly_' + scope.row.id]"
                 @change="roCheck(scope.row)"
-              >只读</el-checkbox>
+              >
+                只读
+              </el-checkbox>
             </template>
           </template>
         </el-table-column>
@@ -219,7 +233,7 @@ export default defineComponent({
     query() {
       let vm = this
       vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
-        vm.form = res.data.data
+        vm.form = res.data
         vm.allCheckUpdate()
       })
     },

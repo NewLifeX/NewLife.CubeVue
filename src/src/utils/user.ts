@@ -4,7 +4,7 @@ const Key = 'userInfo'
 
 export function getUserInfo(): any | null {
   const u = Storage.getItem(Key)
-  if (u) {
+  if (u && u !== 'undefined') {
     return JSON.parse(u)
   }
 

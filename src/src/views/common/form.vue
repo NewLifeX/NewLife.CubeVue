@@ -75,7 +75,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   data() {
@@ -108,8 +108,8 @@ export default defineComponent({
     },
     isEdit() {
       return (this as any).type === 'Edit'
-    }
-    , title() {
+    },
+    title() {
       return (this as any).typeMap[(this as any).type]
     }
   },
@@ -138,19 +138,18 @@ export default defineComponent({
       let path = vm.currentPath
 
       vm.$api.base.getColumns(path).then((res: any) => {
-        vm.fields = res.data.data
+        vm.fields = res.data
       })
     },
     query() {
       let vm = this
       if (vm.isDetail) {
-        vm.$api.base.getDetailData(vm.currentPath, vm.id)
-          .then((res: any) => {
-            vm.form = res.data.data
-          })
+        vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
+          vm.form = res.data
+        })
       } else {
         vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
-          vm.form = res.data.data
+          vm.form = res.data
         })
       }
     },

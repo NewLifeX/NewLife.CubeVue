@@ -91,7 +91,10 @@ function hasPermission(
   }
 
   // 菜单没有这个权限
-  if (permissions.findIndex((f: any) => f.k === actionId) < 0) {
+  // if (permissions!.findIndex((f: any) => f.k === actionId) < 0) {
+  //   return false
+  // }
+  if (!permissions[actionId]) {
     return false
   }
 

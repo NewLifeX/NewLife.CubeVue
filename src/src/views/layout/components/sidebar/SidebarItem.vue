@@ -20,12 +20,7 @@
       </router-link>
     </template>
 
-    <el-sub-menu
-      v-else
-      ref="subMenu"
-      :index="item.path || item.url"
-      popper-append-to-body
-    >
+    <el-sub-menu v-else ref="subMenu" :index="item.path || item.url" teleported>
       <template v-slot:title>
         <item
           v-if="item"

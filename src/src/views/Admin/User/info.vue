@@ -2,9 +2,17 @@
   <el-tabs v-model="activeName">
     <el-tab-pane label="基本信息" name="UserInfo">
       <div class="objform">
-        <el-form label-position="right" label-width="120px" ref="form" :model="form">
+        <el-form
+          label-position="right"
+          label-width="120px"
+          ref="form"
+          :model="form"
+        >
           <el-form-item label="头像" prop="avatar">
-            <img style="height:100px;width:100px;" :src="$store.getters.urls.baseUrl + form.avatar" />
+            <img
+              style="height:100px;width:100px;"
+              :src="$store.getters.urls.baseUrl + form.avatar"
+            />
           </el-form-item>
           <el-form-item label="名称" prop="name">
             <el-input v-model="form.name" disabled></el-input>
@@ -53,7 +61,12 @@
     </el-tab-pane>
     <el-tab-pane label="修改密码" name="ChangePassword">
       <div class="objform">
-        <el-form label-position="right" label-width="120px" ref="form2" :model="form2">
+        <el-form
+          label-position="right"
+          label-width="120px"
+          ref="form2"
+          :model="form2"
+        >
           <el-form-item label="旧密码" prop="oldPassword">
             <el-input type="password" v-model="form2.oldPassword"></el-input>
           </el-form-item>
@@ -96,7 +109,7 @@ export default defineComponent({
   },
   watch: {
     $route: {
-      handler: function () {
+      handler: function() {
         this.init()
       },
       immediate: true
@@ -108,13 +121,12 @@ export default defineComponent({
     },
     query() {
       let vm = this as any
-      vm.$api.user.getUserInfo()
-        .then((resp: any) => {
-          const data = resp.data.data
-          // 设置用户信息，本页修改信息后再掉此方法刷新
-          vm.$store.dispatch('setUserInfo', data)
-          vm.form = data
-        })
+      vm.$api.user.getUserInfo().then((resp: any) => {
+        const data = resp.data
+        // 设置用户信息，本页修改信息后再掉此方法刷新
+        vm.$store.dispatch('setUserInfo', data)
+        vm.form = data
+      })
     },
     confirm() {
       let vm = this as any

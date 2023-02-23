@@ -231,19 +231,18 @@ export default defineComponent({
       let vm = this
       let path = vm.currentPath
       vm.$api.base.getColumns(path).then((res) => {
-        vm.fields = res.data.data
+        vm.fields = res.data
       })
     },
     query() {
       let vm = this
       if (vm.isDetail) {
-        vm.$api.base.getDetailData(vm.currentPath, vm.id)
-          .then((res) => {
-            vm.form = res.data.data
-          })
+        vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res) => {
+          vm.form = res.data
+        })
       } else {
         vm.$api.base.getData(vm.currentPath, vm.id).then((res) => {
-          vm.form = res.data.data
+          vm.form = res.data
         })
       }
     },

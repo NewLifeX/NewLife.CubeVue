@@ -110,7 +110,7 @@ const interceptorsConfig = {
       } else if (res.code === 403) {
         return handle403(res)
       } else {
-        return response
+        return res
       }
     } else {
       console.log('格式错误', res) // for debug
