@@ -7,20 +7,20 @@ import { createCubeUI } from 'CubeUI'
 import App from './App.vue'
 
 import 'element-plus/dist/index.css'
-import '../../lib/CubeUI.css'
+import '../lib/CubeUI.css'
 
-let cubeUI = createCubeUI(VueRouter, Vuex, Element, ElementIcons)
+let cubeUI = createCubeUI()
 
 const app = createApp(App)
 app.use(cubeUI)
 
-let store = cubeUI.store
+let store = app.config.globalProperties.$store
 
 // 注册组件
-const files = require.context('@/views/', true, /^.*\.vue$/)
+const files = require.context('@/', true, /^.*\.vue$/)
 store.dispatch('setFiles', files)
 
 // store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-store.dispatch('setUrls', { baseUrl: 'http://81.69.253.197:8000' })
+store.dispatch('setUrls', { baseUrl: 'https://cube.newlifex.com' })
 
 app.mount('#app')

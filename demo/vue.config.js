@@ -22,14 +22,14 @@ module.exports = {
           args[0].cdn = {
             js: [
               // 'https://cdn.jsdelivr.net/npm/vue',
-              'https://cdn.bootcdn.net/ajax/libs/vue/3.2.20/vue.min.js',
-              'https://cdn.bootcdn.net/ajax/libs/vue-router/4.0.12/vue-router.cjs.min.js',
-              'https://cdn.bootcdn.net/ajax/libs/vuex/4.0.2/vuex.cjs.min.js',
+              'https://cdn.bootcdn.net/ajax/libs/vue/3.2.47/vue.min.js',
+              'https://cdn.bootcdn.net/ajax/libs/vue-router/4.1.6/vue-router.cjs.min.js',
+              'https://cdn.bootcdn.net/ajax/libs/vuex/4.1.0/vuex.cjs.min.js',
               'https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js',
-              'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.8/index.min.js'
+              'https://cdnjs.cloudflare.com/ajax/libs/element-plus/2.2.32/index.full.js'
             ],
             css: [
-              'https://cdn.bootcdn.net/ajax/libs/element-ui/2.15.8/theme-chalk/index.min.css'
+              'https://cdnjs.cloudflare.com/ajax/libs/element-plus/2.2.32/theme-chalk/index.min.css'
             ]
           }
           console.log(args[0])
@@ -39,21 +39,21 @@ module.exports = {
     }
   },
   configureWebpack: (config) => {
-    if (isProduction) {
-      config.externals = {
-        vue: {
-          root: 'Vue', // 指向全局变量
-          commonjs: 'vue',
-          commonjs2: 'vue',
-          amd: 'vue'
-        },
-        // vue: 'Vue',
-        vuex: 'Vuex',
-        'vue-router': 'VueRouter',
-        axios: 'axios',
-        'element-ui': 'ELEMENT'
-      }
-    }
+    // if (isProduction) {
+    //   config.externals = {
+    //     vue: {
+    //       root: 'Vue', // 指向全局变量
+    //       commonjs: 'vue',
+    //       commonjs2: 'vue',
+    //       amd: 'vue'
+    //     },
+    //     vuex: 'Vuex',
+    //     'vue-router': 'VueRouter',
+    //     axios: 'axios',
+    //     'element-plus': 'ElementPlus',
+    //     '@element-plus/icons': 'ElementPlusIcons'
+    //   }
+    // }
 
     // 源码映射，用于调试
     config.devtool = 'source-map'

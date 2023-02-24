@@ -12,11 +12,32 @@ module.exports = {
           commonjs2: 'vue',
           amd: 'vue'
         },
-        vuex: 'vuex',
-        'vue-router': 'vue-router',
+        vuex: {
+          root: 'Vuex', // 指向全局变量
+          commonjs: 'vuex',
+          commonjs2: 'vuex',
+          amd: 'vuex'
+        },
+
+        'vue-router': {
+          root: 'VueRouter', // 指向全局变量
+          commonjs: 'vue-router',
+          commonjs2: 'vue-router',
+          amd: 'vue-router'
+        },
         axios: 'axios',
-        'element-plus': 'element-plus',
-        '@element-plus/icons': '@element-plus/icons'
+        'element-plus': {
+          root: 'ElementPlus', // 指向全局变量
+          commonjs: 'element-plus',
+          commonjs2: 'element-plus',
+          amd: 'element-plus'
+        },
+        '@element-plus/icons': {
+          root: 'ElementPlusIcons', // 指向全局变量
+          commonjs: '@element-plus/icons',
+          commonjs2: '@element-plus/icons',
+          amd: '@element-plus/icons'
+        }
       }
     }
 
