@@ -6,11 +6,8 @@ import camelCase from 'lodash/camelCase'
  * @param app
  * @param fileContext const fileContext = require.context('@/views/components', true, /\w+\.(vue|js)$/)
  */
-export const requireComponent = (
-  app: any,
-  fileContext: __WebpackModuleApi.RequireContext
-) => {
-  fileContext.keys().forEach((fileName) => {
+export const requireComponent = (app: any, fileContext: any) => {
+  fileContext.keys().forEach((fileName: string) => {
     // 获取组件配置
     const componentConfig = fileContext(fileName)
 

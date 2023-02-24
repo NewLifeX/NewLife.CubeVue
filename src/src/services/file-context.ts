@@ -28,18 +28,22 @@ const keys = function fileContextKeys() {
   return Object.keys(map)
 }
 
-const addFiles = function fileContextAddFiles(
-  files: __WebpackModuleApi.RequireContext
-) {
-  files.keys().forEach((value) => {
-    const id = files.resolve(value)
-    map[id] = files(value)
+const addFiles = function fileContextAddFiles(files: any) {
+  files.keys().forEach((value: any) => {
+    // 在本地调试的时候“files.resolve(value)”获取的id是“./src”开头的路径
+    // 打包后运行获取到的是一个4位长的编码
+    // const id = files.resolve(value)
+    map[value] = files(value)
   })
 }
 
+/**
+ * 解析组件，id传值路径规则：src目录为起始目录
+ * 例如：./App.vue
+ */
 const resolve = (id: any) => {
   if (id.startsWith('@/')) {
-    id = id.replace('@/', './src/')
+    id = id.replace('@/', './')
   }
 
   if (keys().includes(id)) {
