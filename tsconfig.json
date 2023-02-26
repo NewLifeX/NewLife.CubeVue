@@ -1,47 +1,12 @@
 {
+  "extends": "./src/.umi/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
     "declaration": true,
     "declarationDir": "./src",
-    "outDir": "../lib",
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
+    "outDir": "./lib",
     "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
-    "typeRoots": [
-      "./src",
-      "./node_modules/@types"
-    ],
-    "paths": {
-      "@/*": [
-        "src/*"
-      ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
+    "src/**/*.vue"
   ]
 }

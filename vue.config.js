@@ -32,11 +32,11 @@ module.exports = {
           commonjs2: 'element-plus',
           amd: 'element-plus'
         },
-        '@element-plus/icons': {
+        '@element-plus/icons-vue': {
           root: 'ElementPlusIcons', // 指向全局变量
-          commonjs: '@element-plus/icons',
-          commonjs2: '@element-plus/icons',
-          amd: '@element-plus/icons'
+          commonjs: '@element-plus/icons-vue',
+          commonjs2: '@element-plus/icons-vue',
+          amd: '@element-plus/icons-vue'
         }
       }
     }

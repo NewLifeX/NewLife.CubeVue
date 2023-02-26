@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import * as VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import * as Element from 'element-plus'
-import * as ElementIcons from '@element-plus/icons'
+import * as ElementIcons from '@element-plus/icons-vue'
 import { createCubeUI } from 'CubeUI'
 import App from './App.vue'
 
