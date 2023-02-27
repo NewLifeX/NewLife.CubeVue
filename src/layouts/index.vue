@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from '@/views/layout/components'
-import ResizeMixin from '@/views/layout/mixin/ResizeHandler'
+import { Navbar, Sidebar, AppMain } from '@/views/layout/components';
+import ResizeMixin from '@/views/layout/mixin/ResizeHandler';
 
 export default {
   components: {
@@ -28,14 +28,14 @@ export default {
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
-      return this.$store.state.app.sidebar
+      return this.$store.state.app.sidebar;
     },
     device() {
-      return this.$store.state.app.device
+      return this.$store.state.app.device;
     },
     hiddenLayout() {
-      let query = this.$route.query
-      return query.hiddenLayout === 'true' || query.hl === 'true'
+      let query = this.$route.query;
+      return query.hiddenLayout === 'true' || query.hl === 'true';
     },
     classObj() {
       return {
@@ -43,22 +43,22 @@ export default {
         openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
-      }
+      };
     },
     classAppMain() {
       return {
         hiddenLayout: this.hiddenLayout,
         hideSidebarMain: !this.sidebar.opened,
         openSidebarMain: this.sidebar.opened,
-      }
+      };
     },
   },
   methods: {
     handleClickOutside() {
-      this.$store.dispatch('closeSideBar', { withoutAnimation: false })
+      this.$store.dispatch('closeSideBar', { withoutAnimation: false });
     },
   },
-}
+};
 </script>
 
 <style>

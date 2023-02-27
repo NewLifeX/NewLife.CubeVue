@@ -4,12 +4,12 @@ import {
   NavigationGuardWithThis,
   NavigationHookAfter,
   Router,
-  RouterOptions
-} from 'vue-router'
-import fileContext from '@/services/file-context'
-import beforeEachFn from './beforeEach'
+  RouterOptions,
+} from 'vue-router';
+import fileContext from '@/services/file-context';
+import beforeEachFn from './beforeEach';
 
-const Layout = () => Promise.resolve(fileContext('@/views/layout/index.vue'))
+const Layout = () => Promise.resolve(fileContext('@/views/layout/index.vue'));
 // () => import('@/views/layout/index.vue')
 
 export const constantRouterMap = [
@@ -27,13 +27,13 @@ export const constantRouterMap = [
   {
     path: '/login',
     component: () => Promise.resolve(fileContext('@/views/account/login.vue')),
-    hidden: true
+    hidden: true,
   },
   {
     path: '/auth-redirect',
     component: () =>
-      Promise.resolve(fileContext('@/views/account/authRedirect.vue')),
-    hidden: true
+      Promise.resolve(fileContext('@/views/account/auth-redirect.vue')),
+    hidden: true,
   },
   {
     path: '',
@@ -47,10 +47,10 @@ export const constantRouterMap = [
         name: 'UserInfo',
         meta: {
           title: '个人信息',
-          noCache: true
-        }
-      }
-    ]
+          noCache: true,
+        },
+      },
+    ],
   },
   // {
   //   path: '/404',
@@ -75,32 +75,32 @@ export const constantRouterMap = [
         meta: {
           title: '首页',
           icon: 'dashboard',
-          noCache: true
-        }
-      }
-    ]
+          noCache: true,
+        },
+      },
+    ],
   },
   {
     path: '/Admin/Index/Main',
-    redirect: 'dashboard'
-  }
-]
+    redirect: 'dashboard',
+  },
+];
 
 export const asyncRouterMap = [
   {
     path: '*',
     redirect: '/404',
-    hidden: true
-  }
-]
+    hidden: true,
+  },
+];
 
 export const routerOptions = {
   history: createWebHistory(),
   scrollBehavior: () => ({
-    top: 0
+    top: 0,
   }),
-  routes: constantRouterMap
-}
+  routes: constantRouterMap,
+};
 
 /**
  * 安装路由
@@ -113,24 +113,24 @@ export const createRouter = (
   app: any,
   configure: ((routerOptions: RouterOptions) => void) | undefined | null = null,
   beforeEach: NavigationGuardWithThis<undefined> | undefined | null = null,
-  afterEach: NavigationHookAfter | undefined | null = null
+  afterEach: NavigationHookAfter | undefined | null = null,
 ): Router => {
   if (configure) {
-    configure(routerOptions)
+    configure(routerOptions);
   }
 
-  const router = create(routerOptions)
-  app.use(router)
+  const router = create(routerOptions);
+  app.use(router);
 
   if (beforeEach) {
-    router.beforeEach(beforeEach)
+    router.beforeEach(beforeEach);
   } else {
-    router.beforeEach(beforeEachFn)
+    router.beforeEach(beforeEachFn);
   }
 
   if (afterEach) {
-    router.afterEach(afterEach)
+    router.afterEach(afterEach);
   }
 
-  return router
-}
+  return router;
+};

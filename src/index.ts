@@ -71,14 +71,14 @@ const install: any = (app: any) => {
     menuRouters = store.getters.addRouters;
   }
 
-  // // 配置路由
-  // const router = createRouter(app, (options) => {
-  //   // options.history = createWebHashHistory()
+  // 配置路由
+  const router = createRouter(app, (options) => {
+    // options.history = createWebHashHistory()
 
-  //   // 从本地缓存加载的路由必须在这里添加
-  //   // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
-  //   options.routes = menuRouters.concat(options.routes)
-  // })
+    // 从本地缓存加载的路由必须在这里添加
+    // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
+    options.routes = menuRouters.concat(options.routes);
+  });
 
   app.use(elementUI, { size: store.state.app.size });
   for (const key in elementIcons) {

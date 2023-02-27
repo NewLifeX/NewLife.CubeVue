@@ -7,7 +7,7 @@
     />
     <div class="left-menu">
       <a href="/">
-        <span style="display: inline-block;">{{ displayName }}</span>
+        <span style="display: inline-block">{{ displayName }}</span>
       </a>
     </div>
     <div class="right-menu">
@@ -44,18 +44,18 @@
           <el-dropdown-menu class="avatar-dropdown">
             <router-link to="/">
               <el-dropdown-item>
-                <span style="display:inline-block;">首页</span>
+                <span style="display: inline-block">首页</span>
               </el-dropdown-item>
             </router-link>
 
             <router-link to="/Admin/User/Info">
               <el-dropdown-item divided>
-                <span style="display:inline-block;">个人信息</span>
+                <span style="display: inline-block">个人信息</span>
               </el-dropdown-item>
             </router-link>
 
             <el-dropdown-item divided>
-              <span style="display:block;" @click="logout">退出登录</span>
+              <span style="display: block" @click="logout">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -65,63 +65,66 @@
 </template>
 
 <script lang="ts">
-import Hamburger from '@/views/layout/components/hamburger.vue'
+import Hamburger from '@/views/layout/components/hamburger.vue';
 // import SizeSelect from 'src/components/SizeSelect'
 // import ThemePicker from 'src/components/ThemePicker'
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
-    Hamburger
+    Hamburger,
     // Screenfull,
     // SizeSelect,
     // ThemePicker,
   },
   computed: {
+    store() {
+      return this.$store;
+    },
     sidebar() {
-      return this.$store.getters.sidebar
+      return this.$store.getters.sidebar;
     },
     userInfo() {
-      return this.$store.getters.userInfo || {}
+      return this.$store.getters.userInfo || {};
     },
     sysConfig() {
-      return this.$store.getters.sysConfig
+      return this.$store.getters.sysConfig;
     },
     urls() {
-      return this.$store.getters.urls
+      return this.$store.getters.urls;
     },
     myAvatar() {
-      const vm = this as any
-      let avatar = vm.userInfo && vm.userInfo.avatar
+      const vm = this as any;
+      let avatar = vm.userInfo && vm.userInfo.avatar;
       if (avatar) {
         if (avatar.indexOf('http') !== 0) {
-          avatar = vm.urls.baseUrl + avatar
+          avatar = vm.urls.baseUrl + avatar;
         }
-        return avatar
+        return avatar;
       }
-      return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80'
+      return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80';
     },
     displayName() {
-      const vm = this as any
+      const vm = this as any;
       if (vm.sysConfig && vm.sysConfig.displayName) {
-        return vm.sysConfig.displayName
+        return vm.sysConfig.displayName;
       }
-      return ''
-    }
+      return '';
+    },
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('toggleSideBar')
+      this.store.dispatch('toggleSideBar');
     },
     logout() {
-      const vm = this
+      const vm = this as any;
       vm.$api.user.logout().then(() => {
-        vm.$store.dispatch('logout')
-        location.reload() // 为了重新实例化vue-router对象 避免bug
-      })
-    }
-  }
-})
+        vm.store.dispatch('logout');
+        location.reload(); // 为了重新实例化vue-router对象 避免bug
+      });
+    },
+  },
+});
 </script>
 
 <style acoped>

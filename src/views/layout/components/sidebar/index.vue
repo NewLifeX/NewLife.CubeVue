@@ -23,61 +23,61 @@
 </template>
 
 <script lang="ts">
-import { getMenu } from '@/utils/menu'
-import { defineComponent } from 'vue'
-import SidebarItem from './SidebarItem.vue'
+import { getMenu } from '@/utils/menu';
+import { defineComponent } from 'vue';
+import SidebarItem from './SidebarItem.vue';
 
 export default defineComponent({
   name: 'Sidebar',
   components: { SidebarItem },
   computed: {
     menuRouters(): any {
-      const vm = this
-      let menuRouters = vm.$store.getters.menuRouters
+      const vm = this;
+      let menuRouters = vm.$store.getters.menuRouters;
 
       if (menuRouters && menuRouters.length > 0) {
-        return menuRouters
+        return menuRouters;
       }
 
-      const menus = getMenu()
+      const menus = getMenu();
       if (menus && menus.length > 0) {
         // 将菜单数据转化成路由以及菜单信息
-        const accessedRouters = menus
+        const accessedRouters = menus;
 
         // 设置路由信息
-        vm.$store.dispatch('generateRoutes', accessedRouters)
+        vm.$store.dispatch('generateRoutes', accessedRouters);
 
         // 添加路由信息
-        const addRouters = vm.$store.getters.addRouters
+        const addRouters = vm.$store.getters.addRouters;
         if (addRouters) {
           addRouters.forEach((e: any) => {
-            vm.$router.addRoute(e) // 动态添加可访问路由表
-          })
+            vm.$router.addRoute(e); // 动态添加可访问路由表
+          });
         }
       }
 
-      menuRouters = vm.$store.getters.menuRouters
+      menuRouters = vm.$store.getters.menuRouters;
 
-      return menuRouters
+      return menuRouters;
     },
     sidebar(): any {
-      return this.$store.getters.sidebar
+      return this.$store.getters.sidebar;
     },
     isCollapse(): any {
-      return !(this as any).sidebar.opened
-    }
+      return !(this as any).sidebar.opened;
+    },
   },
   data() {
     return {
       active: '1-1-1',
-      data: []
-    }
+      data: [],
+    };
   },
   created() {
     // window.menuRouters = this.menuRouters
     // console.log(this.menuRouters)
-  }
-})
+  },
+});
 </script>
 
 <style scoped>

@@ -38,7 +38,7 @@
               v-else
               v-model="form[item.name]"
               type="text"
-              size="medium"
+              size="default"
             />
             <span>{{ item.description }}</span>
           </el-form-item>
@@ -57,61 +57,61 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   props: ['path'],
   data() {
     return {
       form: {} as any,
-      properties: [] as any
-    }
+      properties: [] as any,
+    };
   },
   computed: {
     currentPath() {
-      return this.path
-    }
+      return this.path;
+    },
   },
   watch: {
     $route: {
-      handler: function() {
-        this.init()
+      handler: function () {
+        this.init();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     init() {
-      this.query()
+      this.query();
     },
     query() {
-      let vm = this
+      let vm = this;
       vm.$api.config.getObject(vm.currentPath).then((res) => {
-        vm.form = res.data.value
-        vm.properties = res.data.properties
-      })
+        vm.form = res.data.value;
+        vm.properties = res.data.properties;
+      });
     },
     confirm() {
-      let vm = this
+      let vm = this;
       vm.$api.config.updateObject(vm.currentPath, vm.form).then(() => {
-        let msg = '保存成功'
+        let msg = '保存成功';
 
         if (!vm.form.enableNewUI) {
-          msg += '，正在跳转页面'
+          msg += '，正在跳转页面';
         }
 
         vm.$message({
           message: msg,
           type: 'success',
-          duration: 3 * 1000
-        })
+          duration: 3 * 1000,
+        });
 
         if (!vm.form.enableNewUI) {
-          location.href = '/'
+          location.href = '/';
         }
-      })
-    }
-  }
-})
+      });
+    },
+  },
+});
 </script>
 
 <style scoped>

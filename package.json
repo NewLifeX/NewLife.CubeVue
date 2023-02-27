@@ -4,7 +4,7 @@
   "description": "NewLife.Cube New UI",
   "scripts": {
     "start": "umi dev",
-    "serve": "umi dev",
+    "serve": "vue-cli-service serve",
     "build": "umi build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --no-clean --target lib --dest ../demo/lib --name CubeUI ./src/index.ts",
@@ -26,7 +26,6 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.21",
     "@umijs/preset-vue": "^4.0.53",
     "@vue/cli-plugin-babel": "~4.5.15",
     "@vue/cli-plugin-router": "^4.5.15",

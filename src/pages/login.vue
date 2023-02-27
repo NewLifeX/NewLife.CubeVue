@@ -75,7 +75,7 @@
               <img
                 v-if="mi.logo"
                 :src="getLogoUrl(mi.logo)"
-                style="width: 64px;height: 64px;"
+                style="width: 64px; height: 64px"
               />
               <template v-else>{{ mi.nickName || mi.name }}</template>
             </a>
