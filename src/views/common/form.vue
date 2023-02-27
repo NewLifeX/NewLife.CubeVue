@@ -75,43 +75,43 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   data() {
     return {
       form: {} as any,
       fields: [] as any,
-      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' }
-    }
+      typeMap: { Add: '新增', Detail: '查看', Edit: '编辑' },
+    };
   },
   computed: {
     id() {
-      return this.$route.params.id
+      return this.$route.params.id;
     },
     currentPath() {
-      let vm = this as any
-      let rplStr = `/${vm.type}`
+      let vm = this as any;
+      let rplStr = `/${vm.type}`;
       if (!vm.isAdd) {
-        rplStr += `/${vm.id}`
+        rplStr += `/${vm.id}`;
       }
-      return this.$route.path.replace(rplStr, '')
+      return this.$route.path.replace(rplStr, '');
     },
     type(): string {
-      return this.$route.params.type.toString()
+      return this.$route.params.type.toString();
     },
     isAdd() {
-      return (this as any).type === 'Add'
+      return (this as any).type === 'Add';
     },
     isDetail() {
-      return (this as any).type === 'Detail'
+      return (this as any).type === 'Detail';
     },
     isEdit() {
-      return (this as any).type === 'Edit'
+      return (this as any).type === 'Edit';
     },
     title() {
-      return (this as any).typeMap[(this as any).type]
-    }
+      return (this as any).typeMap[(this as any).type];
+    },
   },
   // watch: {
   // 原本是通过路由变化初始化数据，但是切换页面时仍会触发
@@ -123,71 +123,73 @@ export default defineComponent({
   //   }
   // },
   created() {
-    this.init()
+    this.init();
   },
   methods: {
     init() {
-      this.getColumns()
+      this.getColumns();
       if (!this.isAdd) {
-        this.query()
+        this.query();
       }
     },
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
-      let vm = this
-      let path = vm.currentPath
+      let vm = this;
+      let path = vm.currentPath;
 
       vm.$api.base.getColumns(path).then((res: any) => {
-        vm.fields = res.data
-      })
+        vm.fields = res.data;
+      });
     },
     query() {
-      let vm = this
+      let vm = this;
       if (vm.isDetail) {
         vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
-          vm.form = res.data
-        })
+          vm.form = res.data;
+        });
       } else {
         vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
-          vm.form = res.data
-        })
+          vm.form = res.data;
+        });
       }
     },
     confirm() {
-      let vm = this
+      let vm = this;
       if (vm.isAdd) {
         vm.$api.base.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '新增成功',
             type: 'success',
-            duration: 5 * 1000
-          })
-        })
+            duration: 5 * 1000,
+          });
+          vm.$router.go(-1);
+        });
       } else {
         vm.$api.base.edit(vm.currentPath, vm.form).then(() => {
           vm.$message({
             message: '保存成功',
             type: 'success',
-            duration: 5 * 1000
-          })
-        })
+            duration: 5 * 1000,
+          });
+          vm.$router.go(-1);
+        });
       }
     },
     returnIndex() {
-      this.$router.push(this.currentPath)
+      this.$router.push(this.currentPath);
     },
     showInForm(col: any) {
-      let vm = this
+      let vm = this;
       if (vm.isAdd) {
-        return col.showInAddForm
+        return col.showInAddForm;
       } else if (vm.isDetail) {
-        return col.showInDetailForm
+        return col.showInDetailForm;
       } else {
-        return col.showInEditForm
+        return col.showInEditForm;
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style scoped>
