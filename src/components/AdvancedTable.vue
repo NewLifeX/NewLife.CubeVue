@@ -77,6 +77,9 @@ export default defineComponent({
         pageSize: 10,
         pageIndex: 1,
         total: 0,
+        totalCount: 0,
+        desc: true,
+        sort: undefined,
       },
       // 搜索参数
       searchParams: {},
@@ -137,9 +140,8 @@ export default defineComponent({
         // limit: this.pager.pageSize,
         // offset: this.pager.pageIndex - 1,
         // currentPage: this.pager.pageIndex,
-        pageSize: this.pager.pageSize,
         keyWord: searchParams.txtKeywords,
-        pageIndex: this.pager.pageIndex,
+        ...this.pager,
         ...searchParams,
       };
 
@@ -170,6 +172,9 @@ export default defineComponent({
         pageSize: 10,
         pageIndex: 1,
         total: 0,
+        totalCount: 0,
+        desc: true,
+        sort: undefined,
       };
       this.searchParams = {};
       this.getDataList();
@@ -233,6 +238,21 @@ export default defineComponent({
         }
       });
     },
+    handlerSortChange({ col, prop, order }: any) {
+      console.log(col, prop, order);
+
+      if (order === 'ascending') {
+        this.pager.desc = false;
+        this.pager.sort = prop;
+      } else if (order === 'descending') {
+        this.pager.desc = true;
+        this.pager.sort = prop;
+      } else {
+        this.pager.desc = true;
+        this.pager.sort = undefined;
+      }
+      this.getDataList();
+    },
   },
   render(ctx: any) {
     return (
@@ -270,6 +290,7 @@ export default defineComponent({
             normalHeight={ctx.normalTableHeight}
             onSelectionChange={ctx.setSelectList}
             onHandlerClick={ctx.handler}
+            onSortChange={ctx.handlerSortChange}
             {...ctx.$attrs}
             v-slots={ctx.$slots}
           ></NormalTable>
