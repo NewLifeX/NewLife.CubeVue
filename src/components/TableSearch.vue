@@ -34,108 +34,111 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref } from 'vue';
 // import singleSelect from '../../components/singleSelect'
 // import multipleSelect from '../../components/multipleSelect'
-import FormControl from './FormControl.vue'
+import FormControl from './FormControl.vue';
 
 export default defineComponent({
   name: 'TableSearch',
   components: {
-    FormControl
+    FormControl,
   },
   props: {
     columns: {
       type: Array as PropType<any[]>,
-      default: () => [] as any[]
+      default: () => [] as any[],
     },
     modelValue: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     searchMethod: {
       type: Function,
-      default: undefined
+      default: undefined,
     },
     resetSearchMethod: {
       type: Function,
-      default: undefined
-    }
+      default: undefined,
+    },
   },
   emits: ['getDataList', 'resetSearch', 'update:modelValue'],
   data() {
     return {
-      model: {} as any
-    }
+      model: {} as any,
+    };
   },
   watch: {
     model: {
       handler(val) {
-        this.$emit('update:modelValue', val)
+        this.$emit('update:modelValue', val);
       },
-      deep: true
+      deep: true,
     },
     modelValue(val) {
-      this.model = val
-    }
+      this.model = val;
+    },
   },
   created() {
-    this.model = this.modelValue // JSON.parse(JSON.stringify(this.modelValue))
+    this.model = this.modelValue; // JSON.parse(JSON.stringify(this.modelValue))
 
-    let columns = this.columns
+    const columns = this.columns;
     for (const key in columns) {
       if (Object.prototype.hasOwnProperty.call(columns, key)) {
-        const item = columns[key]
+        const item = columns[key];
         // console.log(item)
 
         if (
           item.name.includes('$') &&
           item.itemType === 'datePicker' &&
           item.options &&
-          item.options.includes('type=daterange') &&
-          !item.options.includes('setDefaultValue=false')
+          (item.options.type === 'daterange' ||
+            (typeof item.options === 'string' &&
+              item.options.includes('type=daterange'))) &&
+          (item.options.setDefaultValue ||
+            (typeof item.options === 'string' &&
+              !item.options.includes('setDefaultValue=false')))
         ) {
-          // console.log('daterange')
-          let name = item.name
-          let names = name.split('$')
+          const name = item.name;
+          const names = name.split('$');
 
           // 如果是日期范围选择器，默认值设为最近一个月
-          const end = new Date()
-          const start = new Date()
-          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          const end = new Date();
+          const start = new Date();
+          start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
           // 此格式化可能不同浏览器表现不同，返回的可能不是YYYY-MM-DD格式
-          this.model[names[0]] = start.toLocaleDateString('fr-CA')
-          this.model[names[1]] = end.toLocaleDateString('fr-CA')
+          this.model[names[0]] = start.toLocaleDateString('fr-CA');
+          this.model[names[1]] = end.toLocaleDateString('fr-CA');
 
           // console.log('daterange', this.model[item.name])
         }
 
         // 默认值设置
         if (typeof item.value !== 'undefined') {
-          this.model[item.name] = item.value
+          this.model[item.name] = item.value;
         }
       }
     }
   },
   methods: {
     search() {
-      let vm = this
+      const vm = this;
       if (vm.searchMethod) {
-        vm.searchMethod()
+        vm.searchMethod();
       } else {
-        this.$emit('getDataList')
+        this.$emit('getDataList');
       }
     },
     resetSearch() {
-      let vm = this
+      const vm = this;
       if (vm.resetSearchMethod) {
-        vm.resetSearchMethod()
+        vm.resetSearchMethod();
       } else {
-        this.$emit('resetSearch')
+        this.$emit('resetSearch');
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

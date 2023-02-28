@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
+import { defineComponent, PropType } from 'vue';
 // import CustomSelect from './CustomSelect.vue'
 export default defineComponent({
   name: 'FormControl',
@@ -110,8 +110,8 @@ export default defineComponent({
     // 字段配置
     configs: {
       type: Object,
-      default: {}
-    }
+      default: {},
+    },
   },
   emits: ['update:modelValue'],
   data() {
@@ -121,63 +121,63 @@ export default defineComponent({
         {
           text: '昨天',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+            return [start, end];
+          },
         },
         {
           text: '今天',
           value() {
-            const end = new Date()
-            const start = new Date()
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            return [start, end];
+          },
         },
         {
           text: '最近一周',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end];
+          },
         },
         {
           text: '最近一个月',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            return [start, end]
-          }
-        }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end];
+          },
+        },
       ],
       // 选项列表
-      dataList: [] as any
-    }
+      dataList: [] as any,
+    };
   },
   computed: {
     // ui组件的配置
     options(): any {
-      let vm = this
-      let obj = {} as any
-      let configs = vm.configs
+      let vm = this;
+      let obj = {} as any;
+      let configs = vm.configs;
 
       if (!configs.options) {
-        return obj
+        return obj;
       }
 
       // 如果options本身就是对象，直接返回
       if (typeof configs.options === 'object') {
-        return configs.options
+        return configs.options;
       }
 
-      let searchParams = new URLSearchParams(configs.options) as any
+      let searchParams = new URLSearchParams(configs.options) as any;
       for (const item of searchParams) {
-        let val = item[1] as any
+        let val = item[1] as any;
         // if (val.startsWith('{') || val.startsWith('[]')) {
         //   val = JSON.parse(val)
         // }
@@ -188,13 +188,13 @@ export default defineComponent({
         // } else if (val === 'false') {
         //   val = false
         // }
-        obj[item[0]] = val
+        obj[item[0]] = val;
       }
       // console.log('options', obj)
-      return obj
+      return obj;
     },
     name() {
-      return this.configs.name
+      return this.configs.name;
     },
     selectOptions() {
       return this.dataList.map(
@@ -205,43 +205,45 @@ export default defineComponent({
             value:
               this.options.multiple === 'true' || this.options.multiple === true
                 ? this.getValueByDataType(x, this.options) + ''
-                : this.getValueByDataType(x, this.options)
-          })
-      )
-    }
+                : this.getValueByDataType(x, this.options),
+          }),
+      );
+    },
   },
   watch: {
     model(val, oldVal) {
-      let name = this.name
-      let configs = this.configs
-      let options = this.options
+      let name = this.name;
+      let configs = this.configs;
+      let options = this.options;
 
       // 字段名包含$，特殊处理
-      let temp = this.modelValue as any
+      let temp = this.modelValue as any;
       if (name.includes('$')) {
-        let arr = val // temp[name]
-        let names = name.split('$')
+        let arr = val; // temp[name]
+        let names = name.split('$');
 
         if (
           configs.itemType === 'datePicker' &&
           configs.options &&
-          configs.options.includes('type=daterange')
+          (configs.options.type === 'daterange' ||
+            (typeof configs.options === 'string' &&
+              configs.options.includes('type=daterange')))
         ) {
           // 日期范围
 
           if (this.valueValidate(arr)) {
-            temp[names[0]] = arr[0]
-            temp[names[1]] = arr[1]
+            temp[names[0]] = arr[0];
+            temp[names[1]] = arr[1];
           } else {
-            temp[names[0]] = undefined
-            temp[names[1]] = undefined
+            temp[names[0]] = undefined;
+            temp[names[1]] = undefined;
           }
         } else if (configs.itemType === 'checkbox') {
           // 多选框
           if (this.valueValidate(arr)) {
-            temp[names[0]] = arr.join()
+            temp[names[0]] = arr.join();
           } else {
-            temp[names[0]] = undefined
+            temp[names[0]] = undefined;
           }
         } else if (
           configs.itemType === 'select' &&
@@ -249,20 +251,20 @@ export default defineComponent({
         ) {
           // 多选下拉
           if (this.valueValidate(arr)) {
-            temp[names[0]] = arr.join()
+            temp[names[0]] = arr.join();
           } else {
-            temp[names[0]] = undefined
+            temp[names[0]] = undefined;
           }
         } else {
-          console.warn('表单名中带$，但是未配置处理器')
+          console.warn('表单名中带$，但是未配置处理器');
         }
       } else {
         if (configs.itemType === 'select' && !this.valueValidate(val)) {
           // 下拉框上点击清除时，值为空字符串，处理为undefined
-          val = undefined
+          val = undefined;
         }
 
-        temp[name] = val
+        temp[name] = val;
       }
 
       // 因为是对象引用，单属性值变化，可以不触发更新
@@ -271,26 +273,27 @@ export default defineComponent({
     // 外部修改此值，以便传递到model
     modelValue: {
       handler(val: any, oldVal) {
-        let name = this.name
-        let value = val[this.name]
-        let configs = this.configs
-        let options = this.options
+        let name = this.name;
+        let value = val[this.name];
+        let configs = this.configs;
+        let options = this.options;
         // console.log('modelValue', val, oldVal, value)
 
         // 字段名包含$，特殊处理
         if (name.includes('$')) {
-          let names = name.split('$')
+          const names = name.split('$');
           if (
             configs.itemType === 'datePicker' &&
             configs.options &&
-            configs.options.includes('type=daterange')
+            (configs.options.type === 'daterange' ||
+              configs.options.toString().includes('type=daterange'))
           ) {
             // 日期范围从$分割的两个字段中取值
-            let val1 = val[names[0]]
-            let val2 = val[names[1]]
+            const val1 = val[names[0]];
+            const val2 = val[names[1]];
 
             if (this.valueValidate(val1) && this.valueValidate(val2)) {
-              this.model = [val1, val2]
+              this.model = [val1, val2];
               // ;(this.modelValue as any)[name] = undefined
             } else {
               // 如果分割后的两个字段不为空，就不用重置值。因为有可能传进来的值为空是上面的if设置导致
@@ -298,18 +301,18 @@ export default defineComponent({
                 !(this.modelValue as any)[names[0]] ||
                 !(this.modelValue as any)[names[1]]
               ) {
-                this.model = undefined
+                this.model = undefined;
               }
             }
           } else if (configs.itemType === 'checkbox') {
             // 外部传进来的应是逗号隔开的值，传值的字段从name中分离出，然后在这里被序列化成数组
             // value 重新取值
-            value = val[names[0]]
+            value = val[names[0]];
             if (this.valueValidate(value)) {
-              let arr = value.split(',')
-              this.model = arr
+              const arr = value.split(',');
+              this.model = arr;
             } else {
-              this.model = undefined
+              this.model = undefined;
             }
           } else if (
             configs.itemType === 'select' &&
@@ -317,12 +320,12 @@ export default defineComponent({
           ) {
             // 外部传进来的应是逗号隔开的值，传值的字段从name中分离出，然后在这里被序列化成数组
             // value 重新取值
-            value = val[names[0]]
+            value = val[names[0]];
             if (this.valueValidate(value)) {
-              let arr = value.split(',')
-              this.model = arr
+              const arr = value.split(',');
+              this.model = arr;
             } else {
-              this.model = []
+              this.model = [];
             }
           }
         } else {
@@ -330,28 +333,28 @@ export default defineComponent({
             configs.itemType === 'select' &&
             (options.multiple === 'true' || options.multiple === true)
           ) {
-            this.model = value || []
+            this.model = value || [];
           } else {
-            this.model = value
+            this.model = value;
           }
         }
       },
       // 加了此选项，就不用再created赋值
       immediate: true,
-      deep: true
+      deep: true,
     },
     'configs.url': {
       handler() {
-        this.getData()
-      }
+        this.getData();
+      },
     },
     // 获取远程数据的参数
     'configs.data': {
       handler() {
-        this.getData()
+        this.getData();
       },
-      deep: true
-    }
+      deep: true,
+    },
     // !!! 不能监听，外部如果共用configs，那么所有用了该configs的组件都会受影响
     // 'configs.dataList': {
     //   handler() {
@@ -361,35 +364,35 @@ export default defineComponent({
     // }
   },
   created() {
-    let vm = this
+    const vm = this;
 
     // 远程或本地数据源处理
-    vm.getData()
+    vm.getData();
   },
   methods: {
     // 设置请求参数，configs.data。对options.data进行处理，如果值有{{field}}形式的值，则替换成为model中的值
     setData() {
       if (!this.options.data) {
-        return
+        return;
       }
 
-      let data
+      let data;
 
       // 如果options.data是对象，直接赋值，否则解析为对象
       if (typeof this.options.data === 'object') {
-        data = this.options.data
+        data = this.options.data;
       } else {
-        data = JSON.parse(this.options.data)
+        data = JSON.parse(this.options.data);
       }
 
       // 将options的data解析后，挂到configs上
       if (!this.configs.data) {
-        this.configs.data = {}
+        this.configs.data = {};
       }
 
       for (const key in data) {
         if (Object.prototype.hasOwnProperty.call(data, key)) {
-          const val = data[key]
+          const val = data[key];
 
           if (
             typeof val === 'string' &&
@@ -397,138 +400,137 @@ export default defineComponent({
             val.endsWith('}}')
           ) {
             if (this.modelValue) {
-              this.configs.data[key] = this.modelValue[
-                val.substring(2, val.length - 2)
-              ]
+              this.configs.data[key] =
+                this.modelValue[val.substring(2, val.length - 2)];
             }
           } else {
-            this.configs.data[key] = val
+            this.configs.data[key] = val;
           }
         }
       }
     },
     // 类似多选下拉的组件，设置默认值
     setDefaultValue() {
-      let vm = this
-      let options = vm.options
-      let row = vm.modelValue as any
+      const vm = this;
+      const options = vm.options;
+      const row = vm.modelValue as any;
       if (vm.dataList) {
         // 不设置该选项，直接返回
         if (!options.getValueField || !options.getLabelField) {
-          return
+          return;
         }
 
-        let val = row[options.getValueField]
+        const val = row[options.getValueField];
         // 如果值为空，说明是新增，还没有默认值
         if (!val) {
-          return
+          return;
         }
 
-        let data = {
+        const data = {
           [options.labelField]: row[options.getLabelField] || val,
-          [options.valueField]: val
-        }
+          [options.valueField]: val,
+        };
 
-        vm.dataList.push(data)
+        vm.dataList.push(data);
       }
     },
     getData() {
-      let vm = this
-      let url = vm.configs.url
+      const vm = this;
+      const url = vm.configs.url;
       if (!url) {
-        return
+        return;
       }
 
       // 远程下拉框，直接返回
       if (vm.options.remote === 'true' || vm.options.remote === true) {
         // 设置默认选项
-        this.setDefaultValue()
-        return
+        this.setDefaultValue();
+        return;
       }
 
       // 如果本身就是数组
       if (typeof url === 'object' && url.length > 0) {
-        vm.dataList = url
-        return
+        vm.dataList = url;
+        return;
       }
 
       // 如果是[开头，说明数据是数组
       if (typeof url !== 'string') {
-        console.warn('配置中url不正确，不进行处理', url)
-        return
+        console.warn('配置中url不正确，不进行处理', url);
+        return;
       }
 
       if (url.startsWith('[')) {
         // 直接解析url中数据
-        vm.getLocalData()
+        vm.getLocalData();
       } else if (url.startsWith('/') || url.startsWith('http')) {
         // 请求url获取数据
-        vm.getRemoteData()
+        vm.getRemoteData();
       } else {
-        console.warn('配置中url不正确，不进行处理', url)
+        console.warn('配置中url不正确，不进行处理', url);
       }
     },
     // 获取远程数据
     getRemoteData(query = '') {
-      let vm = this
-      let url = vm.configs.url
-      let method = vm.options.method || 'post'
-      let keyField = vm.options.keyField || 'txtKeywords'
+      const vm = this;
+      const url = vm.configs.url;
+      const method = vm.options.method || 'post';
+      const keyField = vm.options.keyField || 'txtKeywords';
 
       let data = {
-        [keyField]: query
-      }
+        [keyField]: query,
+      };
 
       // 设置data，处理插值
-      this.setData()
+      this.setData();
 
       if (vm.configs.data) {
-        data = { ...data, ...vm.configs.data }
+        data = { ...data, ...vm.configs.data };
       }
 
-      let config = {
+      const config = {
         url,
         method,
         data: undefined as any,
-        params: undefined as any
-      }
+        params: undefined as any,
+      };
 
       if (method === 'post') {
-        config.data = data
+        config.data = data;
       } else if (method === 'get') {
-        config.params = data
+        config.params = data;
       }
 
       vm.$http(config).then((resp) => {
-        const array = resp.data
-        const list = array.rows || array.list || array
+        const array = resp.data;
+        const list = array.rows || array.list || array;
         vm.dataList =
           typeof vm.options.afterGetDataList === 'function'
             ? vm.options.afterGetDataList(list)
-            : list
-      })
+            : list;
+      });
     },
     // 解析url中的数据
     getLocalData() {
-      const vm = this
-      const data = JSON.parse(vm.configs.url)
-      vm.dataList = data
+      const vm = this;
+      const data = JSON.parse(vm.configs.url);
+      vm.dataList = data;
     },
     getValueByDataType(data: any, option: any) {
-      let val = data[option.valueField || 'value']
+      let val = data[option.valueField || 'value'];
       if (option.dataType === 'Int32' || option.dataType === 'int') {
-        val = parseInt(val)
+        val = parseInt(val);
       }
-      return val
+      return val;
     },
     /**
      * 有效值验证，不为undefined、空字符串、null
      */
     valueValidate(value: any) {
-      return value !== '' && value !== undefined && value !== null
-    }
-  }
-})
+      return value !== '' && value !== undefined && value !== null;
+    },
+  },
+});
 </script>
 
 <style></style>

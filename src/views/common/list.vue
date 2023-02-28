@@ -99,14 +99,23 @@ export default defineComponent({
     columns() {
       const vm = this as any;
       const columns = vm.headerData.concat(vm.actionList);
-      columns.push({
-        name: 'Q',
-        displayName: '',
-        showInSearch: true,
-        options: {
-          placeholder: '请输入关键字',
+      columns.push(
+        {
+          itemType: 'datePicker',
+          name: 'dtStart$dtEnd',
+          displayName: '时间范围',
+          showInSearch: true,
+          options: { type: 'daterange', setDefaultValue: false },
         },
-      });
+        {
+          name: 'Q',
+          displayName: '',
+          showInSearch: true,
+          options: {
+            placeholder: '请输入关键字',
+          },
+        },
+      );
       return columns;
     },
     currentPath() {
@@ -222,9 +231,9 @@ export default defineComponent({
       }
       this.getDataList();
     },
-    selectionChange() {
-      console.log('selectionChange', arguments);
-    },
+    // selectionChange() {
+    //   console.log('selectionChange', arguments);
+    // },
   },
 });
 </script>
