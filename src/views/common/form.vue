@@ -5,7 +5,7 @@
       ref="form"
       v-model="form"
       label-position="right"
-      label-width="120px"
+      label-width="135px"
       :inline="true"
       class="form-container"
     >
@@ -14,7 +14,7 @@
           v-if="column.name.toLowerCase() != 'id' && showInForm(column)"
           :key="k"
           :prop="column.isDataObjectField ? column.name : column.columnName"
-          :label="column.displayName || column.name"
+          :label="(column.displayName || column.name)+'：'"
         >
           <template
             v-if="
@@ -25,49 +25,65 @@
             <div style="display:inline-flex">
               <span>{{ column.displayName || column.name }}</span>
               <el-tooltip :content="column.description">
-                <i class="el-icon-warning-outline"></i>
+                <el-icon><InfoFilled /></el-icon>
               </el-tooltip>
             </div>
           </template>
-          <el-switch
+
+          <FormControl
+            v-if="
+                !isDetail
+              "
+            v-model="form"
+            :configs="column"
+          ></FormControl>
+          <span
+            style="width: 220px;word-break: break-all;"
+            v-else
+            >{{ form[column.name] }}</span
+          >
+
+          <!-- <el-switch
             v-if="column.dataType == 'Boolean'"
             v-model="form[column.name]"
             active-color="#13ce66"
             inactive-color="#ff4949"
-          />
+          /> -->
 
-          <el-date-picker
+          <!-- <el-date-picker
             v-else-if="column.dataType == 'DateTime'"
             v-model="form[column.name]"
             type="datetime"
             format="YYYY-MM-DD HH:mm:ss"
             value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择日期时间"
-          />
+          /> -->
 
-          <el-input
+          <!-- <el-input
             v-else-if="column.dataType == 'String' && column.length > 50"
             v-model="form[column.name]"
             autosize
             type="textarea"
-          />
+          /> -->
 
-          <el-input
+          <!-- <el-input
             v-else
             v-model="
               form[column.isDataObjectField ? column.name : column.columnName]
             "
             type="text"
-          />
+          /> -->
         </el-form-item>
       </template>
 
-      <el-form-item v-if="!isDetail">
+      <el-form-item>
         <div
           style="position: fixed; margin:20px; float:right; bottom: 0px; right: 0px; z-index: 1;"
         >
-          <el-button @click="returnIndex">取消</el-button>
-          <el-button type="primary" @click="confirm">保存</el-button>
+          <el-button @click="returnIndex">返回</el-button>
+          <el-button v-if="!isDetail" type="primary" @click="confirm"
+            >保存</el-button
+          >
         </div>
       </el-form-item>
     </el-form>
@@ -76,8 +92,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import FormControl from '@/components/FormControl.vue';
 
 export default defineComponent({
+  components: {
+    FormControl,
+  },
   data() {
     return {
       form: {} as any,
@@ -90,7 +110,7 @@ export default defineComponent({
       return this.$route.params.id;
     },
     currentPath() {
-      let vm = this as any;
+      const vm = this as any;
       let rplStr = `/${vm.type}`;
       if (!vm.isAdd) {
         rplStr += `/${vm.id}`;
@@ -134,15 +154,15 @@ export default defineComponent({
     },
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
-      let vm = this;
-      let path = vm.currentPath;
+      const vm = this;
+      const path = vm.currentPath;
 
       vm.$api.base.getColumns(path).then((res: any) => {
         vm.fields = res.data;
       });
     },
     query() {
-      let vm = this;
+      const vm = this;
       if (vm.isDetail) {
         vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
           vm.form = res.data;
@@ -154,7 +174,7 @@ export default defineComponent({
       }
     },
     confirm() {
-      let vm = this;
+      const vm = this;
       if (vm.isAdd) {
         vm.$api.base.add(vm.currentPath, vm.form).then(() => {
           vm.$message({
@@ -179,7 +199,7 @@ export default defineComponent({
       this.$router.push(this.currentPath);
     },
     showInForm(col: any) {
-      let vm = this;
+      const vm = this;
       if (vm.isAdd) {
         return col.showInAddForm;
       } else if (vm.isDetail) {

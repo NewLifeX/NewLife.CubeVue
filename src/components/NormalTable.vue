@@ -44,14 +44,8 @@
                 v-if="col.description && col.displayName != col.description"
                 :content="col.description"
               >
-                <i
-                  class="el-icon-warning-outline"
-                  @click="
-                      (e) => {
-                        e.stopPropagation()
-                      }
-                    "
-                ></i>
+                <el-icon><InfoFilled /></el-icon>
+                <!-- <i class="el-icon-warning-outline"></i> -->
               </el-tooltip>
             </div>
           </template>

@@ -26,43 +26,22 @@ export default defineComponent({
   },
   data() {
     return {
-      tableHandlerList: [
-        {
-          name: '新增',
-          handler: 'add',
-          type: 'primary',
-          if: () => this.hasPermission(permissionFlags.insert),
-        },
-      ],
       tableData: [],
-      tableHeight: '300px',
-      queryParams: {
-        Q: null,
-        dateRange: null,
-        dtStart: null,
-        dtEnd: null,
-      },
-      page: {
-        pageIndex: 1,
-        pageSize: 20,
-        totalCount: 0,
-        Q: undefined,
-        desc: true,
-        sort: undefined,
-      },
-      headerData: [],
-      listLoading: false,
-      permissionFlags,
-      operatorList: [
+      searchList: [
         {
-          name: '新增',
-          action: 'add',
-          type: 'primary',
+          itemType: 'datePicker',
+          name: 'dtStart$dtEnd',
+          displayName: '时间范围',
+          showInSearch: true,
+          options: { type: 'daterange', setDefaultValue: false },
         },
         {
-          name: '导出',
-          action: 'export',
-          type: 'primary',
+          name: 'Q',
+          displayName: '',
+          showInSearch: true,
+          options: {
+            placeholder: '请输入关键字',
+          },
         },
       ],
       actionList: [
@@ -93,29 +72,21 @@ export default defineComponent({
           ],
         },
       ],
+      tableHandlerList: [
+        {
+          name: '新增',
+          handler: 'add',
+          type: 'primary',
+          if: () => this.hasPermission(permissionFlags.insert),
+        },
+      ],
+      headerData: [],
     };
   },
   computed: {
     columns() {
       const vm = this as any;
-      const columns = vm.headerData.concat(vm.actionList);
-      columns.push(
-        {
-          itemType: 'datePicker',
-          name: 'dtStart$dtEnd',
-          displayName: '时间范围',
-          showInSearch: true,
-          options: { type: 'daterange', setDefaultValue: false },
-        },
-        {
-          name: 'Q',
-          displayName: '',
-          showInSearch: true,
-          options: {
-            placeholder: '请输入关键字',
-          },
-        },
-      );
+      const columns = vm.searchList.concat(vm.headerData.concat(vm.actionList));
       return columns;
     },
     currentPath() {
@@ -128,23 +99,6 @@ export default defineComponent({
     batchList(): any {
       return this.advancedTable.selectList;
     },
-    // queryData() {
-    //   const vm = this;
-    //   const dateRange = vm.queryParams.dateRange;
-    //   if (dateRange) {
-    //     vm.queryParams.dtStart = dateRange[0];
-    //     vm.queryParams.dtEnd = dateRange[1];
-    //   } else {
-    //     vm.queryParams.dtStart = null;
-    //     vm.queryParams.dtEnd = null;
-    //   }
-
-    //   const temp: any = {};
-    //   // 查询参数也添加上
-    //   Object.assign(temp, vm.page, vm.queryParams);
-    //   temp.dateRange = undefined;
-    //   return temp;
-    // },
   },
   created() {
     this.init();
@@ -154,26 +108,11 @@ export default defineComponent({
   },
   methods: {
     init() {
-      this.setQueryParams();
       this.getColumns();
-    },
-    setQueryParams() {
-      // 设置查询参数
-      const vm = this;
-      for (const key in vm.$route.query) {
-        if (Object.hasOwnProperty.call(vm.$route.query, key)) {
-          (vm.queryParams as any)[key] = (vm.$route.query as any)[key];
-        }
-      }
     },
     // 获取表格数据
     getDataList() {
       this.advancedTable.getDataList();
-    },
-    getUrl(column: any, entity: any) {
-      // 针对指定实体对象计算url，替换其中变量
-      const reg = /{(\w+)}/g;
-      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b]);
     },
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
@@ -202,7 +141,6 @@ export default defineComponent({
         vm.getDataList();
       });
     },
-
     rowDblclick(row: any) {
       this.editData({ row });
     },
@@ -218,22 +156,6 @@ export default defineComponent({
       });
       return has;
     },
-    sortChange({ col, prop, order }: any) {
-      if (order === 'ascending') {
-        this.page.desc = false;
-        this.page.sort = prop;
-      } else if (order === 'descending') {
-        this.page.desc = true;
-        this.page.sort = prop;
-      } else {
-        this.page.desc = true;
-        this.page.sort = undefined;
-      }
-      this.getDataList();
-    },
-    // selectionChange() {
-    //   console.log('selectionChange', arguments);
-    // },
   },
 });
 </script>

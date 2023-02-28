@@ -80,6 +80,20 @@
     v-bind="$attrs"
   ></el-date-picker>
 
+  <template
+    v-else-if="configs.itemType === 'switch' || configs.dataType === 'Boolean'"
+  >
+    <el-switch
+      v-model="model"
+      :style="{ width: configs.width ? configs.width : '220px' }"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+      :disabled="
+      options.disabled === 'true' || options.disabled === true ? true : false
+    "
+    />
+  </template>
+
   <!-- input 标签 ，默认-->
   <el-input
     v-else
@@ -89,6 +103,7 @@
     :placeholder="options.placeholder || '请输入' + configs.displayName"
     v-model="model"
     clearable
+    autosize
     :rows="4"
     :type="options.type || 'text'"
     :disabled="
@@ -273,10 +288,10 @@ export default defineComponent({
     // 外部修改此值，以便传递到model
     modelValue: {
       handler(val: any, oldVal) {
-        let name = this.name;
+        const name = this.name;
         let value = val[this.name];
-        let configs = this.configs;
-        let options = this.options;
+        const configs = this.configs;
+        const options = this.options;
         // console.log('modelValue', val, oldVal, value)
 
         // 字段名包含$，特殊处理
