@@ -32,9 +32,10 @@
         <el-table-column align="center" prop="visible" label="可见" width="80">
           <template v-slot="scope">
             <el-switch
-              :value="scope.row.visible"
+              v-model="scope.row.visible"
               active-color="#13ce66"
               inactive-color="#ff4949"
+              disabled
             />
           </template>
         </el-table-column>
@@ -67,7 +68,7 @@
                   hasPermission(permissionFlags.detail)
               "
               type="primary"
-              size="mini"
+              size="small"
               @click="detail(scope.row)"
             >
               查看
@@ -75,14 +76,14 @@
             <el-button
               v-if="hasPermission(permissionFlags.update)"
               type="primary"
-              size="mini"
+              size="small"
               @click="editData(scope.row)"
             >
               编辑
             </el-button>
             <el-button
               v-if="hasPermission(permissionFlags.delete)"
-              size="mini"
+              size="small"
               type="danger"
               @click="deleteData(scope.row)"
             >
@@ -92,7 +93,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <div>
+    <!-- <div>
       <el-pagination
         :current-page="page.pageIndex"
         :page-size="page.pageSize"
@@ -102,11 +103,11 @@
         @size-change="handleSizeChange"
         layout="total, sizes, prev, pager, next, jumper"
       ></el-pagination>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'MenuList',
   data() {
@@ -115,12 +116,12 @@ export default defineComponent({
       tableHeight: '300px',
       queryParams: {
         Q: null,
-        dateRange: null
+        dateRange: null,
       } as any,
       page: {
         pageIndex: 1,
         pageSize: 20,
-        totalCount: 0
+        totalCount: 0,
       } as any,
       listLoading: false,
       permissionFlags: {
@@ -128,31 +129,31 @@ export default defineComponent({
         detail: 1,
         insert: 2,
         update: 4,
-        delete: 8
-      }
-    }
+        delete: 8,
+      },
+    };
   },
   computed: {
     currentPath() {
-      return this.$route.path
+      return this.$route.path;
     },
     queryData() {
-      let vm = this
-      let dateRange = vm.queryParams.dateRange
+      const vm = this;
+      const dateRange = vm.queryParams.dateRange;
       if (dateRange) {
-        vm.queryParams.dtStart = dateRange[0]
-        vm.queryParams.dtEnd = dateRange[1]
+        vm.queryParams.dtStart = dateRange[0];
+        vm.queryParams.dtEnd = dateRange[1];
       } else {
-        vm.queryParams.dtStart = null
-        vm.queryParams.dtEnd = null
+        vm.queryParams.dtStart = null;
+        vm.queryParams.dtEnd = null;
       }
 
-      let temp = {} as any
+      const temp = {} as any;
       // 查询参数也添加上
-      Object.assign(temp, vm.page, vm.queryParams)
-      temp.dateRange = undefined
-      return temp
-    }
+      Object.assign(temp, vm.page, vm.queryParams);
+      temp.dateRange = undefined;
+      return temp;
+    },
   },
   // watch: {
   //   $route: {
@@ -163,156 +164,157 @@ export default defineComponent({
   //   }
   // },
   created() {
-    this.init()
+    this.init();
   },
   activated() {
-    this.init()
+    this.init();
   },
   methods: {
     init() {
-      this.setQueryParams()
-      this.query()
+      this.setQueryParams();
+      this.query();
     },
     setQueryParams() {
       // 设置查询参数
-      let vm = this
+      const vm = this;
       for (const key in vm.$route.query) {
         if (Object.hasOwnProperty.call(vm.$route.query, key)) {
-          const element = vm.$route.query[key]
-          vm.queryParams[key] = element
+          const element = vm.$route.query[key];
+          vm.queryParams[key] = element;
         }
       }
     },
     getUrl(column: any, entity: any) {
       // 针对指定实体对象计算url，替换其中变量
-      const reg = /{(\w+)}/g
-      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b])
+      const reg = /{(\w+)}/g;
+      return column.cellUrl.replace(reg, (a: any, b: any) => entity[b]);
     },
     add() {
-      let vm = this
-      vm.$router.push(vm.currentPath + '/Add')
+      const vm = this;
+      vm.$router.push(vm.currentPath + '/Add');
     },
     detail(row: any) {
-      let vm = this
-      vm.$router.push(vm.currentPath + '/Detail/' + row.id)
+      const vm = this;
+      vm.$router.push(vm.currentPath + '/Detail/' + row.id);
     },
     editData(row: any) {
-      let vm = this
-      vm.$router.push(vm.currentPath + '/Edit/' + row.id)
+      const vm = this;
+      vm.$router.push(vm.currentPath + '/Edit/' + row.id);
     },
     deleteData(row: any) {
-      let vm = this
+      const vm = this;
       vm.$api.base.deleteById(vm.currentPath, row.id).then(() => {
-        vm.getTableData()
-      })
+        vm.getTableData();
+      });
     },
     query() {
-      this.page.pageIndex = 1
-      this.getTableData()
+      this.page.pageIndex = 1;
+      this.getTableData();
     },
     getTableData() {
-      let vm = this
-      vm.listLoading = true
+      const vm = this;
+      vm.listLoading = true;
 
       vm.$api.base.getDataList(vm.currentPath, vm.queryData).then((res) => {
-        vm.listLoading = false
-        let tableData = vm.getTreeData(res.data)
+        vm.listLoading = false;
+        const tableData = vm.getTreeData(res.data);
         // console.log(tableData)
-        vm.tableData = tableData
-        vm.page = (res as any).pager
-        vm.setTableHeight(vm.tableData.length)
-      })
+        vm.tableData = tableData;
+        vm.page = (res as any).pager;
+        vm.page.totalCount = parseInt(vm.page.totalCount);
+        vm.setTableHeight(vm.tableData.length);
+      });
     },
     getTreeData(dataList: any, pId = 0) {
       // 将列表数据构造成树状结构数据
 
-      let vm = this
+      const vm = this;
 
       if (!dataList || dataList.length < 1) {
-        return []
+        return [];
       }
 
-      let len = dataList.length
+      const len = dataList.length;
       // 父级列表
-      let pList = []
+      const pList = [];
       for (let idx = 0; idx < len; idx++) {
-        const e = dataList[idx]
+        const e = dataList[idx];
 
-        if (e.parentID == pId) {
-          let m = {
+        if (e.parentID === pId) {
+          const m = {
             id: e.id,
             name: e.name,
             displayName: e.displayName,
-            parentID: e.parentID
-          }
-          pList.push(e)
-          let children = vm.getTreeData(dataList, e.id)
+            parentID: e.parentID,
+          };
+          pList.push(e);
+          const children = vm.getTreeData(dataList, e.id);
           if (children.length > 0) {
-            e.children = children
+            e.children = children;
           }
         }
       }
 
-      return pList
+      return pList;
     },
     currentChange(val: any) {
-      this.page.pageIndex = val
-      this.getTableData()
+      this.page.pageIndex = val;
+      this.getTableData();
     },
     handleSizeChange(val: any) {
-      this.page.pageSize = val
-      this.getTableData()
+      this.page.pageSize = val;
+      this.getTableData();
     },
     sortChange({ column, prop, order }: any) {
       if (order === 'ascending') {
-        this.page.desc = false
-        this.page.sort = prop
+        this.page.desc = false;
+        this.page.sort = prop;
       } else if (order === 'descending') {
-        this.page.desc = true
-        this.page.sort = prop
+        this.page.desc = true;
+        this.page.sort = prop;
       } else {
-        this.page.desc = true
-        this.page.sort = undefined
+        this.page.desc = true;
+        this.page.sort = undefined;
       }
-      this.getTableData()
+      this.getTableData();
     },
     rowDblclick(row: any) {
-      this.editData(row)
+      this.editData(row);
     },
     hasPermission(actionId: any) {
-      let vm = this as any
-      let menuId = vm.$route.meta.menuId
-      let permissions = vm.$route.meta.permissions
-      let has = vm.$store.state.user.hasPermission(vm.$store, {
+      const vm = this as any;
+      const menuId = vm.$route.meta.menuId;
+      const permissions = vm.$route.meta.permissions;
+      const has = vm.$store.state.user.hasPermission(vm.$store, {
         menuId,
         actionId,
-        permissions
-      })
-      return has
+        permissions,
+      });
+      return has;
     },
     setTableHeight(count: any) {
       // 根据数据条数设置表格高度，最高设置708px，一页最多显示20条
-      let vm = this
+      const vm = this;
       // console.log(count)
       if (count && count > 0) {
         if (count > 20) {
-          count = 20
+          count = 20;
         } else if (count < 8) {
-          count = 9
+          count = 9;
         }
         setTimeout(() => {
-          vm.tableHeight = count * 35.9 + 'px'
-        }, 500)
+          vm.tableHeight = count * 35.9 + 'px';
+        }, 500);
       }
-    }
-  }
-})
+    },
+  },
+});
 </script>
 <style scoped>
 .list-container {
-  height: -moz-calc(100vh - 51px);
-  height: -webkit-calc(100vh - 51px);
-  height: calc(100vh - 51px);
+  height: -moz-calc(100vh - 61px);
+  height: -webkit-calc(100vh - 61px);
+  height: calc(100vh - 61px);
   overflow-x: hidden;
   overflow-y: auto;
 }
