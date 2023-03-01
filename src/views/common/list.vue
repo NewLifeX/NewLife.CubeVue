@@ -24,10 +24,10 @@ export default defineComponent({
   components: {
     AdvancedTable,
   },
-  data() {
-    return {
-      tableData: [],
-      searchList: [
+  props: {
+    searchFieldColumns: {
+      type: Array,
+      default: () => [
         {
           itemType: 'datePicker',
           name: 'dtStart$dtEnd',
@@ -44,6 +44,16 @@ export default defineComponent({
           },
         },
       ],
+    },
+    // 列表字段配置
+    listFieldColumns: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      tableData: [],
       actionList: [
         {
           name: 'handler',
@@ -86,7 +96,15 @@ export default defineComponent({
   computed: {
     columns() {
       const vm = this as any;
-      const columns = vm.searchList.concat(vm.headerData.concat(vm.actionList));
+
+      // 如果有传入列信息，则使用传入的列信息，否则请求接口使用headerData
+      let listFieldColumns = vm.listFieldColumns;
+      if (listFieldColumns.length === 0) {
+        listFieldColumns = vm.headerData;
+      }
+      const columns = vm.searchFieldColumns.concat(
+        listFieldColumns.concat(vm.actionList),
+      );
       return columns;
     },
     currentPath() {
@@ -117,6 +135,11 @@ export default defineComponent({
     getColumns() {
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       const vm = this;
+
+      if (vm.listFieldColumns.length > 0) {
+        return;
+      }
+
       const path = vm.currentPath;
 
       vm.$api.base.getColumns(path).then((res) => {
