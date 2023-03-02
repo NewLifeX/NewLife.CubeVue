@@ -46,7 +46,7 @@ export function formatRoutes(
         // 同时注入同目录下的config.ts文件
 
         let props = {};
-        const configPath = `@/views${router.path}/config.ts`;
+        const configPath = `@/views${router.path}/config.tsx`;
 
         if (files.resolve(configPath)) {
           props = files(configPath);

@@ -1,4 +1,4 @@
-export const searchFieldColumns = [
+export const tableSearchConfig = [
   {
     itemType: 'datePicker',
     name: 'dtStart$dtEnd',
@@ -16,7 +16,7 @@ export const searchFieldColumns = [
   },
 ];
 
-export const listFieldColumns = [
+export const tableColumnConfig = [
   {
     name: 'id',
     displayName: '编号',

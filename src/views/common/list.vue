@@ -25,7 +25,8 @@ export default defineComponent({
     AdvancedTable,
   },
   props: {
-    searchFieldColumns: {
+    // 搜索字段配置
+    tableSearchConfig: {
       type: Array,
       default: () => [
         {
@@ -45,8 +46,18 @@ export default defineComponent({
         },
       ],
     },
+    // 表格操作按钮配置
+    tableHandlerConfig: {
+      type: Array,
+      default: () => [],
+    },
     // 列表字段配置
-    listFieldColumns: {
+    tableColumnConfig: {
+      type: Array,
+      default: () => [],
+    },
+    // 列表操作按钮配置
+    tableActionConfig: {
       type: Array,
       default: () => [],
     },
@@ -82,29 +93,71 @@ export default defineComponent({
           ],
         },
       ],
-      tableHandlerList: [
-        {
-          name: '新增',
-          handler: 'add',
-          type: 'primary',
-          if: () => this.hasPermission(permissionFlags.insert),
-        },
-      ],
       headerData: [],
     };
   },
   computed: {
+    tableHandlerList() {
+      const vm = this;
+      if (vm.tableHandlerConfig.length < 1) {
+        return [
+          {
+            name: '新增',
+            handler: 'add',
+            type: 'primary',
+            if: () => this.hasPermission(permissionFlags.insert),
+          },
+        ];
+      } else {
+        return vm.tableHandlerConfig.map((handler: any) => {
+          const ifFn2 = handler.if;
+          if (typeof ifFn2 === 'function') {
+            handler.if = (row: any) => ifFn2(vm, row);
+          }
+
+          return handler;
+        });
+      }
+    },
     columns() {
       const vm = this as any;
 
       // 如果有传入列信息，则使用传入的列信息，否则请求接口使用headerData
-      let listFieldColumns = vm.listFieldColumns;
-      if (listFieldColumns.length === 0) {
-        listFieldColumns = vm.headerData;
+      let tableColumnConfig = vm.tableColumnConfig;
+      let actionList = vm.tableActionConfig;
+
+      if (tableColumnConfig.length === 0) {
+        tableColumnConfig = vm.headerData;
       }
-      const columns = vm.searchFieldColumns.concat(
-        listFieldColumns.concat(vm.actionList),
+
+      if (actionList.length === 0) {
+        actionList = vm.actionList;
+      }
+
+      const columns = vm.tableSearchConfig.concat(
+        tableColumnConfig.concat(actionList),
       );
+
+      // 处理if条件，this当前页面实例
+      for (const column of columns) {
+        const ifFn = column.if;
+
+        if (typeof ifFn === 'function') {
+          column.if = (row: any) => ifFn(vm, row);
+        }
+
+        if (column.handlerList && column.handlerList.length > 0) {
+          column.handlerList = column.handlerList.map((handler: any) => {
+            const ifFn2 = handler.if;
+            if (typeof ifFn2 === 'function') {
+              handler.if = (row: any) => ifFn2(vm, row);
+            }
+
+            return handler;
+          });
+        }
+      }
+
       return columns;
     },
     currentPath() {
@@ -136,7 +189,7 @@ export default defineComponent({
       // TODO 可改造成vue的属性，自动根据路由获取对应的列信息
       const vm = this;
 
-      if (vm.listFieldColumns.length > 0) {
+      if (vm.tableColumnConfig.length > 0) {
         return;
       }
 

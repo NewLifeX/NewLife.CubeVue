@@ -28,7 +28,7 @@ const install: any = (app: any) => {
   }
   install.installed = true;
 
-  const files = require.context('@/', true, /^.*?\.(?<!\.d\.)(vue|ts)$/);
+  const files = require.context('@/', true, /^.*\.(vue|tsx)$/);
 
   // 注入视图文件
   fileContext.addFiles(files);
