@@ -5,9 +5,9 @@
   "scripts": {
     "start": "umi dev",
     "serve": "vue-cli-service serve",
-    "build": "umi build",
+    "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --no-clean --target lib --dest ../demo/lib --name CubeUI ./src/index.ts",
+    "lib": "vue-cli-service build --no-clean --target lib --dest ./demo/lib --name CubeUI ./src/index.ts",
     "publish": "yarn lib && npm publish --access public --registry=https://registry.npmjs.com/"
   },
   "files": [
@@ -15,17 +15,11 @@
     "lib/*.css"
   ],
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
-    "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "element-plus": "^2.2.32",
-    "lodash": "^4.17.21",
-    "umi": "^4.0.53",
-    "vue": "^3.2.47",
-    "vue-router": "^4.1.6",
-    "vuex": "^4.1.0"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@umijs/preset-vue": "^4.0.53",
     "@vue/cli-plugin-babel": "~4.5.15",
     "@vue/cli-plugin-router": "^4.5.15",
@@ -33,12 +27,18 @@
     "@vue/cli-plugin-vuex": "^4.5.15",
     "@vue/cli-service": "~4.5.15",
     "@vue/compiler-sfc": "^3.2.20",
+    "axios": "^0.21.1",
+    "element-plus": "^2.2.32",
     "prettier": "^2",
     "prettier-plugin-organize-imports": "^2",
     "prettier-plugin-packagejson": "^2",
     "sass": "^1.26.2",
     "sass-loader": "^8.0.2",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "umi": "^4.0.53",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vuex": "^4.1.0"
   },
   "browserslist": [
     "> 1%",
