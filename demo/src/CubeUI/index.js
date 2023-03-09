@@ -1,4 +1,4 @@
 /* eslint-disable */
-import * as CubeUI from '../../lib/CubeUI.umd.js';
+import * as CubeUI from '../../lib/CubeUI.js';
 export default CubeUI;
-export * from '../../lib/CubeUI.umd.js';
+export * from '../../lib/CubeUI.js';
