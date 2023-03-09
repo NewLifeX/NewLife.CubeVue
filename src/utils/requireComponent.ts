@@ -1,5 +1,5 @@
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
+import camelCase from 'lodash/camelCase';
+import upperFirst from 'lodash/upperFirst';
 
 /**
  * 组件自动化全局注册
@@ -7,9 +7,11 @@ import camelCase from 'lodash/camelCase'
  * @param fileContext const fileContext = require.context('@/views/components', true, /\w+\.(vue|js)$/)
  */
 export const requireComponent = (app: any, fileContext: any) => {
-  fileContext.keys().forEach((fileName: string) => {
-    // 获取组件配置
-    const componentConfig = fileContext(fileName)
+  // fileContext.keys().forEach((fileName: string) => {
+  //   // 获取组件配置
+  //   const componentConfig = fileContext(fileName)
+  Object.entries(fileContext).forEach(([fileName, val]) => {
+    const componentConfig = val as any;
 
     // 获取组件的 PascalCase 名
     const componentName = upperFirst(
@@ -18,16 +20,16 @@ export const requireComponent = (app: any, fileContext: any) => {
         fileName
           .split('/')
           .pop()
-          ?.replace(/\.\w+$/, '')
-      )
-    )
+          ?.replace(/\.\w+$/, ''),
+      ),
+    );
 
     app.component(
       componentName,
       // 在 `.default` 上查找组件选项。
       // 如果组件导出了 `export default` 的话，该选项会存在。
       // 否则回退到模块的根。
-      componentConfig.default || componentConfig
-    )
-  })
-}
+      componentConfig.default || componentConfig,
+    );
+  });
+};

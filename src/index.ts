@@ -10,11 +10,10 @@ import { fileContext } from './services/file-context';
 import { createStore } from './store';
 import { getMenu } from './utils/menu';
 
-const golbalComponent = require.context(
-  '@/views/components',
-  true,
-  /\w+\.(vue|js)$/,
-);
+// tslint:disable-next-line:whitespace
+const golbalComponent = import.meta.glob('/src/views/components/*.vue', {
+  eager: true,
+});
 
 let elementUI: any;
 let elementIcons: any;
@@ -25,7 +24,9 @@ const install: any = (app: any) => {
   }
   install.installed = true;
 
-  const files = require.context('@/', true, /^.*\.(vue|tsx)$/);
+  // const files = require.context('@/', true, /^.*\.(vue|tsx)$/);
+  // tslint:disable-next-line:whitespace
+  const files = import.meta.glob('@/**/*.(vue|tsx)', { eager: true });
 
   // 注入视图文件
   fileContext.addFiles(files);

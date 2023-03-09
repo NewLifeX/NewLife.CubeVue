@@ -11,7 +11,7 @@
 // }
 
 // { "./src/views/account/login.vue": VueComponet }
-const map: any = {};
+let map: any = {};
 
 function context(id: string) {
   // console.log('获取文件', id)
@@ -29,12 +29,14 @@ const keys = function fileContextKeys() {
 };
 
 const addFiles = function fileContextAddFiles(files: any) {
-  files.keys().forEach((value: any) => {
-    // 在本地调试的时候“files.resolve(value)”获取的id是“./src”开头的路径
-    // 打包后运行获取到的是一个4位长的编码
-    // const id = files.resolve(value)
-    map[value] = files(value);
-  });
+  // files.keys().forEach((value: any) => {
+  //   // 在本地调试的时候“files.resolve(value)”获取的id是“./src”开头的路径
+  //   // 打包后运行获取到的是一个4位长的编码
+  //   // const id = files.resolve(value)
+  //   map[value] = files(value);
+  // });
+
+  map = { ...map, ...files }; // 使用vite后，此对象直接就是文件对象
 };
 
 /**
@@ -43,7 +45,7 @@ const addFiles = function fileContextAddFiles(files: any) {
  */
 const resolve = (id: any) => {
   if (id.startsWith('@/')) {
-    id = id.replace('@/', './');
+    id = id.replace('@/', '/src/'); // vite中，@/ 变成 /src/
   }
 
   if (keys().includes(id)) {

@@ -4,11 +4,7 @@ import { h } from 'vue';
  * 将菜单转化成路由
  * @param {*} routes 请求返回菜单
  */
-export function formatRoutes(
-  files: __WebpackModuleApi.RequireContext,
-  routes: any[],
-  depth = 0,
-) {
+export function formatRoutes(files: any, routes: any[], depth = 0) {
   routes.forEach((router) => {
     router.path = router.url;
     if (router.path.startsWith('~')) {
@@ -77,11 +73,7 @@ export function formatRoutes(
   return routes;
 }
 
-function getEditRoute(
-  files: __WebpackModuleApi.RequireContext,
-  router: any,
-  path: string,
-) {
+function getEditRoute(files: any, router: any, path: string) {
   // 添加、编辑页路由
   const r = {
     visible: false,
