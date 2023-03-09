@@ -1,17 +1,14 @@
-import { createStore } from './store';
-import { createRouter } from './router';
-import { createAxios } from '@/utils/request';
 import { createApi } from '@/api';
-import { requireComponent } from '@/utils/requireComponent';
-import { Navbar, Sidebar, AppMain } from '@/views/layout/components/index';
-import fileContext from './services/file-context';
-import * as Element from 'element-plus';
-import * as ElementIcons from '@element-plus/icons-vue';
-
 import '@/styles/index.scss'; // global css
-import { createWebHashHistory } from 'vue-router';
+import { createAxios } from '@/utils/request';
+import { requireComponent } from '@/utils/requireComponent';
+import { AppMain, Navbar, Sidebar } from '@/views/layout/components/index';
+import * as ElementIcons from '@element-plus/icons-vue';
+import * as Element from 'element-plus';
+import { createRouter } from './router';
+import { fileContext } from './services/file-context';
+import { createStore } from './store';
 import { getMenu } from './utils/menu';
-import * as utils from './utils';
 
 const golbalComponent = require.context(
   '@/views/components',
@@ -114,15 +111,15 @@ export default {
   install,
 };
 
-export {
-  fileContext,
-  createStore,
-  createRouter,
-  createAxios,
-  createApi,
-  requireComponent,
-  utils,
-};
-
-export * from '@/views/layout/components/index';
 export * from '@/views/components/index';
+export * from '@/views/layout/components/index';
+export * from './services/file-context';
+// export {
+//   fileContext,
+//   createStore,
+//   createRouter,
+//   createAxios,
+//   createApi,
+//   requireComponent,
+//   utils,
+// };

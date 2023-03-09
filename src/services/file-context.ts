@@ -11,31 +11,31 @@
 // }
 
 // { "./src/views/account/login.vue": VueComponet }
-const map: any = {}
+const map: any = {};
 
-function fileContext(id: string) {
+function context(id: string) {
   // console.log('获取文件', id)
   //   console.log(__webpack_require__)
   //   return __webpack_require__(id)
-  const req = resolve(id)
+  const req = resolve(id);
   if (!req) {
-    throw new Error('找不到模块：' + id)
+    throw new Error('找不到模块：' + id);
   }
-  return map[req]
+  return map[req];
 }
 
 const keys = function fileContextKeys() {
-  return Object.keys(map)
-}
+  return Object.keys(map);
+};
 
 const addFiles = function fileContextAddFiles(files: any) {
   files.keys().forEach((value: any) => {
     // 在本地调试的时候“files.resolve(value)”获取的id是“./src”开头的路径
     // 打包后运行获取到的是一个4位长的编码
     // const id = files.resolve(value)
-    map[value] = files(value)
-  })
-}
+    map[value] = files(value);
+  });
+};
 
 /**
  * 解析组件，id传值路径规则：src目录为起始目录
@@ -43,19 +43,20 @@ const addFiles = function fileContextAddFiles(files: any) {
  */
 const resolve = (id: any) => {
   if (id.startsWith('@/')) {
-    id = id.replace('@/', './')
+    id = id.replace('@/', './');
   }
 
   if (keys().includes(id)) {
-    return id
+    return id;
   } else {
-    return null
+    return null;
   }
-}
+};
 
-fileContext.addFiles = addFiles
-fileContext.id = 'fileContext'
-fileContext.keys = keys
-fileContext.resolve = resolve
+context.addFiles = addFiles;
+context.id = 'fileContext';
+context.keys = keys;
+context.resolve = resolve;
 
-export default fileContext
+export const fileContext = context;
+export default fileContext;
