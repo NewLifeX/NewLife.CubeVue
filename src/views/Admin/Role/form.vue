@@ -32,7 +32,14 @@
 
       <el-form-item>
         <div
-          style="position: fixed; margin:20px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+          style="
+            position: fixed;
+            margin: 20px;
+            float: right;
+            bottom: 0px;
+            right: 0px;
+            z-index: 1;
+          "
         >
           <el-button @click="returnIndex">返回</el-button>
           <el-button type="primary" @click="confirm">保存</el-button>
@@ -43,7 +50,7 @@
         :data="tableData"
         :tree-props="{
           children: 'children',
-          hasChildren: 'hasChildren'
+          hasChildren: 'hasChildren',
         }"
         row-key="id"
         border

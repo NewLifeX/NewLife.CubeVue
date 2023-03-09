@@ -1,8 +1,7 @@
-import { ComponentCustomProperties } from 'vue';
-import { Store } from 'vuex';
+import type { AxiosInstance } from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Api } from './api';
-import { AxiosInstance } from 'axios';
+import type { Store } from 'vuex';
+import type { Api } from './api';
 
 declare module '@vue/runtime-core' {
   // 声明自己的 store state
