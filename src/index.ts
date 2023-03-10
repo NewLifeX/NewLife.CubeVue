@@ -5,10 +5,8 @@ import { requireComponent } from '@/utils/requireComponent';
 import { AppMain, Navbar, Sidebar } from '@/views/layout/components/index';
 import * as ElementIcons from '@element-plus/icons-vue';
 import * as Element from 'element-plus';
-import { createRouter } from './router';
 import { fileContext } from './services/file-context';
 import { createStore } from './store';
-import { getMenu } from './utils/menu';
 
 // tslint:disable-next-line:whitespace
 const golbalComponent = import.meta.glob('/src/views/components/*.vue', {
@@ -58,25 +56,25 @@ const install: any = (app: any) => {
   store.dispatch('setMessage', elementUI.ElMessage);
   store.dispatch('setMessageBox', elementUI.ElMessageBox);
 
-  // 尝试从本地缓存加载菜单
-  const accessedRouters = getMenu();
-  let menuRouters: any[] = [];
-  if (accessedRouters && accessedRouters.length > 0) {
-    // 设置路由信息
-    store.dispatch('generateRoutes', accessedRouters);
+  // // 尝试从本地缓存加载菜单
+  // const accessedRouters = getMenu();
+  // let menuRouters: any[] = [];
+  // if (accessedRouters && accessedRouters.length > 0) {
+  //   // 设置路由信息
+  //   store.dispatch('generateRoutes', accessedRouters);
 
-    // 添加路由信息
-    menuRouters = store.getters.addRouters;
-  }
+  //   // 添加路由信息
+  //   menuRouters = store.getters.addRouters;
+  // }
 
-  // 配置路由
-  const router = createRouter(app, (options) => {
-    // options.history = createWebHashHistory()
+  // // 配置路由
+  // const router = createRouter(app, (options) => {
+  //   // options.history = createWebHashHistory()
 
-    // 从本地缓存加载的路由必须在这里添加
-    // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
-    options.routes = menuRouters.concat(options.routes);
-  });
+  //   // 从本地缓存加载的路由必须在这里添加
+  //   // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
+  //   options.routes = menuRouters.concat(options.routes);
+  // });
 
   app.use(elementUI, { size: store.state.app.size });
   for (const key in elementIcons) {

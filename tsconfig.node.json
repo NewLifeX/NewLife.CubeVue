@@ -6,6 +6,8 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "vite.config.ts"
+    "vite.config.ts",
+    "src/plugins/**/*.ts",
+    "src/plugins/vite-plugin-vue-cube/router.js",
   ]
 }

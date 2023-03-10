@@ -2,6 +2,7 @@ import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import path from 'path';
 import { defineConfig } from 'vite';
+import vueCubePlugin from './src/plugins/vite-plugin-vue-cube';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -30,5 +31,5 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'], // 默认后缀支持vue
   },
-  plugins: [vue({}), vueJsx()],
+  plugins: [vue({}), vueJsx(), vueCubePlugin()],
 });
