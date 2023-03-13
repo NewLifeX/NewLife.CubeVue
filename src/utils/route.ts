@@ -1,3 +1,4 @@
+import Layout from '@/layouts/index.vue';
 import { h } from 'vue';
 
 /**
@@ -23,8 +24,9 @@ export function formatRoutes(files: any, routes: any[], depth = 0) {
 
     // 第一层使用布局模板
     if (depth === 0) {
-      router.component = () =>
-        Promise.resolve(files('@/views/layout/index.vue'));
+      // 如果是第一层，使用布局模板
+      // TODO 如果页面自身指定了layout，则使用自身的layout
+      router.component = () => Promise.resolve(h(Layout, {}));
     } else {
       // 处理名称，避免冲突
       router.name = router.path.replace(/\//g, '');

@@ -1,8 +1,9 @@
-import Storage from '@/utils/storage';
 import urls from '@/api/constant';
+import Storage from '@/utils/storage';
 const loginConfig = Storage.getItem('loginConfig');
 const app = {
   state: {
+    layout: 'layout-default',
     sidebar: {
       opened: true, // !+Storage.getItem('sidebarStatus'),
       withoutAnimation: false,

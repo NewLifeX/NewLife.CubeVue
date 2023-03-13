@@ -1,3 +1,4 @@
+import fileContext from '@/services/file-context';
 import {
   createRouter as create,
   createWebHistory,
@@ -6,11 +7,9 @@ import {
   Router,
   RouterOptions,
 } from 'vue-router';
-import fileContext from '@/services/file-context';
 import beforeEachFn from './beforeEach';
 
-const Layout = () => Promise.resolve(fileContext('@/views/layout/index.vue'));
-// () => import('@/views/layout/index.vue')
+const Layout = () => import('@/layouts/index.vue');
 
 export const constantRouterMap = [
   // {

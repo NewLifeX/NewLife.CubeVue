@@ -1,4 +1,5 @@
 import { createApi } from '@/api';
+import LayoutDefault from '@/layouts/default/index.vue';
 import '@/styles/index.scss'; // global css
 import { createAxios } from '@/utils/request';
 import { requireComponent } from '@/utils/requireComponent';
@@ -31,6 +32,7 @@ const install: any = (app: any) => {
   // 注入视图文件
   fileContext.addFiles(files);
 
+  app.component('LayoutDefault', LayoutDefault);
   app.component('Navbar', Navbar);
   app.component('Sidebar', Sidebar);
   app.component('AppMain', AppMain);
