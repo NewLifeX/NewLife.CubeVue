@@ -27,7 +27,7 @@ let beforeEachFn = (to, from, next) => {
   }
 };
 
-const Layout = () => import('@/views/layout/index.vue');
+const Layout = () => import('@/layouts/default/index.vue');
 
 // 尝试从本地缓存加载菜单
 const accessedRouters = getMenu();

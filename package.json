@@ -14,32 +14,29 @@
     "lib/*.css"
   ],
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
+    "@ant-design-vue/pro-layout": "^3.2.3",
+    "@ant-design/icons-vue": "^6.1.0",
+    "ant-design-vue": "^3.2.15",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
-    "lodash": "^4.17.21"
+    "element-plus": "^2.2.32",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6",
+    "vue-tsc": "^1.0.7",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "2.0.1",
-    "@vue/cli-plugin-babel": "~4.5.15",
-    "@vue/cli-plugin-router": "^4.5.15",
-    "@vue/cli-plugin-typescript": "^4.5.15",
-    "@vue/cli-plugin-vuex": "^4.5.15",
-    "@vue/cli-service": "~4.5.15",
-    "@vue/compiler-sfc": "^3.2.20",
-    "axios": "^0.21.1",
-    "element-plus": "^2.2.32",
     "prettier": "^2",
     "prettier-plugin-organize-imports": "^2",
     "prettier-plugin-packagejson": "^2",
     "sass": "^1.26.2",
     "sass-loader": "^8.0.2",
     "typescript": "^4.5.2",
-    "vite": "^4.1.4",
-    "vue": "^3.2.47",
-    "vue-router": "^4.1.6",
-    "vue-tsc": "^1.0.7",
-    "vuex": "^4.1.0"
+    "vite": "^4.1.4"
   },
   "browserslist": [
     "> 1%",

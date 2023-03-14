@@ -3,7 +3,8 @@ import Storage from '@/utils/storage';
 const loginConfig = Storage.getItem('loginConfig');
 const app = {
   state: {
-    layout: 'layout-default',
+    layout: 'LayoutDefault',
+    // layout: 'LayoutAntdv',
     sidebar: {
       opened: true, // !+Storage.getItem('sidebarStatus'),
       withoutAnimation: false,

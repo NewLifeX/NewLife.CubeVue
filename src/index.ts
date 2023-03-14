@@ -1,9 +1,10 @@
 import { createApi } from '@/api';
+import LayoutAntdv from '@/layouts/antdv/index.vue';
+import { AppMain, Navbar, Sidebar } from '@/layouts/default/components/index';
 import LayoutDefault from '@/layouts/default/index.vue';
 import '@/styles/index.scss'; // global css
 import { createAxios } from '@/utils/request';
 import { requireComponent } from '@/utils/requireComponent';
-import { AppMain, Navbar, Sidebar } from '@/views/layout/components/index';
 import * as ElementIcons from '@element-plus/icons-vue';
 import * as Element from 'element-plus';
 import { createRouter } from './router';
@@ -33,6 +34,7 @@ const install: any = (app: any) => {
   fileContext.addFiles(files);
 
   app.component('LayoutDefault', LayoutDefault);
+  app.component('LayoutAntdv', LayoutAntdv);
   app.component('Navbar', Navbar);
   app.component('Sidebar', Sidebar);
   app.component('AppMain', AppMain);
@@ -74,7 +76,6 @@ const install: any = (app: any) => {
   // 配置路由
   const router = createRouter(app, (options) => {
     // options.history = createWebHashHistory()
-
     // 从本地缓存加载的路由必须在这里添加
     // 否则在已登录的情况，先进行导航再动态添加路由，导致找不到页面
     options.routes = menuRouters.concat(options.routes);
@@ -115,7 +116,6 @@ export default {
 };
 
 export * from '@/views/components/index';
-export * from '@/views/layout/components/index';
 export * from './services/file-context';
 // export {
 //   fileContext,
