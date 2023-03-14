@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "vite.config.ts",
+    "src/plugins/**/*.ts",
+    "src/plugins/vite-plugin-vue-cube/router.js",
+  ]
+}

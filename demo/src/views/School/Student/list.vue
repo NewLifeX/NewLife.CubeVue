@@ -3,9 +3,7 @@
     <div>
       <div class="search">
         <div class="left-search">
-          <el-button type="primary" @click="add">
-            新增
-          </el-button>
+          <el-button type="primary" @click="add">新增</el-button>
         </div>
         <div class="right-search">
           <el-date-picker
@@ -19,13 +17,11 @@
             :shortcuts="shortcuts"
           ></el-date-picker>
           <el-input
-            style="width:auto"
+            style="width: auto"
             v-model="queryParams.key"
             placeholder="关键字"
           ></el-input>
-          <el-button type="primary" @click="getTableData">
-            查询
-          </el-button>
+          <el-button type="primary" @click="getTableData">查询</el-button>
         </div>
       </div>
       <div class="table-container">
@@ -68,14 +64,14 @@
             <template v-slot="scope">
               <el-button
                 type="primary"
-                size="mini"
+                size="small"
                 @click="editData(scope.row)"
               >
                 编辑
               </el-button>
               <el-button
                 v-if="scope.row.status != 'deleted'"
-                size="mini"
+                size="small"
                 type="danger"
                 @click="deleteData(scope.row)"
               >
@@ -107,12 +103,12 @@ export default {
       tabledata: [],
       queryParams: {
         key: null,
-        dateRange: null
+        dateRange: null,
       },
       page: {
         PageIndex: 1,
         PageSize: 10,
-        TotalCount: 0
+        TotalCount: 0,
       },
       headerData: [],
       listLoading: false,
@@ -120,145 +116,145 @@ export default {
         {
           text: '昨天',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+            end.setTime(end.getTime() - 3600 * 1000 * 24 * 1);
+            return [start, end];
+          },
         },
         {
           text: '今天',
           value() {
-            const end = new Date()
-            const start = new Date()
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            return [start, end];
+          },
         },
         {
           text: '最近一周',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            return [start, end]
-          }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            return [start, end];
+          },
         },
         {
           text: '最近一个月',
           value() {
-            const end = new Date()
-            const start = new Date()
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            return [start, end]
-          }
-        }
-      ]
-    }
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            return [start, end];
+          },
+        },
+      ],
+    };
   },
   computed: {
     currentPath() {
-      return this.$route.path
+      return this.$route.path;
     },
     queryData() {
-      let vm = this
-      let dateRange = vm.queryParams.dateRange
+      let vm = this;
+      let dateRange = vm.queryParams.dateRange;
       if (dateRange) {
-        vm.queryParams.dtStart = dateRange[0]
-        vm.queryParams.dtEnd = dateRange[1]
+        vm.queryParams.dtStart = dateRange[0];
+        vm.queryParams.dtEnd = dateRange[1];
       } else {
-        vm.queryParams.dtStart = null
-        vm.queryParams.dtEnd = null
+        vm.queryParams.dtStart = null;
+        vm.queryParams.dtEnd = null;
       }
 
-      let temp = {}
-      Object.assign(temp, vm.page, vm.queryParams)
-      temp.dateRange = undefined
-      return temp
-    }
+      let temp = {};
+      Object.assign(temp, vm.page, vm.queryParams);
+      temp.dateRange = undefined;
+      return temp;
+    },
   },
   watch: {
     $route: {
-      handler: function() {
-        this.init()
+      handler: function () {
+        this.init();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     init() {
-      this.getListFields()
-      this.query()
+      this.getListFields();
+      this.query();
     },
     getListFields() {
-      let vm = this
-      let path = vm.currentPath
-      let key = path + '-list'
-      let fields = vm.$store.state.entity.listFields[key]
+      let vm = this;
+      let path = vm.currentPath;
+      let key = path + '-list';
+      let fields = vm.$store.state.entity.listFields[key];
       if (fields) {
-        vm.headerData = fields
-        return
+        vm.headerData = fields;
+        return;
       }
 
       // 没有获取过字信息，请求回来后保存一份
       vm.$store.getters.apis.getListFields(path).then((res) => {
-        fields = res.data.data
-        vm.headerData = fields
+        fields = res.data;
+        vm.headerData = fields;
 
-        vm.$store.dispatch('setListFields', { key, fields })
-      })
+        vm.$store.dispatch('setListFields', { key, fields });
+      });
     },
     add() {
-      let vm = this
-      vm.$router.push(vm.currentPath + '/Add')
+      let vm = this;
+      vm.$router.push(vm.currentPath + '/Add');
     },
     editData(row) {
-      let vm = this
-      vm.$router.push(vm.currentPath + '/Edit/' + row.id)
+      let vm = this;
+      vm.$router.push(vm.currentPath + '/Edit/' + row.id);
     },
     deleteData(row) {
-      let vm = this
+      let vm = this;
       vm.$api.deleteById(vm.currentPath, row.id).then(() => {
-        vm.getTableData()
-      })
+        vm.getTableData();
+      });
     },
     closes() {
-      this.editor = false
+      this.editor = false;
       this.addform = {
         BusinessPartyId: '',
         TenantIdName: '',
-        BusinessType: ''
-      }
+        BusinessType: '',
+      };
     },
     clear() {
-      this.search = {}
-      this.page.pageIndex = 1
-      console.log('清除重置')
+      this.search = {};
+      this.page.pageIndex = 1;
+      console.log('清除重置');
     },
     query() {
-      this.page.pageIndex = 1
-      this.getTableData()
+      this.page.pageIndex = 1;
+      this.getTableData();
     },
     getTableData() {
-      let vm = this
-      vm.listLoading = true
+      let vm = this;
+      vm.listLoading = true;
 
       vm.$api.getDataList(vm.currentPath, vm.queryData).then((res) => {
-        vm.listLoading = false
-        vm.tabledata = res.data.data
-        vm.page = res.data.pager
-      })
+        vm.listLoading = false;
+        vm.tabledata = res.data;
+        vm.page = res.pager;
+      });
     },
     currentchange(val) {
-      this.page.pageIndex = val
-      this.getTableData()
+      this.page.pageIndex = val;
+      this.getTableData();
     },
     handleSizeChange(val) {
-      this.page.pageSize = val
-      this.getTableData()
-    }
-  }
-}
+      this.page.pageSize = val;
+      this.getTableData();
+    },
+  },
+};
 </script>
 <style scoped>
 .search {

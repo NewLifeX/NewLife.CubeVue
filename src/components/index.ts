@@ -1,0 +1,6 @@
+export { default as NormalTable } from './NormalTable.vue'
+export { default as TableHandler } from './TableHandler.vue'
+export { default as TableSearch } from './TableSearch.vue'
+export { default as TablePagination } from './TablePagination.vue'
+export { default as AdvancedTable } from './AdvancedTable.vue'
+export { default as FormControl } from './FormControl.vue'

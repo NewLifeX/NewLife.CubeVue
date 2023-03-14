@@ -1,0 +1,541 @@
+[
+    {
+        "id": 4,
+        "name": "Admin",
+        "displayName": "系统管理",
+        "parentID": 0,
+        "url": "/Admin",
+        "icon": "fa-desktop",
+        "visible": true,
+        "newWindow": false,
+        "permissions": {},
+        "children": [
+            {
+                "id": 10,
+                "name": "Department",
+                "displayName": "部门",
+                "parentID": 4,
+                "url": "/Admin/Department",
+                "icon": "fa-users",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 20,
+                "name": "User",
+                "displayName": "用户",
+                "parentID": 4,
+                "url": "/Admin/User",
+                "icon": "fa-user",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 17,
+                "name": "Role",
+                "displayName": "角色",
+                "parentID": 4,
+                "url": "/Admin/Role",
+                "icon": "fa-user-plus",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 13,
+                "name": "Menu",
+                "displayName": "菜单",
+                "parentID": 4,
+                "url": "/Admin/Menu",
+                "icon": "fa-navicon",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 12,
+                "name": "Log",
+                "displayName": "审计日志",
+                "parentID": 4,
+                "url": "/Admin/Log",
+                "icon": "fa-history",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看"
+                },
+                "children": null
+            },
+            {
+                "id": 8,
+                "name": "Cube",
+                "displayName": "魔方设置",
+                "parentID": 4,
+                "url": "/Admin/Cube",
+                "icon": "fa-wrench",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "4": "修改"
+                },
+                "children": null
+            },
+            {
+                "id": 16,
+                "name": "Parameter",
+                "displayName": "字典参数",
+                "parentID": 4,
+                "url": "/Admin/Parameter",
+                "icon": "fa-wrench",
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 11,
+                "name": "File",
+                "displayName": "文件",
+                "parentID": 4,
+                "url": "/Admin/File",
+                "icon": "fa-file",
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 9,
+                "name": "Db",
+                "displayName": "数据库",
+                "parentID": 4,
+                "url": "/Admin/Db",
+                "icon": "fa-database",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加"
+                },
+                "children": null
+            },
+            {
+                "id": 6,
+                "name": "Main",
+                "displayName": "服务器信息",
+                "parentID": 4,
+                "url": "/Admin/Index/Main",
+                "icon": "fa-home",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看"
+                },
+                "children": null
+            },
+            {
+                "id": 5,
+                "name": "Index",
+                "displayName": "首页",
+                "parentID": 4,
+                "url": "/Admin/Index",
+                "icon": "fa-home",
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "16": "重启",
+                    "32": "释放内存"
+                },
+                "children": null
+            },
+            {
+                "id": 7,
+                "name": "Core",
+                "displayName": "基本设置",
+                "parentID": 4,
+                "url": "/Admin/Core",
+                "icon": "fa-bomb",
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "4": "修改"
+                },
+                "children": null
+            },
+            {
+                "id": 14,
+                "name": "OAuthConfig",
+                "displayName": "OAuth配置",
+                "parentID": 4,
+                "url": "/Admin/OAuthConfig",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 15,
+                "name": "OAuthLog",
+                "displayName": "OAuth日志",
+                "parentID": 4,
+                "url": "/Admin/OAuthLog",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看"
+                },
+                "children": null
+            },
+            {
+                "id": 18,
+                "name": "Sys",
+                "displayName": "系统设置",
+                "parentID": 4,
+                "url": "/Admin/Sys",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "4": "修改"
+                },
+                "children": null
+            },
+            {
+                "id": 19,
+                "name": "UserConnect",
+                "displayName": "用户链接",
+                "parentID": 4,
+                "url": "/Admin/UserConnect",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 21,
+                "name": "UserOnline",
+                "displayName": "用户在线",
+                "parentID": 4,
+                "url": "/Admin/UserOnline",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 22,
+                "name": "UserStat",
+                "displayName": "用户统计",
+                "parentID": 4,
+                "url": "/Admin/UserStat",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看"
+                },
+                "children": null
+            },
+            {
+                "id": 23,
+                "name": "UserToken",
+                "displayName": "用户令牌",
+                "parentID": 4,
+                "url": "/Admin/UserToken",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 24,
+                "name": "XCode",
+                "displayName": "数据中间件",
+                "parentID": 4,
+                "url": "/Admin/XCode",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "4": "修改"
+                },
+                "children": null
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "name": "School",
+        "displayName": "教务系统",
+        "parentID": 0,
+        "url": "/School",
+        "icon": null,
+        "visible": true,
+        "newWindow": false,
+        "permissions": {},
+        "children": [
+            {
+                "id": 3,
+                "name": "Student",
+                "displayName": "学生",
+                "parentID": 1,
+                "url": "/School/Student",
+                "icon": null,
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 2,
+                "name": "Class",
+                "displayName": "班级",
+                "parentID": 1,
+                "url": "/School/Class",
+                "icon": null,
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "name": "Cube",
+        "displayName": "魔方管理",
+        "parentID": 0,
+        "url": "/Cube",
+        "icon": "fa-tachometer",
+        "visible": true,
+        "newWindow": false,
+        "permissions": {},
+        "children": [
+            {
+                "id": 33,
+                "name": "ModelTable",
+                "displayName": "模型表",
+                "parentID": 25,
+                "url": "/Cube/ModelTable",
+                "icon": "fa-table",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 32,
+                "name": "ModelColumn",
+                "displayName": "模型列",
+                "parentID": 25,
+                "url": "/Cube/ModelColumn",
+                "icon": "fa-table",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 29,
+                "name": "Area",
+                "displayName": "地区",
+                "parentID": 25,
+                "url": "/Cube/Area",
+                "icon": "fa-area-chart",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 27,
+                "name": "App",
+                "displayName": "应用系统",
+                "parentID": 25,
+                "url": "/Cube/App",
+                "icon": "fa-star",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 30,
+                "name": "Attachment",
+                "displayName": "附件",
+                "parentID": 25,
+                "url": "/Cube/Attachment",
+                "icon": "fa-file-text",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 31,
+                "name": "CronJob",
+                "displayName": "定时作业",
+                "parentID": 25,
+                "url": "/Cube/CronJob",
+                "icon": "fa-clock-o",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 26,
+                "name": "AppModule",
+                "displayName": "应用插件",
+                "parentID": 25,
+                "url": "/Cube/AppModule",
+                "icon": null,
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            },
+            {
+                "id": 28,
+                "name": "AppLog",
+                "displayName": "应用日志",
+                "parentID": 25,
+                "url": "/Cube/AppLog",
+                "icon": null,
+                "visible": false,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看"
+                },
+                "children": null
+            },
+            {
+                "id": 34,
+                "name": "PrincipalAgent",
+                "displayName": "委托代理",
+                "parentID": 25,
+                "url": "/Cube/PrincipalAgent",
+                "icon": "fa-user-secret",
+                "visible": true,
+                "newWindow": false,
+                "permissions": {
+                    "1": "查看",
+                    "2": "添加",
+                    "4": "修改",
+                    "8": "删除"
+                },
+                "children": null
+            }
+        ]
+    }
+]
