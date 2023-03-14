@@ -237,11 +237,10 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .list-container {
-  height: -moz-calc(100vh - 51px);
-  height: -webkit-calc(100vh - 51px);
-  height: calc(100vh - 51px);
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 5px;
+  background-color: #fff;
 }
 </style>

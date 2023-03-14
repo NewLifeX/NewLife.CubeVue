@@ -10,7 +10,8 @@
         >
           <el-form-item label="头像" prop="avatar">
             <img
-              style="height:100px;width:100px;"
+              v-if="form.avatar"
+              style="height: 100px; width: 100px"
               :src="$store.getters.urls.baseUrl + form.avatar"
             />
           </el-form-item>
@@ -51,7 +52,14 @@
 
           <el-form-item prop label-name>
             <div
-              style="position: fixed; margin: 30px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+              style="
+                position: fixed;
+                margin: 30px;
+                float: right;
+                bottom: 0px;
+                right: 0px;
+                z-index: 1;
+              "
             >
               <el-button type="primary" @click="confirm">保存</el-button>
             </div>
@@ -78,7 +86,14 @@
           </el-form-item>
           <el-form-item prop label-name>
             <div
-              style="position: fixed; margin: 30px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+              style="
+                position: fixed;
+                margin: 30px;
+                float: right;
+                bottom: 0px;
+                right: 0px;
+                z-index: 1;
+              "
             >
               <el-button type="primary" @click="confirm2">保存</el-button>
             </div>
@@ -91,7 +106,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 export default defineComponent({
   props: ['path'],
   data() {
@@ -99,66 +114,66 @@ export default defineComponent({
       form: {} as any,
       form2: {} as any,
       properties: [],
-      activeName: 'UserInfo'
-    }
+      activeName: 'UserInfo',
+    };
   },
   computed: {
     currentPath() {
-      return this.path
-    }
+      return this.path;
+    },
   },
   watch: {
     $route: {
-      handler: function() {
-        this.init()
+      handler() {
+        this.init();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     init() {
-      this.query()
+      this.query();
     },
     query() {
-      let vm = this as any
+      const vm = this as any;
       vm.$api.user.getUserInfo().then((resp: any) => {
-        const data = resp.data
+        const data = resp.data;
         // 设置用户信息，本页修改信息后再掉此方法刷新
-        vm.$store.dispatch('setUserInfo', data)
-        vm.form = data
-      })
+        vm.$store.dispatch('setUserInfo', data);
+        vm.form = data;
+      });
     },
     confirm() {
-      let vm = this as any
+      let vm = this as any;
       vm.$api.user.updateUserInfo(vm.form).then(() => {
-        let msg = '保存成功'
+        const msg = '保存成功';
 
         vm.$message({
           message: msg,
           type: 'success',
-          duration: 3 * 1000
-        })
+          duration: 3 * 1000,
+        });
 
         // 刷新用户信息
-        vm.query()
-      })
+        vm.query();
+      });
     },
     confirm2() {
-      let vm = this as any
+      let vm = this as any;
       vm.$api.user.changePassword(vm.form2).then(() => {
-        let msg = '保存成功'
+        const msg = '保存成功';
 
         vm.$message({
           message: msg,
           type: 'success',
-          duration: 3 * 1000
-        })
+          duration: 3 * 1000,
+        });
 
-        vm.form2 = {}
-      })
-    }
-  }
-})
+        vm.form2 = {};
+      });
+    },
+  },
+});
 </script>
 
 <style scoped>
