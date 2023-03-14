@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { AppMain, Navbar, Sidebar } from '@/views/layout/components';
-import ResizeMixin from '@/views/layout/mixin/ResizeHandler';
+import { AppMain, Navbar, Sidebar } from './components';
+import ResizeMixin from './mixin/ResizeHandler';
 
 export default {
   name: 'LayoutDefault',
@@ -92,9 +92,9 @@ export default {
 
 .openSidebarMain {
   left: 210px;
-  width: -webkit-calc(100% - 240px);
-  width: -moz-calc(100% - 240px);
-  width: calc(100% - 240px);
+  width: -webkit-calc(100% - 211px);
+  width: -moz-calc(100% - 211px);
+  width: calc(100% - 211px);
 }
 
 .hiddenLayout {

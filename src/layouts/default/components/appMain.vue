@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'AppMain',
@@ -16,18 +16,21 @@ export default defineComponent({
     //   return this.$store.state.tagsView.cachedViews
     // },
     key() {
-      return this.$route.fullPath
-    }
-  }
-})
+      return this.$route.fullPath;
+    },
+  },
+});
 </script>
 
 <style scoped>
 .app-main {
-  min-height: 100%;
-  width: 100%;
+  height: -moz-calc(100vh - 81px);
+  height: -webkit-calc(100vh - 81px);
+  height: calc(100vh - 81px);
+  /* min-height: 100%; */
+  /* width: 100%; */
   position: relative;
   overflow: hidden;
-  padding: 0px 0px 0px 15px;
+  margin: 15px;
 }
 </style>

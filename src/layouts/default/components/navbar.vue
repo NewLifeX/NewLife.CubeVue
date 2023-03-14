@@ -65,10 +65,8 @@
 </template>
 
 <script lang="ts">
-import Hamburger from '@/views/layout/components/hamburger.vue';
-// import SizeSelect from 'src/components/SizeSelect'
-// import ThemePicker from 'src/components/ThemePicker'
 import { defineComponent } from 'vue';
+import Hamburger from './hamburger.vue';
 
 export default defineComponent({
   components: {
