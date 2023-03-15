@@ -14,9 +14,9 @@
     "lib/*.css"
   ],
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.10",
     "@ant-design-vue/pro-layout": "^3.2.3",
     "@ant-design/icons-vue": "^6.1.0",
+    "@element-plus/icons-vue": "^2.1.0",
     "ant-design-vue": "^3.2.15",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
@@ -28,6 +28,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
+    "@types/node": "^18.15.3",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "2.0.1",
     "prettier": "^2",

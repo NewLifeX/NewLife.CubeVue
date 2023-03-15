@@ -4,18 +4,12 @@ import { AppMain, Navbar, Sidebar } from '@/layouts/default/components/index';
 import LayoutDefault from '@/layouts/default/index.vue';
 import '@/styles/index.scss'; // global css
 import { createAxios } from '@/utils/request';
-import { requireComponent } from '@/utils/requireComponent';
 import * as ElementIcons from '@element-plus/icons-vue';
 import * as Element from 'element-plus';
 import { createRouter } from './router';
 import { fileContext } from './services/file-context';
 import { createStore } from './store';
 import { getMenu } from './utils/menu';
-
-// tslint:disable-next-line:whitespace
-const golbalComponent = import.meta.glob('/src/views/components/*.vue', {
-  eager: true,
-});
 
 let elementUI: any;
 let elementIcons: any;
@@ -89,9 +83,6 @@ const install: any = (app: any) => {
     }
   }
 
-  // 自动注册全局组件
-  requireComponent(app, golbalComponent);
-
   app.config.globalProperties.$message = elementUI.ElMessage;
   app.config.globalProperties.$messageBox = elementUI.ElMessageBox;
   app.config.globalProperties.$warn = (config: any) => {
@@ -115,7 +106,7 @@ export default {
   install,
 };
 
-export * from '@/views/components/index';
+export * from '@/components/index';
 export * from './services/file-context';
 // export {
 //   fileContext,

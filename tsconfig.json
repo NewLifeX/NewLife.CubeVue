@@ -17,8 +17,7 @@
     ],
     "skipLibCheck": true,
     "types": [
-      "vite/client",
-      "@ant-design-vue/pro-layout"
+      "vite/client"
     ],
     "paths": {
       "@/*": [

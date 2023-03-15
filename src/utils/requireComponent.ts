@@ -13,16 +13,19 @@ export const requireComponent = (app: any, fileContext: any) => {
   Object.entries(fileContext).forEach(([fileName, val]) => {
     const componentConfig = val as any;
 
-    // 获取组件的 PascalCase 名
-    const componentName = upperFirst(
-      camelCase(
-        // 获取目录深度无关的文件名
-        fileName
-          .split('/')
-          .pop()
-          ?.replace(/\.\w+$/, ''),
-      ),
-    );
+    // 如果name不存在则使用文件名
+    // 获取组件的 PascalCase 名，
+    const componentName =
+      (componentConfig.default || componentConfig).name ||
+      upperFirst(
+        camelCase(
+          // 获取目录深度无关的文件名
+          fileName
+            .split('/')
+            .pop()
+            ?.replace(/\.\w+$/, ''),
+        ),
+      );
 
     app.component(
       componentName,

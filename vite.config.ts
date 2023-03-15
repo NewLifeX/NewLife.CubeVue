@@ -16,12 +16,27 @@ export default defineConfig({
     rollupOptions: {
       external: [
         '@element-plus/icons-vue',
+        '@ant-design-vue/pro-layout',
+        '@ant-design/icons-vue',
         'axios',
         'element-plus',
         'vue',
         'vue-router',
         'vuex',
       ],
+      output: {
+        exports: 'named',
+        globals: {
+          '@element-plus/icons-vue': 'ElementPlusIconsVue',
+          '@ant-design-vue/pro-layout': 'ProLayout',
+          '@ant-design/icons-vue': 'IconsVue',
+          axios: 'axios',
+          'element-plus': 'ElementPlus',
+          vue: 'Vue',
+          'vue-router': 'VueRouter',
+          vuex: 'Vuex',
+        },
+      },
     },
   },
   resolve: {
