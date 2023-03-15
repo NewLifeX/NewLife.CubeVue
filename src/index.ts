@@ -108,12 +108,5 @@ export default {
 
 export * from '@/components/index';
 export * from './services/file-context';
-// export {
-//   fileContext,
-//   createStore,
-//   createRouter,
-//   createAxios,
-//   createApi,
-//   requireComponent,
-//   utils,
-// };
+export * from './utils';
+export { createStore, createRouter, createAxios, createApi };

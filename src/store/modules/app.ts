@@ -64,6 +64,9 @@ const app = {
     SET_MESSAGEBOX: (state: any, messageBox: any) => {
       state.messageBox = messageBox;
     },
+    SET_LAYOUT: (state: any, layout: any) => {
+      state.layout = layout;
+    },
   },
   actions: {
     toggleSideBar({ commit }: any) {
@@ -95,6 +98,9 @@ const app = {
     },
     setMessageBox({ commit }: any, messageBox: any) {
       commit('SET_MESSAGEBOX', messageBox);
+    },
+    setLayout({ commit }: any, layout: any) {
+      commit('SET_LAYOUT', layout);
     },
   },
 };
