@@ -1,3 +1,4 @@
+import '@ant-design-vue/pro-layout/dist/style.css';
 import 'element-plus/dist/index.css';
 import { createApp } from 'vue';
 // import app1 from './app.js';

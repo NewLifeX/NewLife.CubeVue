@@ -163,8 +163,6 @@ function logout() {
 </script>
 
 <style>
-@import '@ant-design-vue/pro-layout/dist/style.css';
-
 .ant-pro-basicLayout-content {
   height: -moz-calc(100vh - 96px);
   height: -webkit-calc(100vh - 96px);
