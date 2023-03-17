@@ -65,12 +65,14 @@
 </template>
 
 <script lang="ts">
+import { ElDropdown } from 'element-plus';
 import { defineComponent } from 'vue';
 import Hamburger from './hamburger.vue';
 
 export default defineComponent({
   components: {
     Hamburger,
+    ElDropdown,
     // Screenfull,
     // SizeSelect,
     // ThemePicker,

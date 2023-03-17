@@ -11,21 +11,18 @@ import { fileContext } from './services/file-context';
 import { createStore } from './store';
 import { getMenu } from './utils/menu';
 
-let elementUI: any;
-let elementIcons: any;
+// const files = require.context('@/', true, /^.*\.(vue|tsx)$/);
+// tslint:disable-next-line:whitespace
+const files = import.meta.glob('@/**/*.(vue|tsx)', { eager: true });
+
+// 注入视图文件
+fileContext.addFiles(files);
 
 const install: any = (app: any) => {
   if (install.installed) {
     return;
   }
   install.installed = true;
-
-  // const files = require.context('@/', true, /^.*\.(vue|tsx)$/);
-  // tslint:disable-next-line:whitespace
-  const files = import.meta.glob('@/**/*.(vue|tsx)', { eager: true });
-
-  // 注入视图文件
-  fileContext.addFiles(files);
 
   app.component('LayoutDefault', LayoutDefault);
   app.component('LayoutAntdv', LayoutAntdv);
@@ -53,8 +50,8 @@ const install: any = (app: any) => {
   // 创建api，公用接口,注入$api
   createApi(app, axios);
 
-  store.dispatch('setMessage', elementUI.ElMessage);
-  store.dispatch('setMessageBox', elementUI.ElMessageBox);
+  store.dispatch('setMessage', Element.ElMessage);
+  store.dispatch('setMessageBox', Element.ElMessageBox);
 
   // 尝试从本地缓存加载菜单
   const accessedRouters = getMenu();
@@ -75,18 +72,18 @@ const install: any = (app: any) => {
     options.routes = menuRouters.concat(options.routes);
   });
 
-  app.use(elementUI, { size: store.state.app.size });
-  for (const key in elementIcons) {
-    if (Object.prototype.hasOwnProperty.call(elementIcons, key)) {
-      const e = elementIcons[key];
+  app.use(Element, { size: store.state.app.size });
+  for (const key in ElementIcons) {
+    if (Object.prototype.hasOwnProperty.call(ElementIcons, key)) {
+      const e = (ElementIcons as any)[key];
       app.component(e.name, e);
     }
   }
 
-  app.config.globalProperties.$message = elementUI.ElMessage;
-  app.config.globalProperties.$messageBox = elementUI.ElMessageBox;
+  app.config.globalProperties.$message = Element.ElMessage;
+  app.config.globalProperties.$messageBox = Element.ElMessageBox;
   app.config.globalProperties.$warn = (config: any) => {
-    elementUI.ElMessage.warning(config);
+    Element.ElMessage.warning(config);
   };
 
   // 注入的计算属性自动解包
@@ -94,9 +91,6 @@ const install: any = (app: any) => {
 };
 
 export const createCubeUI = () => {
-  elementUI = Element;
-  elementIcons = ElementIcons;
-
   return {
     install,
   };
@@ -106,7 +100,8 @@ export default {
   install,
 };
 
-export * from '@/components/index';
+export * from './components/index';
 export * from './services/file-context';
 export * from './utils';
+export { LayoutDefault, LayoutAntdv, Navbar, Sidebar, AppMain };
 export { createStore, createRouter, createAxios, createApi };

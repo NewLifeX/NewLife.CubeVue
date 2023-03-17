@@ -24,12 +24,13 @@
 
 <script lang="ts">
 import { getMenu } from '@/utils/menu';
+import { ElMenu, ElScrollbar } from 'element-plus';
 import { defineComponent } from 'vue';
 import SidebarItem from './SidebarItem.vue';
 
 export default defineComponent({
   name: 'Sidebar',
-  components: { SidebarItem },
+  components: { SidebarItem, ElScrollbar, ElMenu },
   computed: {
     menuRouters(): any {
       const vm = this;

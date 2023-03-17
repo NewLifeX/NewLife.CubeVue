@@ -89,8 +89,8 @@
       active-color="#13ce66"
       inactive-color="#ff4949"
       :disabled="
-      options.disabled === 'true' || options.disabled === true ? true : false
-    "
+        options.disabled === 'true' || options.disabled === true ? true : false
+      "
     />
   </template>
 
@@ -114,7 +114,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+interface FieldConfig {
+  displayName: string;
+  name: string;
+  width: string;
+  itemType: string;
+  dataType: string;
+  options: any;
+  url: string | Array<any>;
+  showInList: boolean;
+  showInSearch: boolean;
+  showInDetail: boolean;
+  data: any;
+}
+
+import type { PropType } from 'vue';
+import { defineComponent } from 'vue';
 // import CustomSelect from './CustomSelect.vue'
 export default defineComponent({
   name: 'FormControl',
@@ -124,7 +139,7 @@ export default defineComponent({
     modelValue: [Object],
     // 字段配置
     configs: {
-      type: Object,
+      type: Object as PropType<FieldConfig>,
       default: {},
     },
   },
@@ -488,7 +503,7 @@ export default defineComponent({
     // 获取远程数据
     getRemoteData(query = '') {
       const vm = this;
-      const url = vm.configs.url;
+      const url = vm.configs.url as string;
       const method = vm.options.method || 'post';
       const keyField = vm.options.keyField || 'txtKeywords';
 
@@ -528,7 +543,7 @@ export default defineComponent({
     // 解析url中的数据
     getLocalData() {
       const vm = this;
-      const data = JSON.parse(vm.configs.url);
+      const data = JSON.parse(vm.configs.url as string);
       vm.dataList = data;
     },
     getValueByDataType(data: any, option: any) {

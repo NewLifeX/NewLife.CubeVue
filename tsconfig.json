@@ -11,8 +11,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "lib": [
       "ESNext",
       "DOM"
@@ -21,12 +19,12 @@
     "types": [
       "vite/client"
     ],
+    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
-      ]
+        "src/*"
+      ],
     },
-    "outDir": "dist"
   },
   "include": [
     "src/**/*.ts",
