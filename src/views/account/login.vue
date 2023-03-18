@@ -4,15 +4,29 @@
       <!-- Login -->
       <div>
         <!-- Logo-->
-        <el-row>
-          <el-col :span="24" class="login-logo">
-            <i class="el-icon-cloudy"></i>
+        <el-row style="text-align: center">
+          <el-col :span="24">
+            <el-icon class="login-logo"><MostlyCloudy /></el-icon>
+          </el-col>
+          <el-col :span="24">
+            <span
+              style="
+                display: block;
+                font-size: 24px;
+                font-weight: 700;
+                padding: 5px 0;
+                margin-bottom: 20px;
+                text-align: center;
+              "
+              class="heading text-primary"
+              >{{ displayName }}</span
+            >
           </el-col>
         </el-row>
         <template v-if="loginConfig.allowLogin">
           <el-form :model="loginForm" size="default" class="cube-login">
             <!-- 登录-->
-            <span class="heading text-primary">{{ displayName }} 登录</span>
+            <!-- <span class="heading text-primary"> 登录</span> -->
             <el-form-item label>
               <el-input
                 v-model="loginForm.username"
@@ -75,7 +89,7 @@
               <img
                 v-if="mi.logo"
                 :src="getLogoUrl(mi.logo)"
-                style="width: 64px;height: 64px;"
+                style="width: 64px; height: 64px"
               />
               <template v-else>{{ mi.nickName || mi.name }}</template>
             </a>
@@ -144,6 +158,8 @@ export default defineComponent({
     vm.$api.config.getLoginConfig().then((res: any) => {
       let cfg = res.data;
       vm.$store.dispatch('setLoginConfig', cfg);
+      // 获取设登录设置后，再次检查是否需要自动跳转第三方登录
+      vm.autoAuthRedirect();
     });
   },
   methods: {
@@ -246,7 +262,7 @@ export default defineComponent({
   text-align: center;
 }
 
-.cube-login .heading {
+.heading {
   display: block;
   font-size: 24px;
   font-weight: 700;
