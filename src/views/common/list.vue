@@ -195,7 +195,10 @@ export default defineComponent({
 
       const path = vm.currentPath;
 
-      vm.$api.base.getColumns(path).then((res) => {
+      vm.$api.base.getColumns(path, 'List').then((res) => {
+        for (const item of res.data) {
+          item.showInList = true;
+        }
         vm.headerData = res.data;
       });
     },

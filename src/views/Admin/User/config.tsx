@@ -19,7 +19,7 @@ export const tableSearchConfig = [
     //   { label: '游客', value: 4 },
     //   { label: '新生命', value: 5 },
     // ],
-    options: { labelField: 'name', valueField: 'id' },
+    options: { method: 'get', labelField: 'name', valueField: 'id' },
   },
   {
     name: 'Q',

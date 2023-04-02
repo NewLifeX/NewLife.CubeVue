@@ -15,22 +15,57 @@ class ApiBase {
   /**
    * 获取表对应的列
    * @param {*} path 基础请求路径
+   * @type List-列表、Detail-详情、Add-添加、Edit-编辑
    * @returns
    */
-  public getColumns(path: string) {
+  public getColumns(path: string, type: string) {
     const request = this.request;
+    // 1-列表List、2-详情Detail、3-添加Add、4-编辑Edit
+    let kind = 1;
+    switch (type) {
+      case 'List':
+        kind = 1;
+        break;
+      case 'Detail':
+        kind = 2;
+
+        break;
+      case 'Add':
+        kind = 3;
+        break;
+      case 'Edit':
+        kind = 4;
+        break;
+      default:
+        break;
+    }
     return request({
-      url: path + '/GetColumns',
+      url: path + '/GetFields',
       method: 'get',
+      params: {
+        kind: kind,
+      },
+    }).then((res) => {
+      let list = res.data;
+      for (const item of list) {
+        if (item.name === 'ID' || item.name === 'Id') {
+          item.name = 'id';
+        } else {
+          // 大驼峰命名改为小驼峰命名
+          item.name = item.name.replace(/([A-Z])/g, '$1').toLowerCase();
+        }
+      }
+      return res;
     });
   }
 
   public getDataList(path: string, page: any) {
     const request = this.request;
     return request({
-      url: path + '/Index',
-      method: 'post',
-      data: page,
+      url: path,
+      method: 'get',
+      params: page,
+      // data: page,
     });
   }
 

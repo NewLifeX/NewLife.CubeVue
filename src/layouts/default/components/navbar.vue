@@ -203,7 +203,7 @@ export default defineComponent({
   cursor: pointer;
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 .navbar .right-menu .avatar-container .avatar-wrapper .user-info {
   max-width: 150px;

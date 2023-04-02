@@ -14,7 +14,7 @@
           v-if="column.name.toLowerCase() != 'id' && showInForm(column)"
           :key="k"
           :prop="column.isDataObjectField ? column.name : column.columnName"
-          :label="(column.displayName || column.name)+'：'"
+          :label="(column.displayName || column.name) + '：'"
         >
           <template
             v-if="
@@ -22,7 +22,7 @@
             "
             #label
           >
-            <div style="display:inline-flex">
+            <div style="display: inline-flex">
               <span>{{ column.displayName || column.name }}</span>
               <el-tooltip :content="column.description">
                 <el-icon><InfoFilled /></el-icon>
@@ -31,17 +31,13 @@
           </template>
 
           <FormControl
-            v-if="
-                !isDetail
-              "
+            v-if="!isDetail"
             v-model="form"
             :configs="column"
           ></FormControl>
-          <span
-            style="width: 220px;word-break: break-all;"
-            v-else
-            >{{ form[column.name] }}</span
-          >
+          <span style="width: 220px; word-break: break-all" v-else>{{
+            form[column.name]
+          }}</span>
 
           <!-- <el-switch
             v-if="column.dataType == 'Boolean'"
@@ -78,7 +74,14 @@
 
       <el-form-item>
         <div
-          style="position: fixed; margin:20px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+          style="
+            position: fixed;
+            margin: 20px;
+            float: right;
+            bottom: 0px;
+            right: 0px;
+            z-index: 1;
+          "
         >
           <el-button @click="returnIndex">返回</el-button>
           <el-button v-if="!isDetail" type="primary" @click="confirm"
@@ -91,8 +94,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import FormControl from '@/components/FormControl.vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
@@ -157,21 +160,23 @@ export default defineComponent({
       const vm = this;
       const path = vm.currentPath;
 
-      vm.$api.base.getColumns(path).then((res: any) => {
-        vm.fields = res.data;
-      });
+      vm.$api.base
+        .getColumns(path, this.$route.params.type.toString())
+        .then((res: any) => {
+          vm.fields = res.data;
+        });
     },
     query() {
       const vm = this;
-      if (vm.isDetail) {
-        vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
-          vm.form = res.data;
-        });
-      } else {
-        vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
-          vm.form = res.data;
-        });
-      }
+      // if (vm.isDetail) {
+      vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
+        vm.form = res.data;
+      });
+      // } else {
+      //   vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
+      //     vm.form = res.data;
+      //   });
+      // }
     },
     confirm() {
       const vm = this;
@@ -199,6 +204,7 @@ export default defineComponent({
       this.$router.push(this.currentPath);
     },
     showInForm(col: any) {
+      return true;
       const vm = this;
       if (vm.isAdd) {
         return col.showInAddForm;

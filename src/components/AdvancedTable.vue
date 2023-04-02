@@ -1,6 +1,7 @@
 <script lang="tsx">
-import { defineComponent, PropType, h } from 'vue';
-import { TableSearch, TableHandler, NormalTable, TablePagination } from './';
+import { Method } from 'axios';
+import { defineComponent, PropType } from 'vue';
+import { NormalTable, TableHandler, TablePagination, TableSearch } from './';
 export default defineComponent({
   name: 'AdvancedTable',
   props: {
@@ -59,6 +60,13 @@ export default defineComponent({
     tableParent: {
       type: Object,
       require: false,
+    },
+    /**
+     * 请求方法，默认get
+     */
+    requestMethod: {
+      type: String as PropType<string>,
+      default: 'get',
     },
   },
   data() {
@@ -150,7 +158,11 @@ export default defineComponent({
       }
 
       this.loadingTable = true;
-      this.$http.post(this.url, data).then((res) => {
+      this.$http(this.url, {
+        method: this.requestMethod as Method,
+        data: this.requestMethod.toLowerCase() == 'get' ? null : data,
+        params: this.requestMethod.toLowerCase() == 'get' ? data : null,
+      }).then((res) => {
         this.tableData = res.data.list || res.data.rows || res.data;
 
         if (res.data.pagerModel) {
