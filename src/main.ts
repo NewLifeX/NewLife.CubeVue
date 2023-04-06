@@ -13,7 +13,8 @@ app.use(cubeUI);
 
 const store = app.config.globalProperties.$store;
 
-// store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
-store.dispatch('setUrls', { baseUrl: 'https://cube.newlifex.com' });
+// store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' });
+// store.dispatch('setUrls', { baseUrl: '' });
+store.dispatch('setUrls', { baseUrl: 'https://cube3.newlifex.com' });
 
 app.mount('#app');

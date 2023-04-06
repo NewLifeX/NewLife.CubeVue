@@ -246,7 +246,7 @@ export default defineComponent({
     },
     query() {
       const vm = this;
-      vm.$api.base.getData(vm.currentPath, vm.id).then((res: any) => {
+      vm.$api.base.getDetailData(vm.currentPath, vm.id).then((res: any) => {
         vm.form = res.data;
         vm.allCheckUpdate();
       });

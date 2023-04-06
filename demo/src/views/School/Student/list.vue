@@ -242,7 +242,7 @@ export default {
       vm.$api.getDataList(vm.currentPath, vm.queryData).then((res) => {
         vm.listLoading = false;
         vm.tabledata = res.data;
-        vm.page = res.pager;
+        vm.page = res.page;
       });
     },
     currentchange(val) {

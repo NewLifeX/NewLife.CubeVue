@@ -20,7 +20,7 @@
         @row-dblclick="rowDblclick"
         :tree-props="{
           children: 'children',
-          hasChildren: 'hasChildren'
+          hasChildren: 'hasChildren',
         }"
         row-key="id"
         default-expand-all
@@ -65,7 +65,7 @@
             <el-button
               v-if="
                 !hasPermission(permissionFlags.update) &&
-                  hasPermission(permissionFlags.detail)
+                hasPermission(permissionFlags.detail)
               "
               type="primary"
               size="small"
@@ -93,17 +93,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <!-- <div>
-      <el-pagination
-        :current-page="page.pageIndex"
-        :page-size="page.pageSize"
-        :page-sizes="[10, 20, 50, 100]"
-        :total="page.totalCount"
-        @current-change="currentChange"
-        @size-change="handleSizeChange"
-        layout="total, sizes, prev, pager, next, jumper"
-      ></el-pagination>
-    </div> -->
   </div>
 </template>
 <script lang="ts">
@@ -220,7 +209,7 @@ export default defineComponent({
         const tableData = vm.getTreeData(res.data);
         // console.log(tableData)
         vm.tableData = tableData;
-        vm.page = (res as any).pager;
+        vm.page = (res as any).page;
         vm.page.totalCount = parseInt(vm.page.totalCount);
         vm.setTableHeight(vm.tableData.length);
       });
