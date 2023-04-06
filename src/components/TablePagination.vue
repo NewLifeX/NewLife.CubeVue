@@ -13,42 +13,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'TablePagination',
   props: ['modelValue'],
-  emits: ['update:modelValue', 'pagerChange'],
+  emits: ['update:modelValue', 'pageChange'],
   watch: {
     'modelValue.pageSize': {
       handler(val, oldVal) {
         if (val == oldVal) {
-          return
+          return;
         }
 
-        this.$emit('update:modelValue', this.modelValue)
-        this.$emit('pagerChange', this.modelValue)
+        this.$emit('update:modelValue', this.modelValue);
+        this.$emit('pageChange', this.modelValue);
       },
-      deep: true
+      deep: true,
     },
     'modelValue.pageIndex': {
       handler(val, oldVal) {
         if (val == oldVal) {
-          return
+          return;
         }
 
-        this.$emit('update:modelValue', this.modelValue)
-        this.$emit('pagerChange', this.modelValue)
+        this.$emit('update:modelValue', this.modelValue);
+        this.$emit('pageChange', this.modelValue);
       },
-      deep: true
-    }
-  }
-  // methods: {
-  //   pagerChange() {
-  //     this.$emit('pagerChange', this.modelValue)
-  //   }
-  // }
-})
+      deep: true,
+    },
+  },
+});
 </script>
 
 <style lang="scss" scoped>

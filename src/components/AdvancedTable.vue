@@ -81,7 +81,7 @@ export default defineComponent({
       // 表格数据
       tableData: [] as any[],
       // 分页参数
-      pager: {
+      page: {
         pageSize: 10,
         pageIndex: 1,
         total: 0,
@@ -145,11 +145,11 @@ export default defineComponent({
 
       const searchParams = this.searchParams as any;
       const data = {
-        // limit: this.pager.pageSize,
-        // offset: this.pager.pageIndex - 1,
-        // currentPage: this.pager.pageIndex,
+        // limit: this.page.pageSize,
+        // offset: this.page.pageIndex - 1,
+        // currentPage: this.page.pageIndex,
         keyWord: searchParams.txtKeywords,
-        ...this.pager,
+        ...this.page,
         ...searchParams,
       };
 
@@ -166,11 +166,11 @@ export default defineComponent({
         this.tableData = res.data.list || res.data.rows || res.data;
 
         if (res.data.pagerModel) {
-          this.pager.total = res.data.pagerModel.total;
-        } else if ((res as any).pager) {
-          this.pager.total = parseInt((res as any).pager.totalCount || 0);
+          this.page.total = res.data.pagerModel.total;
+        } else if ((res as any).page) {
+          this.page.total = parseInt((res as any).page.totalCount || 0);
         } else {
-          this.pager.total = res.data.total || 0;
+          this.page.total = res.data.total || 0;
         }
 
         if (this.afterGetDataList) {
@@ -180,7 +180,7 @@ export default defineComponent({
       });
     },
     resetSearch() {
-      this.pager = {
+      this.page = {
         pageSize: 10,
         pageIndex: 1,
         total: 0,
@@ -254,14 +254,14 @@ export default defineComponent({
       console.log(col, prop, order);
 
       if (order === 'ascending') {
-        this.pager.desc = false;
-        this.pager.sort = prop;
+        this.page.desc = false;
+        this.page.sort = prop;
       } else if (order === 'descending') {
-        this.pager.desc = true;
-        this.pager.sort = prop;
+        this.page.desc = true;
+        this.page.sort = prop;
       } else {
-        this.pager.desc = true;
-        this.pager.sort = undefined;
+        this.page.desc = true;
+        this.page.sort = undefined;
       }
       this.getDataList();
     },
@@ -312,8 +312,8 @@ export default defineComponent({
         {ctx.showPagination ? (
           <TablePagination
             ref="tablePagination"
-            onPagerChange={ctx.getDataList}
-            v-model={ctx.pager}
+            onPageChange={ctx.getDataList}
+            v-model={ctx.page}
           />
         ) : (
           ''
