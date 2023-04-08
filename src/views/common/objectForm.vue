@@ -47,7 +47,14 @@
 
       <el-form-item prop label-name>
         <div
-          style="position: fixed; margin: 30px; float:right; bottom: 0px; right: 0px; z-index: 1;"
+          style="
+            position: fixed;
+            margin: 30px;
+            float: right;
+            bottom: 0px;
+            right: 0px;
+            z-index: 1;
+          "
         >
           <el-button type="primary" @click="confirm">保存</el-button>
         </div>
@@ -64,6 +71,7 @@ export default defineComponent({
     return {
       form: {} as any,
       properties: [] as any,
+      fields: [] as any,
     };
   },
   computed: {
@@ -81,13 +89,29 @@ export default defineComponent({
   },
   methods: {
     init() {
+      this.getFields();
       this.query();
+    },
+    getFields() {
+      let vm = this;
+      vm.$api.base.getColumns(vm.currentPath).then((res) => {
+        let fields = res.data;
+        // 对fields根据category进行分组
+        let properties = {} as any;
+        fields.forEach((item: any) => {
+          if (!properties[item.category]) {
+            properties[item.category] = [];
+          }
+          properties[item.category].push(item);
+        });
+
+        vm.properties = properties;
+      });
     },
     query() {
       let vm = this;
       vm.$api.config.getObject(vm.currentPath).then((res) => {
-        vm.form = res.data.value;
-        vm.properties = res.data.properties;
+        vm.form = res.data;
       });
     },
     confirm() {

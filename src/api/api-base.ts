@@ -18,7 +18,7 @@ class ApiBase {
    * @type List-列表、Detail-详情、Add-添加、Edit-编辑
    * @returns
    */
-  public getColumns(path: string, type: string) {
+  public getColumns(path: string, type: string = 'List') {
     const request = this.request;
     // 1-列表List、2-详情Detail、3-添加Add、4-编辑Edit
     let kind = 1;
@@ -52,7 +52,7 @@ class ApiBase {
           item.name = 'id';
         } else {
           // 大驼峰命名改为小驼峰命名
-          item.name = item.name.replace(/([A-Z])/g, '$1').toLowerCase();
+          item.name = item.name[0].toLowerCase() + item.name.substring(1);
         }
       }
       return res;
