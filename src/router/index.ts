@@ -1,7 +1,7 @@
 import fileContext from '@/services/file-context';
 import {
   createRouter as create,
-  createWebHistory,
+  createWebHashHistory,
   NavigationGuardWithThis,
   NavigationHookAfter,
   Router,
@@ -94,7 +94,7 @@ export const asyncRouterMap = [
 ];
 
 export const routerOptions = {
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   scrollBehavior: () => ({
     top: 0,
   }),
