@@ -64,14 +64,14 @@ export default function vueCubePlugin(): Plugin {
         console.log('transform ', id, code);
       }
 
-      //   console.log('transform', arguments);
+      // console.log('transform', arguments);
       return code;
     },
     configureServer() {
       //   console.log('configureServer', arguments);
     },
     transformIndexHtml(html) {
-      //   console.log('transformIndexHtml', arguments);
+      // console.log('transformIndexHtml', arguments);
       return html;
     },
   };
