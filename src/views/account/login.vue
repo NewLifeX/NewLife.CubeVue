@@ -217,7 +217,7 @@ export default defineComponent({
       // let url = `/sso/authorize?response_type=token&client_id=${name}`
       let redirect_uri = encodeURIComponent(
         location.origin +
-          '/auth-redirect' +
+          vm.$router.resolve('/auth-redirect').href +
           (vm.redirect ? '?redirect=' + vm.redirect : ''),
       );
       url += `&redirect_uri=${redirect_uri}`;

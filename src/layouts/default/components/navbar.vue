@@ -31,14 +31,16 @@
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <span>
-            <img :src="myAvatar" class="user-avatar" />
+            <el-avatar :size="35">
+              <img v-if="myAvatar" :src="myAvatar" class="user-avatar" />
+              <img v-else src="@/assets/img/user.png" />
+            </el-avatar>
           </span>
           <span class="user-info">
             {{ userInfo && userInfo.displayName }}
             <br />
             [{{ userInfo && userInfo.roleNames }}]
           </span>
-          <i class="el-icon-caret-bottom" />
         </div>
         <template #dropdown>
           <el-dropdown-menu class="avatar-dropdown">
@@ -102,7 +104,7 @@ export default defineComponent({
         }
         return avatar;
       }
-      return 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80';
+      return '';
     },
     displayName() {
       const vm = this as any;
@@ -215,7 +217,7 @@ export default defineComponent({
   vertical-align: top;
   line-height: 16px;
   position: relative;
-  top: 6px;
+  top: 1px;
   margin-left: 5px;
   color: #c7c7c7;
 }
