@@ -28,23 +28,24 @@ export default defineComponent({
     // 搜索字段配置
     tableSearchConfig: {
       type: Array,
-      default: () => [
-        {
-          itemType: 'datePicker',
-          name: 'dtStart$dtEnd',
-          displayName: '时间范围',
-          showInSearch: true,
-          options: { type: 'daterange', setDefaultValue: false },
-        },
-        {
-          name: 'Q',
-          displayName: '',
-          showInSearch: true,
-          options: {
-            placeholder: '请输入关键字',
-          },
-        },
-      ],
+      default: () => [],
+      // default: () => [
+      //   {
+      //     itemType: 'datePicker',
+      //     name: 'dtStart$dtEnd',
+      //     displayName: '时间范围',
+      //     showInSearch: true,
+      //     options: { type: 'daterange', setDefaultValue: false },
+      //   },
+      //   {
+      //     name: 'Q',
+      //     displayName: '',
+      //     showInSearch: true,
+      //     options: {
+      //       placeholder: '请输入关键字',
+      //     },
+      //   },
+      // ],
     },
     // 表格操作按钮配置
     tableHandlerConfig: {
@@ -94,6 +95,7 @@ export default defineComponent({
         },
       ],
       headerData: [],
+      searchData: [],
     };
   },
   computed: {
@@ -134,7 +136,13 @@ export default defineComponent({
         actionList = vm.actionList;
       }
 
-      const columns = vm.tableSearchConfig.concat(
+      let tableSearchConfig = vm.tableSearchConfig;
+
+      if (tableSearchConfig.length === 0) {
+        tableSearchConfig = vm.searchData;
+      }
+
+      const columns = tableSearchConfig.concat(
         tableColumnConfig.concat(actionList),
       );
 
@@ -180,6 +188,7 @@ export default defineComponent({
   methods: {
     init() {
       this.getColumns();
+      this.getSearchFields();
     },
     // 获取表格数据
     getDataList() {
@@ -200,6 +209,22 @@ export default defineComponent({
           item.showInList = true;
         }
         vm.headerData = res.data;
+      });
+    },
+    getSearchFields(){
+      const vm = this;
+
+      if (vm.tableSearchConfig.length > 0) {
+        return;
+      }
+
+      const path = vm.currentPath;
+
+      vm.$api.base.getColumns(path, 'Search').then((res) => {
+        for (const item of res.data) {
+          item.showInSearch = true;
+        }
+        vm.searchData = res.data;
       });
     },
     add() {

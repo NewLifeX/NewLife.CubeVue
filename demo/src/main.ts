@@ -1,3 +1,4 @@
+import '@ant-design-vue/pro-layout/dist/style.css';
 import { createCubeUI, fileContext } from '@newlifex/cube-ui';
 import '@newlifex/cube-ui/dist/style.css';
 import 'element-plus/dist/index.css';
@@ -21,5 +22,7 @@ fileContext.addFiles(files);
 // store.dispatch('setUrls', { baseUrl: 'http://localhost:5000' })
 // store.dispatch('setUrls', { baseUrl: 'https://cube2.newlifex.com' });
 store.dispatch('setUrls', { baseUrl: (window as any).baseUrl });
+
+store.dispatch('setLayout', 'LayoutAntdv');
 
 app.mount('#app');

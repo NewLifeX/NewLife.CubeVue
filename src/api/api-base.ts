@@ -1,3 +1,4 @@
+import { changeToCamelCase } from '@/config/config';
 import type { AxiosInstance } from 'axios';
 
 /**
@@ -36,6 +37,9 @@ class ApiBase {
       case 'Edit':
         kind = 4;
         break;
+      case 'Search':
+        kind = 5;
+        break;
       default:
         break;
     }
@@ -48,12 +52,7 @@ class ApiBase {
     }).then((res) => {
       let list = res.data;
       for (const item of list) {
-        if (item.name === 'ID' || item.name === 'Id') {
-          item.name = 'id';
-        } else {
-          // 大驼峰命名改为小驼峰命名
-          item.name = item.name[0].toLowerCase() + item.name.substring(1);
-        }
+        item.name = changeToCamelCase(item.name);
       }
       return res;
     });

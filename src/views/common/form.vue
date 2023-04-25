@@ -39,13 +39,6 @@
             form[column.name]
           }}</span>
 
-          <!-- <el-switch
-            v-if="column.dataType == 'Boolean'"
-            v-model="form[column.name]"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-          /> -->
-
           <!-- <el-date-picker
             v-else-if="column.dataType == 'DateTime'"
             v-model="form[column.name]"

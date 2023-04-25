@@ -114,12 +114,13 @@
 </template>
 
 <script lang="ts">
-interface FieldConfig {
+export interface FieldConfig {
   displayName: string;
   name: string;
   width: string;
   itemType: string;
-  dataType: string;
+  /** 类型名称 */
+  typeName: string;
   options: any;
   url: string | Array<any>;
   showInList: boolean;
@@ -128,8 +129,10 @@ interface FieldConfig {
   data: any;
 }
 
+import { setItemType } from '@/config/config';
 import type { PropType } from 'vue';
 import { defineComponent } from 'vue';
+
 // import CustomSelect from './CustomSelect.vue'
 export default defineComponent({
   name: 'FormControl',
@@ -396,10 +399,19 @@ export default defineComponent({
   created() {
     const vm = this;
 
+    vm.setItemType();
+
     // 远程或本地数据源处理
     vm.getData();
   },
   methods: {
+    /**
+     * 设置itemType
+     */
+    setItemType() {
+      const configs = this.configs;
+      setItemType(configs);
+    },
     // 设置请求参数，configs.data。对options.data进行处理，如果值有{{field}}形式的值，则替换成为model中的值
     setData() {
       if (!this.options.data) {
