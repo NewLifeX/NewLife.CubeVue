@@ -74,7 +74,7 @@ class ApiBase {
       id,
     };
     return request({
-      url: path + '/Edit',
+      url: path,
       method: 'get',
       params,
     });
@@ -98,8 +98,8 @@ class ApiBase {
       id,
     };
     return request({
-      url: path + '/Delete',
-      method: 'get',
+      url: path,
+      method: 'delete',
       params,
     });
   }
@@ -107,7 +107,7 @@ class ApiBase {
   public add(path: string, entity: any) {
     const request = this.request;
     return request({
-      url: path + '/Add',
+      url: path,
       method: 'post',
       data: entity,
     });
@@ -116,8 +116,8 @@ class ApiBase {
   public edit(path: string, entity: any) {
     const request = this.request;
     return request({
-      url: path + '/Edit',
-      method: 'post',
+      url: path,
+      method: 'put',
       data: entity,
     });
   }
