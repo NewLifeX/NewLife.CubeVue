@@ -39,7 +39,10 @@ export const setItemType = (config: FieldConfig) => {
     return;
   }
 
-  if (config.typeName) {
+  if (config.lovCode) {
+    config.itemType = 'select';
+    return
+  } else if (config.typeName) {
     config.itemType = typeNameToItemType(config.typeName);
   }
 

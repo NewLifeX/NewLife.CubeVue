@@ -127,6 +127,8 @@ export interface FieldConfig {
   showInSearch: boolean;
   showInDetail: boolean;
   data: any;
+  /** LOV 编码 */
+  lovCode: any;
 }
 
 import { setItemType } from '@/config/config';
@@ -230,6 +232,10 @@ export default defineComponent({
       return this.configs.name;
     },
     selectOptions() {
+      if (!this.dataList) {
+        return [];
+      }
+
       return this.dataList.map(
         (x: any) =>
           new Object({
@@ -399,12 +405,55 @@ export default defineComponent({
   created() {
     const vm = this;
 
+    // 设置itemType
     vm.setItemType();
 
-    // 远程或本地数据源处理
-    vm.getData();
+    // lovCode
+    if (vm.configs.lovCode) {
+      vm.getLovAndSetOptions();
+    } else {
+      // 远程或本地数据源处理
+      vm.getData();
+    }
   },
   methods: {
+    /** 根据lovCode获取配置，并设置选项 */
+    getLovAndSetOptions() {
+      const vm = this;
+      const lovCode = vm.configs.lovCode;
+      let lov = {}; // vm.$store.state.lov[lovCode]; // TODO 内存缓存起来，不用每次都请求
+      // if (lov) {
+      //   vm.setOptions(lov);
+      // vm.getData();
+      // } else
+      {
+        vm.$http
+          .get('/Cube/OrderManager/GetInfo', { params: { codes: lovCode } })
+          .then((res: any) => {
+            if (res.data && res.data.length > 0) {
+              lov = res.data[0];
+              // vm.$store.commit('setLov', { lovCode, lov })
+              vm.setOptions(lov);
+              vm.getData();
+            } else {
+              vm.$message.error('获取lovCode配置失败:' + lovCode);
+            }
+          });
+      }
+    },
+    setOptions(lov: any) {
+      const vm = this;
+      vm.configs.url = lov.url;
+      // vm.configs.data = lov.data;
+
+      if (!vm.configs.options) {
+        vm.configs.options = {};
+      }
+
+      vm.configs.options.method = lov.method;
+      vm.configs.options.labelField = lov.labelField;
+      vm.configs.options.valueField = lov.valueField;
+    },
     /**
      * 设置itemType
      */
