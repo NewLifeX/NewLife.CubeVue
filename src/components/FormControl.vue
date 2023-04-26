@@ -63,6 +63,7 @@
     </el-checkbox-group>
   </div>
 
+
   <!-- 日期时间选择器 -->
   <el-date-picker
     v-else-if="configs.itemType === 'datePicker'"
@@ -81,7 +82,7 @@
   ></el-date-picker>
 
   <template
-    v-else-if="configs.itemType === 'switch' || configs.dataType === 'Boolean'"
+    v-else-if="configs.itemType === 'switch' || configs.typeName === 'Boolean'"
   >
     <el-switch
       v-model="model"
@@ -609,7 +610,7 @@ export default defineComponent({
     },
     getValueByDataType(data: any, option: any) {
       let val = data[option.valueField || 'value'];
-      if (option.dataType === 'Int32' || option.dataType === 'int') {
+      if (option.typeName === 'Int32' || option.typeName === 'int') {
         val = parseInt(val);
       }
       return val;
